@@ -59,8 +59,9 @@ html, body {
 /* ---------- Open button ---------- */
 #open-sidebar {
   position: fixed;
-  top: 16px;
-  left: 16px;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 20;
   padding: 10px 16px;
   font-size: 15px;
@@ -128,7 +129,7 @@ html, body {
 
 /* ---------- Tooltip ---------- */
 #tooltip {
-  position: fixed;
+  position: absolute; /* relative to #map, so it pans with its circle */
   z-index: 40;
   max-width: 320px;
   max-height: 70vh;

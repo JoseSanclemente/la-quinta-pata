@@ -40,6 +40,7 @@ let pos = { x: 0, y: 0 };          // current translate
 let start = { x: 0, y: 0 };        // pointer down origin
 let origin = { x: 0, y: 0 };       // pos at pointer down
 let panning = false;
+let moved = false;                 // true if the pointer actually dragged
 
 function applyTransform() {
   map.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
@@ -59,6 +60,7 @@ function clamp() {
 
 function pointerDown(e) {
   panning = true;
+  moved = false;
   viewport.classList.add("dragging");
   const p = e.touches ? e.touches[0] : e;
   start = { x: p.clientX, y: p.clientY };
@@ -67,6 +69,7 @@ function pointerDown(e) {
 
 function pointerMove(e) {
   if (!panning) return;
+  moved = true;
   const p = e.touches ? e.touches[0] : e;
   pos.x = origin.x + (p.clientX - start.x);
   pos.y = origin.y + (p.clientY - start.y);
@@ -99,7 +102,7 @@ function renderCircle(c) {
   el.style.background = c.color;
   el.addEventListener("click", (e) => {
     e.stopPropagation();
-    showTooltip(c, e.clientX, e.clientY);
+    showTooltip(c);
   });
   circlesLayer.appendChild(el);
 }
@@ -175,7 +178,7 @@ form.addEventListener("submit", async (e) => {
 // ============================================================
 //  4. Tooltip — show a circle's media
 // ============================================================
-function showTooltip(c, clickX, clickY) {
+function showTooltip(c) {
   tooltipBody.innerHTML = "";
   if (c.media_type === "image") {
     const img = document.createElement("img");
@@ -191,17 +194,23 @@ function showTooltip(c, clickX, clickY) {
     p.textContent = c.text_content || "";
     tooltipBody.appendChild(p);
   }
+  // Anchor to the circle's own position (same % space circles use), so the
+  // tooltip lives inside the map and pans together with its circle.
+  tooltip.style.left = c.x + "%";
+  tooltip.style.top = c.y + "%";
+  // Sit beside the circle; flip to the left side when near the right edge.
+  tooltip.style.transform = c.x > 60
+    ? "translate(calc(-100% - 14px), -50%)"
+    : "translate(14px, -50%)";
   tooltip.classList.remove("hidden");
-  // position near click, kept on screen
-  const tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
-  let left = Math.min(clickX + 12, window.innerWidth - tw - 8);
-  let top = Math.min(clickY + 12, window.innerHeight - th - 8);
-  tooltip.style.left = Math.max(8, left) + "px";
-  tooltip.style.top = Math.max(8, top) + "px";
 }
 
 closeTooltip.addEventListener("click", () => tooltip.classList.add("hidden"));
-viewport.addEventListener("click", () => tooltip.classList.add("hidden"));
+// Click on empty map closes the tooltip — but ignore the click that ends a pan-drag.
+viewport.addEventListener("click", () => {
+  if (moved) return;
+  tooltip.classList.add("hidden");
+});
 
 // ============================================================
 //  5. Realtime — show circles others create, live
