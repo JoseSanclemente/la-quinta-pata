@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="1400" viewBox="0 0 2000 1400">
+  <defs>
+    <radialGradient id="sea" cx="50%" cy="40%" r="80%">
+      <stop offset="0%" stop-color="#7fb5c9"/>
+      <stop offset="100%" stop-color="#3d6e85"/>
+    </radialGradient>
+  </defs>
+  <rect width="2000" height="1400" fill="url(#sea)"/>
+  <!-- land masses -->
+  <path d="M300 400 Q500 200 800 350 T1300 400 Q1500 600 1200 800 T700 950 Q400 850 350 650 Z"
+        fill="#c8b88a" stroke="#8a7a4f" stroke-width="6"/>
+  <path d="M1400 850 Q1650 750 1800 950 Q1850 1150 1600 1200 Q1380 1150 1400 950 Z"
+        fill="#b9a878" stroke="#8a7a4f" stroke-width="6"/>
+  <!-- mountains -->
+  <path d="M600 500 l60 -110 l60 110 z M700 520 l70 -130 l70 130 z" fill="#9a8c63"/>
+  <text x="1000" y="120" text-anchor="middle" font-family="Georgia, serif"
+        font-size="64" fill="#1d3557" opacity="0.7">Mapa de marcador</text>
+  <text x="1000" y="1320" text-anchor="middle" font-family="Georgia, serif"
+        font-size="34" fill="#1d3557" opacity="0.6">
+    Reemplaza con assets/map.png (tu mapa real)
+  </text>
+</svg>
