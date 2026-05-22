@@ -28,6 +28,11 @@ html, body {
   will-change: transform;
 }
 
+/* added only during centerOnCircle so the recenter glides; drag stays instant */
+#map.smooth {
+  transition: transform 0.4s ease-out;
+}
+
 #map-image {
   display: block;
   /* natural image size; pan reveals it. Adjust if your image is huge/small */
@@ -55,6 +60,16 @@ html, body {
   transition: transform 0.1s ease;
 }
 .circle:hover { transform: translate(-50%, -50%) scale(1.25); }
+
+/* Drop-in animation — played only the first time a circle appears (see app.js).
+   Rest state matches the resting transform so there's no jump on finish. */
+@keyframes circle-drop {
+  0%   { transform: translate(-50%, calc(-50% - 40px)); opacity: 0; }
+  60%  { transform: translate(-50%, -50%);              opacity: 1; }
+  80%  { transform: translate(-50%, calc(-50% - 6px)); }   /* small bounce */
+  100% { transform: translate(-50%, -50%); }
+}
+.circle.dropping { animation: circle-drop 0.45s ease-out; }
 
 /* ---------- Open button ---------- */
 #open-sidebar {

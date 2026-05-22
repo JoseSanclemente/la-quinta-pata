@@ -58,6 +58,17 @@ function clamp() {
   pos.y = Math.max(minY, Math.min(0, pos.y));
 }
 
+function centerOnCircle(c) {
+  const mw = map.offsetWidth, mh = map.offsetHeight;
+  pos.x = viewport.clientWidth / 2 - (c.x / 100) * mw;
+  pos.y = viewport.clientHeight / 2 - (c.y / 100) * mh;
+  clamp();
+  map.classList.add("smooth");
+  applyTransform();
+  scheduleVisible();
+  map.addEventListener("transitionend", () => map.classList.remove("smooth"), { once: true });
+}
+
 function pointerDown(e) {
   panning = true;
   moved = false;
@@ -75,6 +86,7 @@ function pointerMove(e) {
   pos.y = origin.y + (p.clientY - start.y);
   clamp();
   applyTransform();
+  scheduleVisible();
 }
 
 function pointerUp() {
@@ -90,10 +102,19 @@ window.addEventListener("touchmove", pointerMove, { passive: true });
 window.addEventListener("touchend", pointerUp);
 
 // ============================================================
-//  2. Render a circle on the map
+//  2. Render circles on the map (with viewport culling)
 // ============================================================
+// We keep ALL circle rows in `allCircles` but only mount the ones currently in
+// view as DOM nodes. `renderedIds` tracks what's mounted; `droppedIds` tracks
+// which circles already played their fall animation (first appearance only).
+let allCircles = [];
+const renderedIds = new Set();
+const droppedIds = new Set();
+const MARGIN = 200; // px buffer so circles mount just before they scroll in
+
+// Mount a single circle as a DOM node (no-op if already mounted).
 function renderCircle(c) {
-  if (document.querySelector(`[data-id="${c.id}"]`)) return; // avoid dupes
+  if (renderedIds.has(c.id)) return;
   const el = document.createElement("div");
   el.className = "circle";
   el.dataset.id = c.id;
@@ -104,14 +125,56 @@ function renderCircle(c) {
     e.stopPropagation();
     showTooltip(c);
   });
+  // Play the drop animation only the first time this circle ever appears.
+  if (!droppedIds.has(c.id)) {
+    droppedIds.add(c.id);
+    el.classList.add("dropping");
+    el.addEventListener("animationend", () => el.classList.remove("dropping"), { once: true });
+  }
   circlesLayer.appendChild(el);
+  renderedIds.add(c.id);
+}
+
+// Unmount a circle's DOM node.
+function removeCircle(id) {
+  if (!renderedIds.has(id)) return;
+  const el = circlesLayer.querySelector(`[data-id="${id}"]`);
+  if (el) el.remove();
+  renderedIds.delete(id);
+}
+
+// Is the circle's screen position within the viewport (+ buffer)?
+function isInView(c) {
+  const mw = map.offsetWidth, mh = map.offsetHeight;
+  const sx = pos.x + (c.x / 100) * mw; // screen x of the circle
+  const sy = pos.y + (c.y / 100) * mh;
+  return sx >= -MARGIN && sx <= viewport.clientWidth + MARGIN
+      && sy >= -MARGIN && sy <= viewport.clientHeight + MARGIN;
+}
+
+// Culling pass: mount circles that entered view, unmount those that left.
+function updateVisible() {
+  for (const c of allCircles) {
+    const visible = isInView(c);
+    if (visible && !renderedIds.has(c.id)) renderCircle(c);
+    else if (!visible && renderedIds.has(c.id)) removeCircle(c.id);
+  }
+}
+
+// Throttle updateVisible to once per animation frame (called on every pan move).
+let rafPending = false;
+function scheduleVisible() {
+  if (rafPending) return;
+  rafPending = true;
+  requestAnimationFrame(() => { rafPending = false; updateVisible(); });
 }
 
 async function loadCircles() {
   if (!db) return;
   const { data, error } = await db.from("circles").select("*");
   if (error) { console.error(error); return; }
-  data.forEach(renderCircle);
+  allCircles = data;
+  updateVisible();
 }
 
 // ============================================================
@@ -163,7 +226,8 @@ form.addEventListener("submit", async (e) => {
       .single();
     if (error) throw error;
 
-    renderCircle(data);
+    allCircles.push(data);
+    centerOnCircle(data); // recenters + culling pass mounts the new circle (animated)
     formStatus.textContent = "¡Círculo creado!";
     form.reset();
     mediaType.dispatchEvent(new Event("change"));
@@ -220,7 +284,11 @@ function subscribeRealtime() {
   db
     .channel("circles-changes")
     .on("postgres_changes", { event: "INSERT", schema: "public", table: "circles" },
-      (payload) => renderCircle(payload.new))
+      (payload) => {
+        if (allCircles.some((c) => c.id === payload.new.id)) return; // dedupe own insert
+        allCircles.push(payload.new);
+        updateVisible(); // mounts (+ animates) only if currently in view
+      })
     .subscribe();
 }
 
