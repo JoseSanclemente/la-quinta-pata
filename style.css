@@ -103,6 +103,16 @@ html, body {
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.4);
   padding: 20px;
   overflow-y: auto;
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform .3s ease, opacity .3s ease, visibility 0s linear .3s;
+}
+#sidebar.open {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+  transition: transform .3s ease, opacity .3s ease;
 }
 .sidebar-header {
   display: flex;
@@ -121,7 +131,17 @@ html, body {
 
 #circle-form { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
 #circle-form label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; color: #1d3557; }
-#circle-form input[type="color"] { width: 60px; height: 36px; padding: 0; border: none; cursor: pointer; }
+#color-group { display: flex; flex-wrap: wrap; gap: 10px; border: none; padding: 0; margin: 0; }
+#color-group legend { font-weight: 600; color: #1d3557; margin-bottom: 6px; padding: 0; }
+.swatch {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--c); cursor: pointer;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3px transparent;
+  transition: box-shadow .15s, transform .15s;
+}
+.swatch:hover { transform: scale(1.1); }
+.swatch input { position: absolute; opacity: 0; pointer-events: none; }
+.swatch:has(input:checked) { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1d3557; }
 #circle-form textarea, #circle-form select, #circle-form input[type="file"] {
   font: inherit;
   padding: 8px;

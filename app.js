@@ -21,7 +21,6 @@ const openBtn      = document.getElementById("open-sidebar");
 const sidebar      = document.getElementById("sidebar");
 const closeBtn     = document.getElementById("close-sidebar");
 const form         = document.getElementById("circle-form");
-const colorInput   = document.getElementById("color");
 const mediaType    = document.getElementById("media-type");
 const textField    = document.getElementById("text-field");
 const textContent  = document.getElementById("text-content");
@@ -180,8 +179,8 @@ async function loadCircles() {
 // ============================================================
 //  3. Sidebar — create a circle
 // ============================================================
-openBtn.addEventListener("click", () => sidebar.classList.remove("hidden"));
-closeBtn.addEventListener("click", () => sidebar.classList.add("hidden"));
+openBtn.addEventListener("click", () => sidebar.classList.add("open"));
+closeBtn.addEventListener("click", () => sidebar.classList.remove("open"));
 
 mediaType.addEventListener("change", () => {
   const isText = mediaType.value === "text";
@@ -221,7 +220,7 @@ form.addEventListener("submit", async (e) => {
 
     const { data, error } = await db
       .from("circles")
-      .insert({ x, y, color: colorInput.value, media_type: type, media_url, text_content })
+      .insert({ x, y, color: form.querySelector('input[name="color"]:checked').value, media_type: type, media_url, text_content })
       .select()
       .single();
     if (error) throw error;
@@ -231,6 +230,7 @@ form.addEventListener("submit", async (e) => {
     formStatus.textContent = "¡Círculo creado!";
     form.reset();
     mediaType.dispatchEvent(new Event("change"));
+    sidebar.classList.remove("open"); // close sidebar after creating
   } catch (err) {
     console.error(err);
     formStatus.textContent = "Error: " + (err.message || err);
