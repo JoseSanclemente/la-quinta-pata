@@ -271,15 +271,21 @@ form.addEventListener("submit", async (e) => {
 // ============================================================
 function showTooltip(c) {
   tooltipBody.innerHTML = "";
-  if (c.media_type === "image") {
-    const img = document.createElement("img");
-    img.src = c.media_url;
-    tooltipBody.appendChild(img);
-  } else if (c.media_type === "video") {
-    const v = document.createElement("video");
-    v.src = c.media_url;
-    v.controls = true;
-    tooltipBody.appendChild(v);
+  if (c.media_type === "image" || c.media_type === "video") {
+    // Remote media — show a spinner until it loads (or errors), then reveal it.
+    const spinner = document.createElement("div");
+    spinner.className = "tooltip-spinner";
+    tooltipBody.appendChild(spinner);
+
+    const el = document.createElement(c.media_type === "image" ? "img" : "video");
+    el.className = "loading"; // hidden via CSS until ready
+    el.src = c.media_url;
+    if (c.media_type === "video") el.controls = true;
+    const reveal = () => { spinner.remove(); el.classList.remove("loading"); };
+    if (c.media_type === "image") el.addEventListener("load", reveal, { once: true });
+    else el.addEventListener("loadeddata", reveal, { once: true });
+    el.addEventListener("error", () => spinner.remove(), { once: true });
+    tooltipBody.appendChild(el);
   } else {
     const p = document.createElement("p");
     p.textContent = c.text_content || "";
