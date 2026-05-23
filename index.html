@@ -29,7 +29,6 @@
         <div id="circles-layer"></div>
         <!-- Tooltip lives INSIDE the map so it pans together with its circle -->
         <div id="tooltip" class="hidden">
-          <button id="close-tooltip" title="Cerrar">×</button>
           <div id="tooltip-content"></div>
         </div>
       </div>
@@ -46,6 +45,11 @@
       </div>
 
       <form id="circle-form">
+        <!-- Live preview of the marker (color only for now; swap for "chais" later) -->
+        <div id="circle-preview-wrap">
+          <span id="circle-preview" class="circle-preview"></span>
+        </div>
+
         <fieldset id="color-group">
           <legend>Color del círculo</legend>
           <label class="swatch" style="--c: #e63946"

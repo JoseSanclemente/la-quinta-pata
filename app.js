@@ -28,9 +28,10 @@ const fileField    = document.getElementById("file-field");
 const mediaFile    = document.getElementById("media-file");
 const submitBtn    = document.getElementById("submit-circle");
 const formStatus   = document.getElementById("form-status");
+const colorGroup   = document.getElementById("color-group");
+const circlePreview = document.getElementById("circle-preview");
 const tooltip      = document.getElementById("tooltip");
 const tooltipBody  = document.getElementById("tooltip-content");
-const closeTooltip = document.getElementById("close-tooltip");
 
 // ============================================================
 //  1. Pan / drag the map (no zoom)
@@ -179,15 +180,40 @@ async function loadCircles() {
 // ============================================================
 //  3. Sidebar — create a circle
 // ============================================================
+function closeSidebar() {
+  sidebar.classList.remove("open");
+  formStatus.textContent = ""; // drop stale success/error on close
+}
+
 openBtn.addEventListener("click", () => sidebar.classList.add("open"));
-closeBtn.addEventListener("click", () => sidebar.classList.remove("open"));
+closeBtn.addEventListener("click", closeSidebar);
+
+// Sync preview marker to the selected color (color only for now; swap for "chais" later).
+function updatePreview() {
+  const checked = form.querySelector('input[name="color"]:checked');
+  if (checked) circlePreview.style.background = checked.value;
+}
+colorGroup.addEventListener("change", updatePreview);
+updatePreview(); // reflect default-checked swatch on boot
 
 mediaType.addEventListener("change", () => {
   const isText = mediaType.value === "text";
   textField.classList.toggle("hidden", !isText);
   fileField.classList.toggle("hidden", isText);
   mediaFile.accept = mediaType.value === "video" ? "video/*" : "image/*";
+  updateSubmitState();
 });
+
+// Disable the create button until the active media input has content.
+function updateSubmitState() {
+  const filled = mediaType.value === "text"
+    ? textContent.value.trim() !== ""
+    : mediaFile.files.length > 0;
+  submitBtn.disabled = !filled;
+}
+textContent.addEventListener("input", updateSubmitState);
+mediaFile.addEventListener("change", updateSubmitState);
+updateSubmitState(); // start disabled (empty text by default)
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -230,12 +256,13 @@ form.addEventListener("submit", async (e) => {
     formStatus.textContent = "¡Círculo creado!";
     form.reset();
     mediaType.dispatchEvent(new Event("change"));
-    sidebar.classList.remove("open"); // close sidebar after creating
+    updatePreview(); // reset() restored default color — snap preview back too
+    closeSidebar(); // close sidebar after creating
   } catch (err) {
     console.error(err);
     formStatus.textContent = "Error: " + (err.message || err);
   } finally {
-    submitBtn.disabled = false;
+    updateSubmitState(); // re-enable only if the input still has content
   }
 });
 
@@ -262,14 +289,11 @@ function showTooltip(c) {
   // tooltip lives inside the map and pans together with its circle.
   tooltip.style.left = c.x + "%";
   tooltip.style.top = c.y + "%";
-  // Sit beside the circle; flip to the left side when near the right edge.
-  tooltip.style.transform = c.x > 60
-    ? "translate(calc(-100% - 14px), -50%)"
-    : "translate(14px, -50%)";
+  // Always sit centered above the circle, with the speech-bubble peak pointing down at it.
+  tooltip.style.transform = "translate(-50%, calc(-100% - 18px))";
   tooltip.classList.remove("hidden");
 }
 
-closeTooltip.addEventListener("click", () => tooltip.classList.add("hidden"));
 // Click on empty map closes the tooltip — but ignore the click that ends a pan-drag.
 viewport.addEventListener("click", () => {
   if (moved) return;

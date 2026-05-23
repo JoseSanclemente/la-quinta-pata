@@ -120,7 +120,7 @@ html, body {
   align-items: center;
 }
 .sidebar-header h2 { margin: 0; color: #1d3557; }
-#close-sidebar, #close-tooltip {
+#close-sidebar {
   font-size: 24px;
   line-height: 1;
   background: none;
@@ -133,6 +133,16 @@ html, body {
 #circle-form label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; color: #1d3557; }
 #color-group { display: flex; flex-wrap: wrap; gap: 10px; border: none; padding: 0; margin: 0; }
 #color-group legend { font-weight: 600; color: #1d3557; margin-bottom: 6px; padding: 0; }
+/* ---------- Circle preview (sidebar) ---------- */
+#circle-preview-wrap { display: flex; justify-content: center; margin-bottom: 12px; }
+.circle-preview {
+  width: 56px; height: 56px; border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  background: #e63946; /* matches default checked swatch */
+  transition: background .15s;
+}
+
 .swatch {
   width: 30px; height: 30px; border-radius: 50%;
   background: var(--c); cursor: pointer;
@@ -159,7 +169,7 @@ html, body {
   cursor: pointer;
 }
 #submit-circle:hover { background: #c5303c; }
-#submit-circle:disabled { opacity: 0.6; cursor: wait; }
+#submit-circle:disabled { opacity: 0.6; cursor: not-allowed; }
 #form-status { margin: 0; font-size: 14px; color: #1d3557; min-height: 18px; }
 
 /* ---------- Tooltip ---------- */
@@ -167,13 +177,23 @@ html, body {
   position: absolute; /* relative to #map, so it pans with its circle */
   z-index: 40;
   max-width: 320px;
-  max-height: 70vh;
-  overflow: auto;
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
-  padding: 28px 14px 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  padding: 14px;
 }
-#close-tooltip { position: absolute; top: 4px; right: 8px; }
+/* Speech-bubble peak: triangle at bottom center pointing down at the circle. */
+#tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 10px solid transparent;
+  border-top-color: #fff;
+  border-bottom: 0;
+  filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.1));
+}
+#tooltip-content { max-height: 70vh; overflow: auto; }
 #tooltip-content img, #tooltip-content video { max-width: 100%; border-radius: 6px; display: block; }
 #tooltip-content p { margin: 0; white-space: pre-wrap; color: #1d3557; }
