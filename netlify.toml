@@ -1,3 +1,4 @@
-# Static site — no build step. Netlify just serves the folder.
+# SSR via @astrojs/netlify — the adapter emits the server function itself.
 [build]
-  publish = "."
+  command = "pnpm run build"
+  publish = "dist"

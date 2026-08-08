@@ -1,0 +1,24 @@
+---
+import Layout from "../layouts/Layout.astro";
+import MapViewport from "../components/MapViewport.astro";
+import Sidebar from "../components/Sidebar.astro";
+import { fetchCircles } from "../lib/supabase.server";
+
+export const prerender = false;
+
+// Read server-side so the browser has the circles on first paint — no fetch
+// round-trip, and no race against the first realtime INSERT.
+const circles = await fetchCircles();
+---
+
+<Layout>
+  <MapViewport />
+  <Sidebar />
+
+  <!-- Handoff to the island; parsed by scripts/main.ts. -->
+  <script id="circles-data" type="application/json" is:inline set:html={JSON.stringify(circles)} />
+
+  <script>
+    import "../scripts/main";
+  </script>
+</Layout>

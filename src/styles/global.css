@@ -1,0 +1,218 @@
+@import "tailwindcss";
+/* Variable weight axis (200–800) — self-hosted, no external request. */
+@import "@fontsource-variable/plus-jakarta-sans";
+
+/* ------------------------------------------------------------------
+   Design tokens — these were hard-coded hexes in the prototype's CSS.
+   Tailwind v4 turns every --color-* into utilities (bg-navy, text-ink, ...).
+   ------------------------------------------------------------------ */
+@theme {
+  --font-sans:
+    "Plus Jakarta Sans Variable", system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+
+  --color-ink: #0d1b2a; /* page background behind the map */
+  --color-navy: #1d3557; /* headings, labels, secondary button */
+  --color-navy-hover: #274b73;
+  --color-brand: #e63946; /* submit button, default swatch */
+  --color-brand-hover: #c5303c;
+  --color-paper: #f1faee; /* sidebar background */
+  --color-line: #a8c0d6; /* form field borders */
+
+  /* New palette — names are descriptive only; semantic roles TBD. */
+  --color-magenta: #cb1c85;
+  --color-cream: #f9f5eb;
+  --color-blue: #2743f0;
+  --color-orange: #fc8503;
+  --color-yellow: #ffff08;
+
+  /* The ten circle colors offered in the sidebar. */
+  --color-circle-1: #e63946;
+  --color-circle-2: #f3722c;
+  --color-circle-3: #f9c74f;
+  --color-circle-4: #90be6d;
+  --color-circle-5: #43aa8b;
+  --color-circle-6: #577590;
+  --color-circle-7: #277da1;
+  --color-circle-8: #9b5de5;
+  --color-circle-9: #f15bb5;
+  --color-circle-10: #1d3557;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  background: var(--color-ink);
+}
+
+/* Used by JS to toggle fields and the tooltip; must beat utility classes. */
+.hidden {
+  display: none !important;
+}
+
+/* ------------------------------------------------------------------
+   Map — kept as plain CSS: JS writes the transform inline, and preflight
+   would otherwise cap the image width and break the pan extent.
+   ------------------------------------------------------------------ */
+#viewport {
+  cursor: grab;
+  touch-action: none; /* let JS handle touch dragging */
+}
+#viewport.dragging {
+  cursor: grabbing;
+}
+
+#map {
+  /* translate() is set from JS while dragging */
+  will-change: transform;
+}
+
+/* added only during centerOnCircle so the recenter glides; drag stays instant */
+#map.smooth {
+  transition: transform 0.4s ease-out;
+}
+
+#map-image {
+  display: block;
+  /* natural image size; pan reveals it. Overrides Tailwind preflight. */
+  max-width: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* ------------------------------------------------------------------
+   Circles — created by JS (scripts/circles.ts), so they live here rather
+   than as utility classes in markup.
+   ------------------------------------------------------------------ */
+.circle {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 3px solid rgb(255 255 255 / 0.85);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.5);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+.circle:hover {
+  transform: translate(-50%, -50%) scale(1.25);
+}
+
+/* Drop-in animation — played only the first time a circle appears.
+   Rest state matches the resting transform so there's no jump on finish. */
+@keyframes circle-drop {
+  0% {
+    transform: translate(-50%, calc(-50% - 40px));
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+  80% {
+    transform: translate(-50%, calc(-50% - 6px)); /* small bounce */
+  }
+  100% {
+    transform: translate(-50%, -50%);
+  }
+}
+.circle.dropping {
+  animation: circle-drop 0.45s ease-out;
+}
+
+/* ------------------------------------------------------------------
+   Sidebar slide-in. `.open` is toggled from JS, so the transition pair
+   (including the visibility delay trick) stays as plain CSS.
+   ------------------------------------------------------------------ */
+#sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease,
+    visibility 0s linear 0.3s;
+}
+#sidebar.open {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+/* ------------------------------------------------------------------
+   Color swatches — --c is set inline per swatch in the markup.
+   ------------------------------------------------------------------ */
+.swatch {
+  background: var(--c);
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 3px transparent;
+  transition:
+    box-shadow 0.15s,
+    transform 0.15s;
+}
+.swatch:hover {
+  transform: scale(1.1);
+}
+.swatch:has(input:checked) {
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 4px var(--color-navy);
+}
+
+/* ------------------------------------------------------------------
+   Tooltip — position/transform written by JS; the peak needs a pseudo-element.
+   ------------------------------------------------------------------ */
+#tooltip {
+  position: absolute; /* relative to #map, so it pans with its circle */
+}
+/* Speech-bubble peak: triangle at bottom center pointing down at the circle. */
+#tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 10px solid transparent;
+  border-top-color: #fff;
+  border-bottom: 0;
+  filter: drop-shadow(0 3px 2px rgb(0 0 0 / 0.1));
+}
+#tooltip-content img,
+#tooltip-content video {
+  max-width: 100%;
+  border-radius: 6px;
+  display: block;
+}
+#tooltip-content p {
+  margin: 0;
+  white-space: pre-wrap;
+  color: var(--color-navy);
+}
+/* Media stays hidden until it finishes loading; spinner takes its place. */
+#tooltip-content .loading {
+  display: none;
+}
+.tooltip-spinner {
+  width: 32px;
+  height: 32px;
+  margin: 8px auto;
+  border: 3px solid rgb(29 53 87 / 0.2);
+  border-top-color: var(--color-navy);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
