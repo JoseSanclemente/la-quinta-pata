@@ -1,24 +1,98 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import MapViewport from "../components/MapViewport.astro";
-import Sidebar from "../components/Sidebar.astro";
-import { fetchCircles } from "../lib/supabase.server";
-
-export const prerender = false;
-
-// Read server-side so the browser has the circles on first paint — no fetch
-// round-trip, and no race against the first realtime INSERT.
-const circles = await fetchCircles();
+import tornEdge from "../assets/torn_edge_3.webp";
+import logo from "../assets/logo.webp";
+import hero from "../assets/hero.webp";
+import star from "../assets/blue_star.webp";
 ---
 
 <Layout>
-  <MapViewport />
-  <Sidebar />
+  <main class="relative min-h-dvh overflow-hidden bg-cream">
+    <div class="relative z-10 flex min-h-dvh flex-col">
+      <header class="flex items-center justify-between gap-4 px-6 py-5 md:px-10">
+        <a href="/">
+          <img
+            src={logo.src}
+            alt="La Quinta Pata — Archivo digital"
+            class="h-18 w-auto md:h-32"
+          />
+        </a>
 
-  <!-- Handoff to the island; parsed by scripts/main.ts. -->
-  <script id="circles-data" type="application/json" is:inline set:html={JSON.stringify(circles)} />
+        <nav class="flex items-center gap-4 md:gap-8">
+          <a
+            href="#quienes-somos"
+            class="text-sm text-blue hover:underline md:text-base"
+          >
+            ¿Quiénes Somos?
+          </a>
+          <a
+            href="/memorias"
+            class="rounded-md bg-blue px-5 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 md:text-base"
+          >
+            Conocer anécdotas
+          </a>
+        </nav>
+      </header>
 
-  <script>
-    import "../scripts/main";
-  </script>
+      <!-- Copy sits over the artwork from md up; below that they stack. -->
+      <div
+        class="relative flex flex-1 flex-col items-center justify-center gap-8 px-6 pb-28 md:px-10"
+      >
+        <!-- Torn-paper stars behind the artwork. The pink one is the same asset
+             used as an alpha mask over a flat pink fill, so both come from
+             blue_star.webp. Purely decorative, so they never take pointer events. -->
+        <div class="pointer-events-none absolute inset-0">
+          <div
+            class="absolute top-[2%] left-[14%] w-[50%] bg-magenta/25"
+            style={`aspect-ratio: ${star.width} / ${star.height};
+                    -webkit-mask: url(${star.src}) center / contain no-repeat;
+                    mask: url(${star.src}) center / contain no-repeat;`}
+          >
+          </div>
+          <img
+            src={star.src}
+            alt=""
+            aria-hidden="true"
+            class="absolute top-[10%] right-[18%] w-[52%] opacity-45"
+          />
+        </div>
+
+        <div
+          class="relative max-w-md text-blue md:absolute md:top-1/2 md:left-10 md:w-96 md:-translate-y-1/2 lg:w-md"
+        >
+          <h1 class="text-[40px] leading-tight font-extrabold">
+            ¡Quiubo, Hola, Hello!
+          </h1>
+          <p class="mt-4 text-[20px] leading-relaxed">
+            Bienvenidx a La Quinta Pata. Pasá y conocé el primero archivo
+            digital de la <strong class="font-bold">silla Rimax</strong>.
+          </p>
+        </div>
+
+        <img
+          src={hero.src}
+          alt="Mesa con sillas Rimax, sombrilla y radio bajo un letrero de 'Al aire'"
+          class="relative w-full max-w-6xl object-contain md:max-h-[92vh] md:w-auto"
+        />
+      </div>
+    </div>
+
+    <!-- Torn paper edge closing off the hero. The asset is a white-on-transparent
+         strip, so it's used as an alpha mask over a magenta fill instead of as
+         an <img>; the aspect ratio keeps the strip's proportions at any width. -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-x-0 -bottom-10 z-20 w-full bg-magenta"
+      style={`aspect-ratio: ${tornEdge.width} / ${tornEdge.height};
+              -webkit-mask: url(${tornEdge.src}) center / 100% 100% no-repeat;
+              mask: url(${tornEdge.src}) center / 100% 100% no-repeat;`}
+    >
+    </div>
+  </main>
+
+  <!-- Picks up where the hero's torn edge leaves off — same magenta, so the tear
+       reads as this section's top edge. -->
+  <section id="quienes-somos" class="min-h-[60vh] bg-magenta px-6 py-20 md:px-10">
+    <!-- Section content goes here. -->
+  </section>
 </Layout>

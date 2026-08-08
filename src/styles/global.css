@@ -41,9 +41,16 @@
 
 html,
 body {
+  font-family: var(--font-sans);
+  background: var(--color-cream);
+}
+
+/* Opt-in per page via <Layout lockScroll> — the map needs a fixed viewport
+   and the dark backdrop behind the map image. */
+html:has(body.lock-scroll),
+body.lock-scroll {
   height: 100%;
   overflow: hidden;
-  font-family: var(--font-sans);
   background: var(--color-ink);
 }
 

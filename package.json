@@ -9,6 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "shot": "node scripts/shot.mjs",
     "astro": "astro"
   },
   "dependencies": {
@@ -26,5 +27,8 @@
       "esbuild",
       "sharp"
     ]
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
   }
 }

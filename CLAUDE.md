@@ -23,6 +23,35 @@ to all visitors. The page is a static shell plus one vanilla-TS client island; n
 - Env vars are declared in `astro.config.mjs` under `env.schema` and imported from
   `astro:env/client` / `astro:env/server` — not `import.meta.env`.
 
+## Visual UI checks (do this for any UI change)
+
+Never ship or describe a UI change from the markup alone — screenshot it and look at it.
+When the user supplies a design reference, put the shot and the reference side by side and
+name the concrete deltas (spacing, weight, color, alignment) before editing again.
+
+`scripts/shot.mjs` drives headless chromium against the running dev server:
+
+```
+pnpm dev                                       # leave running; HMR means no restart per shot
+node scripts/shot.mjs memorias memorias 1440x900
+node scripts/shot.mjs . home-mobile 390x844    # "." or "" = the root route
+```
+
+Args: `route name viewport`. Output lands in `.screenshots/` (gitignored) unless `SHOT_DIR`
+overrides it; `SHOT_BASE` overrides the origin. Then `Read` the PNG — the Read tool renders
+images visually.
+
+- **Pass the route WITHOUT a leading slash.** Under Git Bash, MSYS path translation rewrites
+  `/memorias` into `C:/Program Files/Git/memorias` before node sees the argument.
+- The script waits on `document.fonts.ready` (Plus Jakarta Sans is a `@fontsource-variable`
+  package — an early shot captures fallback metrics and every spacing judgement is wrong),
+  waits for `#map-image`, and hides `astro-dev-toolbar`, which otherwise floats over the
+  bottom-centre of every dev page.
+- After a `playwright` version bump, run `pnpm exec playwright install chromium` — each
+  release pins its own browser build and launch fails with `Executable doesn't exist at ...`.
+- Circle x/y is RANDOM on creation (`sidebar.ts`), so `/memorias` shots are not pixel-stable.
+  Compare the empty map, or seed fixed rows first.
+
 ## Backend setup (Supabase)
 
 - Run `supabase-setup.sql` once in the Supabase SQL Editor. It creates the `circles` table,
@@ -38,7 +67,8 @@ the adapter emits the SSR function. The three env vars must be set in the Netlif
 
 ## Architecture
 
-`output: "server"`. `src/pages/index.astro` reads all circles server-side
+`output: "server"`. `src/pages/index.astro` is the hero landing page;
+the map lives at `src/pages/memorias.astro` (`/memorias`), which reads all circles server-side
 (`src/lib/supabase.server.ts`) and serializes them into a `<script type="application/json"
 id="circles-data">`. The island parses that on boot instead of fetching — no client
 round-trip, and no race between the initial load and the first realtime INSERT.

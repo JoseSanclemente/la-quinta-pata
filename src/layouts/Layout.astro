@@ -3,9 +3,11 @@ import "../styles/global.css";
 
 interface Props {
   title?: string;
+  /** Fixed-viewport pages (the map) opt in; scrolling pages leave it off. */
+  lockScroll?: boolean;
 }
 
-const { title = "La Silla" } = Astro.props;
+const { title = "La Silla", lockScroll = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -18,7 +20,7 @@ const { title = "La Silla" } = Astro.props;
     />
     <title>{title}</title>
   </head>
-  <body class="m-0">
+  <body class:list={["m-0", lockScroll && "lock-scroll"]}>
     <slot />
   </body>
 </html>
