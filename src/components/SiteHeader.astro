@@ -1,0 +1,31 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/logo.webp";
+---
+
+<header class="flex items-center justify-between gap-4 px-6 py-5 md:px-10">
+  <a href="/">
+    <Image
+      src={logo}
+      alt="La Quinta Pata — Archivo digital"
+      widths={[256, 512]}
+      sizes="(min-width: 768px) 228px, 128px"
+      class="h-18 w-auto md:h-32"
+    />
+  </a>
+
+  <nav class="flex items-center gap-4 md:gap-8">
+    <a
+      href="/quienes-somos"
+      class="text-sm text-blue hover:underline md:text-base"
+    >
+      ¿Quiénes Somos?
+    </a>
+    <a
+      href="/memorias"
+      class="rounded-md bg-blue px-5 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 md:text-base"
+    >
+      Conocer anécdotas
+    </a>
+  </nav>
+</header>

@@ -1,0 +1,73 @@
+---
+import { Image } from "astro:assets";
+import MaskedShape from "../MaskedShape.astro";
+import TapedPhoto from "../TapedPhoto.astro";
+import star from "../../assets/blue_star.webp";
+import chair from "../../assets/chair/yellow_chair.webp";
+import chairPhoto from "../../assets/yellow_chair_photo.webp";
+import tornEdgeCream from "../../assets/torn_edge_1.webp";
+---
+
+<!-- Picks up where the hero's torn edge leaves off — same magenta, so the tear
+     reads as this section's top edge. -->
+<section class="relative overflow-hidden bg-magenta px-6 pt-20 pb-20 md:px-10 md:pb-16">
+  <!-- Starburst sitting behind the chair. Same alpha-mask trick as the hero:
+       blue at 30% over the magenta lands on the violet the artwork uses, so no
+       extra palette token is needed. -->
+  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+    <MaskedShape
+      image={star}
+      width={1000}
+      class="absolute top-[4%] left-[2%] w-[70%] bg-blue/20 md:top-0 md:left-0 md:w-[44%]"
+    />
+  </div>
+
+  <div
+    class="relative z-10 mx-auto grid max-w-7xl gap-12 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] md:items-center md:gap-12"
+  >
+    <div>
+      <h2
+        class="max-w-sm text-section leading-tight font-normal text-white md:text-section-lg"
+      >
+        La Rimax es de esas cosas que uno ve a diario y <em
+          class="font-extrabold italic">ni le para bolas.</em
+        >
+      </h2>
+      <p class="mt-5 max-w-sm text-sm leading-relaxed text-white md:text-base">
+        Está en la terraza, en la tienda, en el cumpleaños, en el patio y hasta
+        en el velorio cogiendo airecito.
+      </p>
+
+      <Image
+        src={chair}
+        alt="Silla Rimax amarilla"
+        widths={[320, 640]}
+        sizes="(min-width: 1024px) 320px, (min-width: 768px) 288px, 224px"
+        class="mt-10 w-56 md:w-72 lg:w-80"
+      />
+    </div>
+
+    <TapedPhoto
+      image={chairPhoto}
+      alt="Un parrillero lleva una silla Rimax amarilla en moto, entre el tráfico"
+    />
+  </div>
+
+  <!-- Cream tear closing the section — different silhouette from the hero's
+       edge so the two don't read as the same cut. It sits BEHIND the collage
+       (z-0) and rides high, so the chair and the photo overhang it. The masked
+       strip is torn along its top and solid below, so a plain cream block
+       carries the fill the rest of the way to the section's bottom. -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex flex-col justify-end"
+  >
+    <MaskedShape
+      image={tornEdgeCream}
+      size="100% 100%"
+      width={1600}
+      class="w-full shrink-0 bg-cream"
+    />
+    <div class="h-14 w-full bg-cream md:h-20"></div>
+  </div>
+</section>

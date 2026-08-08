@@ -1,0 +1,32 @@
+---
+import { getImage } from "astro:assets";
+
+interface Props {
+  /** Torn-paper / starburst asset whose alpha channel becomes the mask. */
+  image: ImageMetadata;
+  /** mask-size: "contain" keeps the shape's proportions, "100% 100%" stretches it edge to edge. */
+  size?: "contain" | "100% 100%";
+  /** Widest the shape ever renders. Masks never need the full-resolution asset. */
+  width?: number;
+  class?: string;
+}
+
+const { image, size = "contain", width = 1200, class: className } = Astro.props;
+
+// The fill comes from a bg-* utility on this div; the asset only supplies the
+// silhouette, so it is downscaled to the size it actually paints at.
+const mask = await getImage({
+  src: image,
+  width: Math.min(width, image.width),
+  format: "webp",
+});
+---
+
+<div
+  aria-hidden="true"
+  class:list={["pointer-events-none", className]}
+  style={`aspect-ratio: ${image.width} / ${image.height};
+          -webkit-mask: url(${mask.src}) center / ${size} no-repeat;
+          mask: url(${mask.src}) center / ${size} no-repeat;`}
+>
+</div>

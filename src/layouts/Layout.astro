@@ -3,22 +3,35 @@ import "../styles/global.css";
 
 interface Props {
   title?: string;
+  description?: string;
   /** Fixed-viewport pages (the map) opt in; scrolling pages leave it off. */
   lockScroll?: boolean;
 }
 
-const { title = "La Silla", lockScroll = false } = Astro.props;
+const {
+  title = "La Quinta Pata",
+  description = "El primer archivo digital de la silla Rimax. Anécdotas de todo el mundo, en un mapa.",
+  lockScroll = false,
+} = Astro.props;
+
+// Pinch-zoom is disabled only where it would fight the pan gesture (the map).
+// Blocking it everywhere is a WCAG 1.4.4 failure.
+const viewport = lockScroll
+  ? "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  : "width=device-width, initial-scale=1.0";
 ---
 
 <!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
+    <meta name="viewport" content={viewport} />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={Astro.url.href} />
   </head>
   <body class:list={["m-0", lockScroll && "lock-scroll"]}>
     <slot />

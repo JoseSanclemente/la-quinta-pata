@@ -11,6 +11,13 @@
     "Plus Jakarta Sans Variable", system-ui, -apple-system, "Segoe UI", Roboto,
     sans-serif;
 
+  /* Landing-page type scale — these were arbitrary text-[Npx] values in the
+     markup. Tailwind turns each into a text-* utility. */
+  --text-hero: 40px; /* h1 */
+  --text-lead: 20px; /* hero paragraph */
+  --text-section: 28px; /* section h2, mobile */
+  --text-section-lg: 34px; /* section h2, md and up */
+
   --color-ink: #0d1b2a; /* page background behind the map */
   --color-navy: #1d3557; /* headings, labels, secondary button */
   --color-navy-hover: #274b73;
