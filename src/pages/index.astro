@@ -4,6 +4,11 @@ import tornEdge from "../assets/torn_edge_3.webp";
 import logo from "../assets/logo.webp";
 import hero from "../assets/hero.webp";
 import star from "../assets/blue_star.webp";
+import chair from "../assets/chair/yellow_chair.webp";
+import chairPhoto from "../assets/yellow_chair_photo.webp";
+import tape1 from "../assets/tape_1.webp";
+import tape2 from "../assets/tape_2.webp";
+import tornEdgeCream from "../assets/torn_edge_1.webp";
 ---
 
 <Layout>
@@ -92,7 +97,83 @@ import star from "../assets/blue_star.webp";
 
   <!-- Picks up where the hero's torn edge leaves off — same magenta, so the tear
        reads as this section's top edge. -->
-  <section id="quienes-somos" class="min-h-[60vh] bg-magenta px-6 py-20 md:px-10">
-    <!-- Section content goes here. -->
+  <section class="relative overflow-hidden bg-magenta px-6 pt-20 pb-20 md:px-10 md:pb-16">
+    <!-- Starburst sitting behind the chair. Same alpha-mask trick as the hero:
+         blue at 30% over the magenta lands on the violet the artwork uses, so no
+         extra palette token is needed. -->
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div
+        class="absolute top-[4%] left-[2%] w-[70%] bg-blue/20 md:top-0 md:left-0 md:w-[44%]"
+        style={`aspect-ratio: ${star.width} / ${star.height};
+                -webkit-mask: url(${star.src}) center / contain no-repeat;
+                mask: url(${star.src}) center / contain no-repeat;`}
+      >
+      </div>
+    </div>
+
+    <div
+      class="relative z-10 mx-auto grid max-w-7xl gap-12 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] md:items-center md:gap-12"
+    >
+      <div>
+        <h2
+          class="max-w-sm text-[28px] leading-tight font-normal text-white md:text-[34px]"
+        >
+          La Rimax es de esas cosas que uno ve a diario y <em
+            class="font-extrabold italic">ni le para bolas.</em
+          >
+        </h2>
+        <p class="mt-5 max-w-sm text-sm leading-relaxed text-white md:text-base">
+          Está en la terraza, en la tienda, en el cumpleaños, en el patio y hasta
+          en el velorio cogiendo airecito.
+        </p>
+
+        <img
+          src={chair.src}
+          alt="Silla Rimax amarilla"
+          class="mt-10 w-56 md:w-72 lg:w-80"
+        />
+      </div>
+
+      <!-- Photo is taped down: the strips overhang the corners, so they're
+           positioned against this wrapper rather than the image itself. -->
+      <div class="relative">
+        <img
+          src={chairPhoto.src}
+          alt="Un parrillero lleva una silla Rimax amarilla en moto, entre el tráfico"
+          class="w-full rounded-sm shadow-[0_4px_24px_rgba(0,0,0,0.25)]"
+        />
+        <img
+          src={tape1.src}
+          alt=""
+          aria-hidden="true"
+          class="absolute -top-7 -left-6 h-24 w-auto -rotate-45 md:-top-10 md:-left-10 md:h-40"
+        />
+        <img
+          src={tape2.src}
+          alt=""
+          aria-hidden="true"
+          class="absolute -top-8 -right-6 h-28 w-auto rotate-45 md:-top-12 md:-right-10 md:h-44"
+        />
+      </div>
+    </div>
+
+    <!-- Cream tear closing the section — different silhouette from the hero's
+         edge so the two don't read as the same cut. It sits BEHIND the collage
+         (z-0) and rides high, so the chair and the photo overhang it. The masked
+         strip is torn along its top and solid below, so a plain cream block
+         carries the fill the rest of the way to the section's bottom. -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex flex-col justify-end"
+    >
+      <div
+        class="w-full shrink-0 bg-cream"
+        style={`aspect-ratio: ${tornEdgeCream.width} / ${tornEdgeCream.height};
+                -webkit-mask: url(${tornEdgeCream.src}) center / 100% 100% no-repeat;
+                mask: url(${tornEdgeCream.src}) center / 100% 100% no-repeat;`}
+      >
+      </div>
+      <div class="h-14 w-full bg-cream md:h-20"></div>
+    </div>
   </section>
 </Layout>
