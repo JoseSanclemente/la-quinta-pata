@@ -4,14 +4,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Astro app ("Mapa Imaginario" / "La Silla"): a draggable map where any visitor drops colored
-circles containing text, an image, or a video. Circles are stored in Supabase and stream live
-to all visitors. The page is a static shell plus one vanilla-TS client island; no UI framework.
+Astro site ("La Quinta Pata"): a digital archive around the Rimax plastic chair, in Spanish.
+Three routes, no UI framework:
+
+- `/` (`src/pages/index.astro`) — prerendered marketing landing, composed of
+  `src/components/home/` sections (`Hero`, `RimaxIntro`, `Discovery`). Editorial layout built
+  from torn-paper `MaskedShape` bands over alternating cream/blue/magenta fields.
+- `/quienes-somos` — prerendered placeholder, an empty blue page; content still to be written.
+- `/memorias` — the interactive part: a draggable map where any visitor drops colored circles
+  containing text, an image, or a video. Circles live in Supabase and stream live to all
+  visitors. Static shell plus one vanilla-TS client island (`src/scripts/`).
+
+Only `/memorias` is server-rendered; the other two set `export const prerender = true`.
 
 ## Running locally
 
 - pnpm only — `packageManager` pins it and there is no npm lockfile. `pnpm install`, then
-  `pnpm dev` (http://localhost:4321). `pnpm build`, `pnpm check`.
+  `pnpm dev` (<http://localhost:4321>). `pnpm build`, `pnpm check`.
 - `allowBuilds` in `pnpm-workspace.yaml` allows `esbuild` and `sharp` to run their install
   scripts; pnpm blocks postinstall by default and the build fails without them. (pnpm 11 no
   longer reads the `pnpm` field in `package.json` — settings live in `pnpm-workspace.yaml`.)
@@ -32,13 +41,14 @@ name the concrete deltas (spacing, weight, color, alignment) before editing agai
 
 `scripts/shot.mjs` drives headless chromium against the running dev server:
 
-```
-pnpm dev                                       # leave running; HMR means no restart per shot
+```bash
+pnpm dev
 node scripts/shot.mjs memorias memorias 1440x900
-node scripts/shot.mjs . home-mobile 390x844    # "." or "" = the root route
+node scripts/shot.mjs . home-mobile 390x844
 ```
 
-Args: `route name viewport`. Output lands in `.screenshots/` (gitignored) unless `SHOT_DIR`
+Leave `pnpm dev` running — HMR means no restart per shot. `.` or an empty string is the root
+route. Args: `route name viewport`. Output lands in `.screenshots/` (gitignored) unless `SHOT_DIR`
 overrides it; `SHOT_BASE` overrides the origin. Then `Read` the PNG — the Read tool renders
 images visually.
 
@@ -95,6 +105,16 @@ The island lives in `src/scripts/`, split along the 5 sections the prototype use
 
 ### Key conventions / gotchas
 
+- **No comments. At all.** Not in `.astro`, `.ts`, `.css`, `.sql`, `.mjs` — no explanatory
+  blocks, no section headers, no trailing notes, no commented-out code. Name things well and
+  let the code stand alone. Anything that genuinely needs prose belongs in this file. When
+  touching a file that still has old comments, delete them. Only exception: functional
+  directives the toolchain reads, like `// @ts-check` in `astro.config.mjs`.
+- **Absolute imports only.** `tsconfig.json` maps `@/*` to `./src/*`; every import inside
+  `src/` goes through it — `@/components/SiteHeader.astro`, `@/assets/hero.webp`,
+  `@/lib/supabase.server`. Never `../` or `./` across directories. (`src/pages/*.astro` and
+  parts of `src/scripts/` still carry relative imports from before the alias landed; convert
+  them as you touch them.)
 - `state.ts` exports containers (objects, arrays, sets), never reassigned primitives — module
   bindings are read-only for importers, so `pan.moved` works where `let moved` would not.
 - Circle positions are percentages (0–100) of the map image box, not pixels — so they stay
@@ -105,7 +125,7 @@ The island lives in `src/scripts/`, split along the 5 sections the prototype use
 - Tailwind is used for the static markup (sidebar, form, buttons). Anything JS creates or
   toggles stays in `src/styles/global.css`: `.circle`, `.tooltip-spinner`, `#tooltip::after`,
   `#sidebar.open`, `.swatch:has(input:checked)`, the keyframes, and `#map-image { max-width:
-  none }` (preflight would otherwise cap it and break the pan extent).
+none }` (preflight would otherwise cap it and break the pan extent).
 - Palette lives in the `@theme` block of `global.css` as `--color-*` tokens, which Tailwind
   turns into `bg-navy`, `text-brand`, etc.
 - Real map image goes at `public/assets/map.png`; `MapViewport.astro` falls back to
@@ -113,4 +133,5 @@ The island lives in `src/scripts/`, split along the 5 sections the prototype use
 
 ## Language note
 
-README, UI strings, and form status messages are in Spanish. Code comments are English.
+README, UI strings, page copy, and form status messages are in Spanish. Identifiers stay in
+English. (No comments in either language — see conventions above.)

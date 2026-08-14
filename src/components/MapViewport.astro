@@ -1,15 +1,7 @@
----
-// Fixed window; the map image pans inside it. Everything positioned here is
-// driven from src/scripts — see global.css for the styles JS depends on.
----
-
 <div id="viewport" class="fixed inset-0 overflow-hidden">
   <div id="map" class="absolute top-0 left-0">
-    <!-- Real map lives at public/assets/map.png; falls back to the placeholder. -->
     <img id="map-image" src="/assets/map.png" alt="Mapa" draggable="false" />
-    <!-- circles get injected here by scripts/circles.ts -->
     <div id="circles-layer" class="absolute inset-0"></div>
-    <!-- Tooltip lives INSIDE the map so it pans together with its circle -->
     <div
       id="tooltip"
       class="hidden z-40 max-w-[320px] rounded-[10px] bg-white p-3.5 shadow-[0_4px_16px_rgb(0_0_0/0.18)]"

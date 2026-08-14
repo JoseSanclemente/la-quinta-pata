@@ -1,5 +1,3 @@
-/** Element lookups, resolved once. Module scripts are deferred, so the DOM exists. */
-
 function el<T extends HTMLElement>(id: string): T {
   const node = document.getElementById(id);
   if (!node) throw new Error(`[la-silla] missing #${id} in the markup`);

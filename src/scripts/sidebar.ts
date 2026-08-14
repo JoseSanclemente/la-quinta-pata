@@ -1,6 +1,3 @@
-// ============================================================
-//  3. Sidebar — create a circle
-// ============================================================
 import {
   circlePreview,
   closeBtn,
@@ -15,15 +12,15 @@ import {
   submitBtn,
   textContent,
   textField,
-} from "./dom";
-import { allCircles } from "./state";
-import { centerOnCircle } from "./pan";
-import { insertCircle, uploadMedia } from "../lib/supabase.client";
-import type { MediaType } from "../lib/types";
+} from "@/scripts/dom";
+import { allCircles } from "@/scripts/state";
+import { centerOnCircle } from "@/scripts/pan";
+import { insertCircle, uploadMedia } from "@/lib/supabase.client";
+import type { MediaType } from "@/lib/types";
 
 function closeSidebar() {
   sidebar.classList.remove("open");
-  formStatus.textContent = ""; // drop stale success/error on close
+  formStatus.textContent = "";
 }
 
 function selectedColor(): string {
@@ -31,12 +28,10 @@ function selectedColor(): string {
   return checked?.value ?? "#e63946";
 }
 
-/** Sync preview marker to the selected color (color only for now; swap for "chais" later). */
 function updatePreview() {
   circlePreview.style.background = selectedColor();
 }
 
-/** Disable the create button until the active media input has content. */
 function updateSubmitState() {
   const filled =
     mediaType.value === "text"
@@ -73,7 +68,6 @@ async function onSubmit(e: SubmitEvent) {
       media_url = await uploadMedia(file);
     }
 
-    // random spot on the map (percent)
     const x = Math.round(Math.random() * 90 + 5);
     const y = Math.round(Math.random() * 90 + 5);
 
@@ -87,17 +81,17 @@ async function onSubmit(e: SubmitEvent) {
     });
 
     allCircles.push(circle);
-    centerOnCircle(circle); // recenters + culling pass mounts the new circle (animated)
+    centerOnCircle(circle);
     formStatus.textContent = "¡Círculo creado!";
     form.reset();
-    onMediaTypeChange(); // reset() restored "text" — resync the visible fields
-    updatePreview(); // reset() restored default color — snap preview back too
-    closeSidebar(); // close sidebar after creating
+    onMediaTypeChange();
+    updatePreview();
+    closeSidebar();
   } catch (err) {
     console.error(err);
     formStatus.textContent = "Error: " + (err instanceof Error ? err.message : String(err));
   } finally {
-    updateSubmitState(); // re-enable only if the input still has content
+    updateSubmitState();
   }
 }
 
@@ -110,6 +104,6 @@ export function initSidebar() {
   mediaFile.addEventListener("change", updateSubmitState);
   form.addEventListener("submit", onSubmit);
 
-  updatePreview(); // reflect default-checked swatch on boot
-  updateSubmitState(); // start disabled (empty text by default)
+  updatePreview();
+  updateSubmitState();
 }

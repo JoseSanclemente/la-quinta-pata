@@ -1,12 +1,11 @@
 ---
 import { Image } from "astro:assets";
-import tape1 from "../assets/tape_1.webp";
-import tape2 from "../assets/tape_2.webp";
+import tape1 from "@/assets/tape_1.webp";
+import tape2 from "@/assets/tape_2.webp";
 
 interface Props {
   image: ImageMetadata;
   alt: string;
-  /** Widths the photo renders at, for the srcset. */
   sizes?: string;
   class?: string;
 }
@@ -19,8 +18,6 @@ const {
 } = Astro.props;
 ---
 
-<!-- The strips overhang the corners, so they're positioned against this wrapper
-     rather than the image itself. -->
 <div class:list={["relative", className]}>
   <Image
     src={image}

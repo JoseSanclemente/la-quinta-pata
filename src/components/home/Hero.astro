@@ -11,13 +11,9 @@ import tornEdge from "@/assets/torn_edge_3.webp";
   <div class="relative z-10 flex min-h-dvh flex-col">
     <SiteHeader />
 
-    <!-- Copy sits over the artwork from md up; below that they stack. -->
     <div
       class="relative flex flex-1 flex-col items-center justify-center gap-8 px-6 pb-28 md:px-10"
     >
-      <!-- Torn-paper stars behind the artwork. The pink one is the same asset
-           used as an alpha mask over a flat pink fill, so both come from
-           blue_star.webp. Purely decorative, so they never take pointer events. -->
       <div class="pointer-events-none absolute inset-0">
         <MaskedShape
           image={star}
@@ -46,7 +42,6 @@ import tornEdge from "@/assets/torn_edge_3.webp";
         </p>
       </div>
 
-      <!-- LCP element: loaded eagerly at high priority, never lazily. -->
       <Image
         src={hero}
         alt="Mesa con sillas Rimax, sombrilla y radio bajo un letrero de 'Al aire'"
@@ -60,9 +55,6 @@ import tornEdge from "@/assets/torn_edge_3.webp";
     </div>
   </div>
 
-  <!-- Torn paper edge closing off the hero. The asset is a white-on-transparent
-       strip, so it's used as an alpha mask over a magenta fill instead of as
-       an <img>; the aspect ratio keeps the strip's proportions at any width. -->
   <MaskedShape
     image={tornEdge}
     size="100% 100%"

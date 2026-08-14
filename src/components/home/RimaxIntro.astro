@@ -8,12 +8,7 @@ import chairPhoto from "@/assets/yellow_chair_photo.webp";
 import tornEdgeCream from "@/assets/torn_edge_1.webp";
 ---
 
-<!-- Picks up where the hero's torn edge leaves off — same magenta, so the tear
-     reads as this section's top edge. -->
 <section class="relative overflow-hidden bg-magenta px-6 pt-20 pb-20 md:px-10 md:pb-16">
-  <!-- Starburst sitting behind the chair. Same alpha-mask trick as the hero:
-       blue at 30% over the magenta lands on the violet the artwork uses, so no
-       extra palette token is needed. -->
   <div class="pointer-events-none absolute inset-0" aria-hidden="true">
     <MaskedShape
       image={star}
@@ -53,11 +48,6 @@ import tornEdgeCream from "@/assets/torn_edge_1.webp";
     />
   </div>
 
-  <!-- Cream tear closing the section — different silhouette from the hero's
-       edge so the two don't read as the same cut. It sits BEHIND the collage
-       (z-0) and rides high, so the chair and the photo overhang it. The masked
-       strip is torn along its top and solid below, so a plain cream block
-       carries the fill the rest of the way to the section's bottom. -->
   <div
     aria-hidden="true"
     class="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex flex-col justify-end"

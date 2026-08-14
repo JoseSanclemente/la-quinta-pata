@@ -1,17 +1,13 @@
-// ============================================================
-//  1. Pan / drag the map (no zoom)
-// ============================================================
-import { map, viewport } from "./dom";
-import { origin, pan, pos, start } from "./state";
-import { scheduleVisible } from "./circles";
-import type { Circle } from "../lib/types";
+import { map, viewport } from "@/scripts/dom";
+import { origin, pan, pos, start } from "@/scripts/state";
+import { scheduleVisible } from "@/scripts/circles";
+import type { Circle } from "@/lib/types";
 
 export function applyTransform() {
   map.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
 }
 
 export function clamp() {
-  // keep at least part of the image on screen
   const vw = viewport.clientWidth;
   const vh = viewport.clientHeight;
   const mw = map.offsetWidth;

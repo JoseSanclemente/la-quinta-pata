@@ -1,6 +1,4 @@
 ---
-// Create-a-circle panel. Slides in from the right; `.open` is toggled by
-// src/scripts/sidebar.ts.
 const COLORS = [
   "#e63946",
   "#f3722c",
@@ -18,7 +16,6 @@ const fieldClass = "rounded-md border border-line p-2 font-normal text-navy";
 const labelClass = "flex flex-col gap-1.5 font-semibold text-navy";
 ---
 
-<!-- Floating button to open the creator -->
 <button
   id="open-sidebar"
   title="Crear círculo"
@@ -43,7 +40,6 @@ const labelClass = "flex flex-col gap-1.5 font-semibold text-navy";
   </div>
 
   <form id="circle-form" class="mt-4 flex flex-col gap-4">
-    <!-- Live preview of the marker (color only for now; swap for "chais" later) -->
     <div class="mb-3 flex justify-center">
       <span
         id="circle-preview"
@@ -71,14 +67,12 @@ const labelClass = "flex flex-col gap-1.5 font-semibold text-navy";
       </select>
     </label>
 
-    <!-- Text input (shown for "text") -->
     <label id="text-field" class={labelClass}>
       Texto
       <textarea id="text-content" rows="4" placeholder="Escribe algo..." class={fieldClass}
       ></textarea>
     </label>
 
-    <!-- File input (shown for "image"/"video") -->
     <label id="file-field" class={`${labelClass} hidden`}>
       Archivo
       <input type="file" id="media-file" accept="image/*" class={fieldClass} />
