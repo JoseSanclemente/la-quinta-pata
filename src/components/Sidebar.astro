@@ -55,7 +55,7 @@ const labelClass = "flex flex-col gap-1.5 font-semibold text-navy";
       <legend class="mb-1.5 p-0 font-semibold text-navy">Color del círculo</legend>
       {
         COLORS.map((color, i) => (
-          <label class="swatch size-[30px] cursor-pointer rounded-full" style={`--c: ${color}`}>
+          <label class="swatch size-7.5 cursor-pointer rounded-full" style={`--c: ${color}`}>
             <input type="radio" name="color" value={color} checked={i === 0} class="pointer-events-none absolute opacity-0" />
           </label>
         ))
@@ -91,6 +91,6 @@ const labelClass = "flex flex-col gap-1.5 font-semibold text-navy";
     >
       Crear y soltar en el mapa
     </button>
-    <p id="form-status" class="m-0 min-h-[18px] text-sm text-navy"></p>
+    <p id="form-status" class="m-0 min-h-4.5 text-sm text-navy"></p>
   </form>
 </aside>
