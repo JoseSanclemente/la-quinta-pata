@@ -8,7 +8,7 @@ import chairPhoto from "@/assets/yellow_chair_photo.webp";
 import tornEdgeCream from "@/assets/torn_edge_1.webp";
 ---
 
-<section class="relative overflow-hidden bg-magenta px-6 pt-20 pb-20 md:px-10 md:pb-16">
+<section class="relative overflow-hidden bg-magenta pt-20 pb-20 md:pb-16">
   <div class="pointer-events-none absolute inset-0" aria-hidden="true">
     <MaskedShape
       image={star}
@@ -17,10 +17,8 @@ import tornEdgeCream from "@/assets/torn_edge_1.webp";
     />
   </div>
 
-  <div
-    class="relative z-10 mx-auto grid max-w-7xl gap-12 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] md:items-center md:gap-12"
-  >
-    <div>
+  <div class="page-grid relative z-10 gap-y-12 md:items-center">
+    <div class="col-start-1 col-end-5 md:col-end-5 lg:col-end-6">
       <h2
         class="max-w-sm text-section leading-tight font-normal text-white md:text-section-lg"
       >
@@ -45,6 +43,8 @@ import tornEdgeCream from "@/assets/torn_edge_1.webp";
     <TapedPhoto
       image={chairPhoto}
       alt="Un parrillero lleva una silla Rimax amarilla en moto, entre el tráfico"
+      sizes="(min-width: 1024px) 52vw, (min-width: 768px) 58vw, 100vw"
+      class="col-start-1 col-end-5 md:col-start-5 md:col-end-9 lg:col-start-6 lg:col-end-13"
     />
   </div>
 

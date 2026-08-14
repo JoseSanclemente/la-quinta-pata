@@ -1,5 +1,6 @@
 ---
 import "@/styles/global.css";
+import GridOverlay from "@/components/GridOverlay.astro";
 
 interface Props {
   title?: string;
@@ -30,7 +31,8 @@ const viewport = lockScroll
     <meta property="og:description" content={description} />
     <meta property="og:url" content={Astro.url.href} />
   </head>
-  <body class:list={["m-0", lockScroll && "lock-scroll"]}>
+  <body class:list={["relative m-0", lockScroll && "lock-scroll"]}>
     <slot />
+    {import.meta.env.DEV && <GridOverlay />}
   </body>
 </html>

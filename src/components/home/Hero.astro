@@ -11,10 +11,8 @@ import tornEdge from "@/assets/torn_edge_3.webp";
   <div class="relative z-10 flex min-h-dvh flex-col">
     <SiteHeader />
 
-    <div
-      class="relative flex flex-1 flex-col items-center justify-center gap-8 px-6 pb-28 md:px-10"
-    >
-      <div class="pointer-events-none absolute inset-0">
+    <div class="page-grid relative flex-1 content-center items-center gap-y-8 pb-28">
+      <div class="pointer-events-none absolute inset-0 col-span-full">
         <MaskedShape
           image={star}
           width={800}
@@ -31,7 +29,7 @@ import tornEdge from "@/assets/torn_edge_3.webp";
       </div>
 
       <div
-        class="relative max-w-md text-blue md:absolute md:top-1/2 md:left-10 md:w-96 md:-translate-y-1/2 lg:w-md"
+        class="relative z-10 col-start-1 col-end-5 self-center text-blue"
       >
         <h1 class="text-hero leading-tight font-extrabold">
           ¡Quiubo, Hola, Hello!
@@ -46,11 +44,11 @@ import tornEdge from "@/assets/torn_edge_3.webp";
         src={hero}
         alt="Mesa con sillas Rimax, sombrilla y radio bajo un letrero de 'Al aire'"
         widths={[480, 768, 1152, hero.width]}
-        sizes="(min-width: 768px) min(1152px, 90vw), 100vw"
+        sizes="(min-width: 1024px) 60vw, (min-width: 768px) 90vw, 100vw"
         loading="eager"
         fetchpriority="high"
         decoding="sync"
-        class="relative w-full max-w-6xl object-contain md:max-h-[92vh] md:w-auto"
+        class="relative col-start-1 col-end-5 w-full self-center object-contain md:col-end-9 md:max-h-[80vh] lg:col-start-5 lg:col-end-13"
       />
     </div>
   </div>

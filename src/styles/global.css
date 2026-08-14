@@ -37,6 +37,51 @@
   --color-circle-10: #1d3557;
 }
 
+:root {
+  --gutter: 1.5rem;
+  --grid-gap: 1rem;
+  --content-max: 90rem;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --gutter: 2.5rem;
+    --grid-gap: 1.25rem;
+  }
+}
+
+@media (width >= 64rem) {
+  :root {
+    --gutter: 4rem;
+    --grid-gap: 1.5rem;
+  }
+}
+
+@utility page-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--grid-gap);
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+
+  @media (width >= 48rem) {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+
+  @media (width >= 64rem) {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+@utility page-gutter {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
 html,
 body {
   font-family: var(--font-sans);

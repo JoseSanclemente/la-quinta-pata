@@ -1,0 +1,65 @@
+---
+const columns = Array.from({ length: 12 }, (_, i) => i);
+
+const visibility = (i: number) => {
+  if (i < 4) return "";
+  if (i < 8) return "[display:none] md:[display:block]";
+  return "[display:none] lg:[display:block]";
+};
+---
+
+<div
+  id="grid-overlay"
+  data-grid-overlay
+  class="pointer-events-none absolute inset-0 z-[9999] hidden"
+>
+  <div class="page-grid h-full">
+    {
+      columns.map((i) => (
+        <div
+          class:list={[
+            "h-full bg-magenta/10 outline outline-magenta/30",
+            visibility(i),
+          ]}
+        />
+      ))
+    }
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const overlay = document.getElementById("grid-overlay");
+    if (!overlay) return;
+
+    const setVisible = (visible) => {
+      overlay.classList.toggle("hidden", !visible);
+      try {
+        localStorage.setItem("grid-overlay", visible ? "1" : "0");
+      } catch {}
+    };
+
+    const params = new URLSearchParams(location.search);
+    let stored = null;
+    try {
+      stored = localStorage.getItem("grid-overlay");
+    } catch {}
+
+    setVisible(params.has("grid") || stored === "1");
+
+    addEventListener("keydown", (event) => {
+      if (event.key !== "g" || event.metaKey || event.ctrlKey || event.altKey) {
+        return;
+      }
+      const target = event.target;
+      if (
+        target instanceof HTMLElement &&
+        (target.isContentEditable ||
+          ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName))
+      ) {
+        return;
+      }
+      setVisible(overlay.classList.contains("hidden"));
+    });
+  })();
+</script>

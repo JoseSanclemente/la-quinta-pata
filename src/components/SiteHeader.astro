@@ -3,8 +3,8 @@ import { Image } from "astro:assets";
 import logo from "@/assets/logo.webp";
 ---
 
-<header class="flex items-center justify-between gap-4 px-6 py-5 md:px-10">
-  <a href="/">
+<header class="page-grid items-center py-5">
+  <a href="/" class="col-start-1 col-end-3 md:col-end-4 lg:col-end-5">
     <Image
       src={logo}
       alt="La Quinta Pata — Archivo digital"
@@ -14,7 +14,9 @@ import logo from "@/assets/logo.webp";
     />
   </a>
 
-  <nav class="flex items-center gap-4 md:gap-8">
+  <nav
+    class="col-start-3 col-end-5 flex items-center justify-end gap-4 md:col-start-6 md:col-end-9 md:gap-8 lg:col-start-9 lg:col-end-13"
+  >
     <a
       href="/quienes-somos"
       class="text-sm text-blue hover:underline md:text-base"

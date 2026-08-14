@@ -122,6 +122,22 @@ The island lives in `src/scripts/`, split along the 5 sections the prototype use
 - Coordinates assigned randomly on creation; there's no placement UI.
 - `droppedIds` makes the drop animation play only on a circle's first ever mount, so culling
   does not replay it.
+- **Layout system: `page-grid`.** Every section's content sits in a `page-grid` layer —
+  12 columns on `lg`, 8 on `md`, 4 below, plus the shared gutter and `--content-max`. It is an
+  `@utility` in `global.css`, driven by the `--gutter` / `--grid-gap` / `--content-max` custom
+  properties on `:root` (they change per breakpoint, so they can't be `@theme` tokens).
+  `page-gutter` is the escape hatch for things that need the margin but not the columns.
+  Sections stay full-bleed (backgrounds, torn `MaskedShape` bands); only the inner layer is
+  gridded. Collage pieces are placed horizontally by column and freely in the vertical
+  (`absolute top-[x%]` inside a `relative h-full` cell) — desordenado, but on the grid.
+- **Place cells with `col-start-*` + `col-end-*`, never `col-span-*`.** `col-span-N` compiles to
+  the `grid-column` shorthand, which wipes any `col-start` from a lower breakpoint; the piece
+  then auto-places into phantom columns.
+- `GridOverlay.astro` paints the columns for debugging. Mounted from `Layout.astro` under
+  `import.meta.env.DEV` only. Toggle with the `g` key (state persists in `localStorage`) or load
+  any page with `?grid`. `node scripts/shot.mjs "?grid" grid-desktop 1440x900` captures it.
+  It uses `[display:none] md:[display:block]` rather than `hidden md:block` because the global
+  `.hidden` rule is `!important` and would win.
 - Tailwind is used for the static markup (sidebar, form, buttons). Anything JS creates or
   toggles stays in `src/styles/global.css`: `.circle`, `.tooltip-spinner`, `#tooltip::after`,
   `#sidebar.open`, `.swatch:has(input:checked)`, the keyframes, and `#map-image { max-width:
