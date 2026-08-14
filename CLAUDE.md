@@ -12,8 +12,9 @@ to all visitors. The page is a static shell plus one vanilla-TS client island; n
 
 - pnpm only — `packageManager` pins it and there is no npm lockfile. `pnpm install`, then
   `pnpm dev` (http://localhost:4321). `pnpm build`, `pnpm check`.
-- `pnpm.onlyBuiltDependencies` in `package.json` allows `esbuild` and `sharp` to run their
-  install scripts; pnpm blocks postinstall by default and the build fails without them.
+- `allowBuilds` in `pnpm-workspace.yaml` allows `esbuild` and `sharp` to run their install
+  scripts; pnpm blocks postinstall by default and the build fails without them. (pnpm 11 no
+  longer reads the `pnpm` field in `package.json` — settings live in `pnpm-workspace.yaml`.)
 - `.npmrc` sets `node-linker=hoisted`. Don't remove it: with pnpm's default symlinked layout
   the Netlify adapter's function bundling dies on Windows with
   `EPERM: operation not permitted, symlink ...\.pnpm\...`.

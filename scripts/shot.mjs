@@ -57,6 +57,23 @@ try {
       .catch(() => {});
   }
 
+  // Below-the-fold <Image>s are loading="lazy", and a fullPage screenshot
+  // captures beyond the viewport WITHOUT scrolling — so they'd shoot blank.
+  // Walk the page down a viewport at a time to trip them, then settle.
+  await page.evaluate(async () => {
+    const step = window.innerHeight;
+    for (let y = 0; y < document.body.scrollHeight; y += step) {
+      window.scrollTo(0, y);
+      await new Promise((r) => setTimeout(r, 120));
+    }
+    window.scrollTo(0, 0);
+    await Promise.all(
+      [...document.images]
+        .filter((img) => !img.complete)
+        .map((img) => new Promise((r) => img.addEventListener("load", r, { once: true }))),
+    );
+  });
+
   // The dev toolbar floats over the bottom-centre of every dev-server page.
   await page.addStyleTag({ content: "astro-dev-toolbar { display: none !important }" });
 
