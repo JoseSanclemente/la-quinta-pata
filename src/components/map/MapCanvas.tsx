@@ -236,6 +236,7 @@ export default function MapCanvas() {
         id="viewport"
         ref={viewportRef}
         className="fixed inset-0 overflow-hidden"
+        inert={detailOpen}
         onClick={() => {
           if (!pan.current.moved) setDetailOpen(false);
         }}
@@ -297,6 +298,7 @@ export default function MapCanvas() {
       <a
         href="/"
         aria-label="Volver al inicio"
+        inert={detailOpen}
         className="fixed top-4 left-4 z-20 inline-flex h-11 w-11 items-center justify-center rounded-lg bg-navy text-white shadow-[0_2px_10px_rgb(0_0_0/0.4)] hover:bg-navy-hover"
       >
         <svg
@@ -314,7 +316,10 @@ export default function MapCanvas() {
         </svg>
       </a>
 
-      <div className="fixed bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3">
+      <div
+        className="fixed bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3"
+        inert={detailOpen}
+      >
         <button
           type="button"
           onClick={() => setSidebarOpen(true)}

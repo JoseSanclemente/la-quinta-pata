@@ -31,3 +31,16 @@
     transform: translateX(0);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  #detail-panel {
+    transform: none;
+    transition:
+      opacity 0.3s ease,
+      visibility 0s linear 0.3s;
+  }
+  #detail-panel.open {
+    transform: none;
+    transition: opacity 0.3s ease;
+  }
+}

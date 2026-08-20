@@ -186,6 +186,9 @@ circle's first ever mount and never replays when culling remounts it.
 none }` (preflight would otherwise cap it and break the pan extent).
 - Palette lives in the `@theme` block of `global.css` as `--color-*` tokens, which Tailwind
   turns into `bg-navy`, `text-brand`, etc.
+- The tooltip bubble (`map-tooltip.css`, `.tooltip-bubble`) is `#f2f2f2`, a neutral gray with no
+  `--color-*` token — deliberate, not a gap. It reads as a paper card against colored map fields;
+  the warm `--color-cream` would blend into them instead of standing apart.
 - **Map image pipeline.** The master is `src/assets/map.webp` — 5000x5000 WebP **lossless**
   (`VP8L`), 36.5 MB. It is gitignored on purpose: shipping it would make Netlify clone 36 MB per
   build. Derivatives are generated once, offline, and committed:

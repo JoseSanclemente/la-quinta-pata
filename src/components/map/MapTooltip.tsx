@@ -25,7 +25,7 @@ export default function MapTooltip({ circle }: { circle: Circle | null }) {
   return (
     <div
       id="tooltip"
-      className="pointer-events-none z-40 max-w-130"
+      className="pointer-events-none z-40 max-w-[min(520px,calc(100vw-32px))]"
       style={{
         left: `${shown.x}%`,
         top: `${shown.y}%`,
@@ -40,7 +40,7 @@ export default function MapTooltip({ circle }: { circle: Circle | null }) {
           id="tooltip-content"
           className="relative max-h-[70vh] overflow-auto p-11"
         >
-          <p className="m-0 mb-1 text-sm text-navy/70">
+          <p className="m-0 mb-1 text-sm text-navy/85">
             Memoria de {shown.author || "anónimo"}:
           </p>
           <p className="m-0 font-bold text-navy">
