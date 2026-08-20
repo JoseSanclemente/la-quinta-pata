@@ -1,21 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, JSX } from "react";
 import chairUrl from "@/assets/chair/pink_chair.webp";
+import { CHAIR_COLORS } from "@/lib/chairColors";
 import { insertCircle, uploadMedia } from "@/lib/supabase.client";
 import type { Circle, MediaType } from "@/lib/types";
 
-const COLORS = [
-  "#e63946",
-  "#f3722c",
-  "#f9c74f",
-  "#90be6d",
-  "#43aa8b",
-  "#577590",
-  "#277da1",
-  "#9b5de5",
-  "#f15bb5",
-  "#1d3557",
-];
+const AVATAR_BG_ALPHA = "4d";
 
 function errorMessage(err: unknown): string {
   if (err instanceof Error) return err.message;
@@ -89,7 +79,7 @@ type Props = {
 };
 
 export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
-  const [color, setColor] = useState(COLORS[0]!);
+  const [color, setColor] = useState(CHAIR_COLORS[0]!.hex);
   const [mediaType, setMediaType] = useState<MediaType>("text");
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
@@ -99,11 +89,14 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
   const [busy, setBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const firstFieldRef = useRef<HTMLInputElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (open) {
+      previousFocusRef.current = document.activeElement as HTMLElement;
       firstFieldRef.current?.focus();
     } else {
+      previousFocusRef.current?.focus();
       setStatus("");
       setTitle("");
       setAuthor("");
@@ -164,6 +157,8 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
     <aside
       id="sidebar"
       className={open ? `open ${asideClass}` : asideClass}
+      role="dialog"
+      aria-modal={open}
       aria-labelledby="sidebar-title"
       inert={!open}
       onKeyDown={(e) => {
@@ -175,7 +170,7 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
           type="button"
           onClick={onClose}
           aria-label="Cerrar"
-          className="cursor-pointer border-none bg-transparent text-2xl leading-none text-navy"
+          className="flex size-11 cursor-pointer items-center justify-center rounded-xl border-none bg-transparent text-2xl leading-none text-navy"
         >
           ×
         </button>
@@ -194,7 +189,7 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
         <div className="flex items-center gap-4">
           <div
             className="flex size-32 shrink-0 items-center justify-center rounded-full"
-            style={{ backgroundColor: `${color}4d` }}
+            style={{ backgroundColor: `${color}${AVATAR_BG_ALPHA}` }}
           >
             <span
               className="chair size-24 transition-[background-color] duration-150"
@@ -209,18 +204,19 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
 
           <fieldset className="m-0 grid grid-cols-6 gap-2 border-none p-0">
             <legend className="sr-only">Color del círculo</legend>
-            {COLORS.map((c) => (
+            {CHAIR_COLORS.map((c) => (
               <label
-                key={c}
+                key={c.hex}
+                aria-label={c.name}
                 className="swatch size-6.5 cursor-pointer rounded-xl"
-                style={{ "--c": c } as CSSProperties}
+                style={{ "--c": c.hex } as CSSProperties}
               >
                 <input
                   type="radio"
                   name="color"
-                  value={c}
-                  checked={color === c}
-                  onChange={() => setColor(c)}
+                  value={c.hex}
+                  checked={color === c.hex}
+                  onChange={() => setColor(c.hex)}
                   className="pointer-events-none absolute opacity-0"
                 />
               </label>
@@ -253,7 +249,11 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
           className={fieldClass}
         />
 
+        <label className="sr-only" htmlFor="circle-text">
+          Relato
+        </label>
         <textarea
+          id="circle-text"
           placeholder="Deja tu relato"
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -288,6 +288,8 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
           <input
             type="file"
             ref={fileRef}
+            tabIndex={-1}
+            aria-hidden="true"
             accept={mediaType === "video" ? "video/*" : "image/*"}
             onChange={(e) => setHasFile((e.target.files?.length ?? 0) > 0)}
             className="sr-only cursor-pointer"
