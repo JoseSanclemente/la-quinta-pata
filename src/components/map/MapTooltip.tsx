@@ -25,6 +25,8 @@ export default function MapTooltip({ circle }: { circle: Circle | null }) {
       onClick={(e) => e.stopPropagation()}
     >
       <div id="tooltip-content" className="max-h-[70vh] overflow-auto">
+        {circle.title && <p className="m-0 mb-1 font-bold text-navy">{circle.title}</p>}
+        {circle.author && <p className="m-0 mb-2 text-sm text-navy/70">{circle.author}</p>}
         {isMedia && status === "loading" && <div className="tooltip-spinner" />}
         {isMedia && status === "error" && <p>No se pudo cargar el archivo.</p>}
         {circle.media_type === "image" && (

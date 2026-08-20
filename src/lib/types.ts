@@ -8,6 +8,8 @@ export interface Circle {
   media_type: MediaType;
   media_url: string | null;
   text_content: string | null;
+  title: string | null;
+  author: string | null;
   created_at: string;
 }
 

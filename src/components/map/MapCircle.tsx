@@ -1,4 +1,6 @@
 import { memo, useState } from "react";
+import type { CSSProperties } from "react";
+import chairUrl from "@/assets/chair/pink_chair.webp";
 import type { Circle } from "@/lib/types";
 
 type Props = {
@@ -16,8 +18,15 @@ function MapCircle({ circle, dropped, onSelect }: Props) {
 
   return (
     <div
-      className={dropping ? "circle dropping" : "circle"}
-      style={{ left: `${circle.x}%`, top: `${circle.y}%`, background: circle.color }}
+      className={dropping ? "circle dropping chair" : "circle chair"}
+      style={
+        {
+          left: `${circle.x}%`,
+          top: `${circle.y}%`,
+          "--c": circle.color,
+          "--chair-src": `url(${chairUrl.src})`,
+        } as CSSProperties
+      }
       onClick={(e) => {
         e.stopPropagation();
         onSelect(circle);

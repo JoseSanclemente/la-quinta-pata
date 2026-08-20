@@ -15,7 +15,7 @@ export async function uploadMedia(file: File): Promise<string> {
 }
 
 export async function insertCircle(circle: NewCircle): Promise<Circle> {
-  const { data, error } = await db.from("circles").insert(circle).select().single();
+  const { data, error } = await db.from("memories").insert(circle).select().single();
   if (error) throw error;
   return data as Circle;
 }

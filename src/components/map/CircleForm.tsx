@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
+import chairUrl from "@/assets/chair/pink_chair.webp";
 import { insertCircle, uploadMedia } from "@/lib/supabase.client";
 import type { Circle, MediaType } from "@/lib/types";
 
@@ -16,6 +17,12 @@ const COLORS = [
   "#1d3557",
 ];
 
+function errorMessage(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  if (err && typeof err === "object" && "message" in err) return String(err.message);
+  return String(err);
+}
+
 const asideClass =
   "z-30 h-full w-80 max-w-[90vw] overflow-y-auto bg-paper p-5 shadow-[-4px_0_20px_rgb(0_0_0/0.4)]";
 const fieldClass = "rounded-md border border-line p-2 font-normal text-navy";
@@ -30,6 +37,8 @@ type Props = {
 export default function CircleForm({ open, onClose, onCreated }: Props) {
   const [color, setColor] = useState(COLORS[0]!);
   const [mediaType, setMediaType] = useState<MediaType>("text");
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
   const [text, setText] = useState("");
   const [hasFile, setHasFile] = useState(false);
   const [status, setStatus] = useState("");
@@ -68,16 +77,20 @@ export default function CircleForm({ open, onClose, onCreated }: Props) {
         media_type: mediaType,
         media_url,
         text_content,
+        title: title.trim() || null,
+        author: author.trim() || null,
       });
 
       onCreated(circle);
+      setTitle("");
+      setAuthor("");
       setText("");
       setHasFile(false);
       if (fileRef.current) fileRef.current.value = "";
       onClose();
     } catch (err) {
       console.error(err);
-      setStatus("Error: " + (err instanceof Error ? err.message : String(err)));
+      setStatus("Error: " + errorMessage(err));
     } finally {
       setBusy(false);
     }
@@ -116,8 +129,10 @@ export default function CircleForm({ open, onClose, onCreated }: Props) {
       >
         <div className="mb-3 flex justify-center">
           <span
-            className="size-14 rounded-full border-[3px] border-white/85 shadow-[0_2px_8px_rgb(0_0_0/0.5)] transition-[background] duration-150"
-            style={{ background: color }}
+            className="chair size-14 transition-[background-color] duration-150"
+            style={
+              { "--c": color, "--chair-src": `url(${chairUrl.src})` } as CSSProperties
+            }
           />
         </div>
 
@@ -140,6 +155,28 @@ export default function CircleForm({ open, onClose, onCreated }: Props) {
             </label>
           ))}
         </fieldset>
+
+        <label className={labelClass}>
+          Título
+          <input
+            type="text"
+            placeholder="Título"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className={fieldClass}
+          />
+        </label>
+
+        <label className={labelClass}>
+          Nombre o seudónimo
+          <input
+            type="text"
+            placeholder="Nombre o seudónimo"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            className={fieldClass}
+          />
+        </label>
 
         <label className={labelClass}>
           Tipo de contenido

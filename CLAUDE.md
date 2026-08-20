@@ -2,10 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Mandatory frontend design workflow
+## Frontend design audit workflow
 
-For every task that creates, changes, reviews, or otherwise affects the user interface,
-always use all three skills: `$impeccable`, `$ui-ux-pro-max`, and `$frontend-design`.
+Only when user explicitly says "Do an audit" (or equivalent), run all three skills:
+`$impeccable`, `$ui-ux-pro-max`, and `$frontend-design`.
 
 - Start with `$impeccable` to establish the appropriate workflow, preserve the existing visual
   world unless a redesign is requested, and complete its bounded visual verification pass.
@@ -14,8 +14,9 @@ always use all three skills: `$impeccable`, `$ui-ux-pro-max`, and `$frontend-des
 - Use `$frontend-design` to develop a subject-specific visual direction, deliberate typography,
   palette, layout, copy, and one justified signature element; avoid generic template aesthetics.
 
-Treat these skills as complementary, not alternatives: apply all of them on every frontend task.
-Continue to follow the visual UI checks in this file, including desktop and mobile screenshots.
+Treat these skills as complementary, not alternatives when running an audit.
+Continue to follow the visual UI checks in this file, including desktop and mobile screenshots,
+for regular UI changes outside the audit flow.
 
 ## What this is
 

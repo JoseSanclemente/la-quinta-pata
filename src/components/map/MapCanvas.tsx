@@ -170,7 +170,7 @@ export default function MapCanvas() {
       .channel("circles-changes")
       .on<Circle>(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "circles" },
+        { event: "INSERT", schema: "public", table: "memories" },
         (payload) => {
           setCircles((prev) =>
             prev.some((c) => c.id === payload.new.id) ? prev : [...prev, payload.new],
@@ -179,7 +179,7 @@ export default function MapCanvas() {
       )
       .subscribe();
 
-    db.from("circles")
+    db.from("memories")
       .select("*")
       .then(({ data, error }) => {
         if (error) return;
@@ -274,13 +274,57 @@ export default function MapCanvas() {
         <p>Desdoblando el mapa</p>
       </div>
 
-      <button
-        type="button"
-        onClick={() => setSidebarOpen(true)}
-        className="fixed bottom-4 left-1/2 z-20 -translate-x-1/2 cursor-pointer rounded-lg bg-navy px-4 py-2.5 text-base font-semibold text-white shadow-[0_2px_10px_rgb(0_0_0/0.4)] hover:bg-navy-hover"
+      <a
+        href="/"
+        aria-label="Volver al inicio"
+        className="fixed top-4 left-4 z-20 inline-flex h-11 w-11 items-center justify-center rounded-lg bg-navy text-white shadow-[0_2px_10px_rgb(0_0_0/0.4)] hover:bg-navy-hover"
       >
-        + Crear
-      </button>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          className="h-5 w-5"
+        >
+          <path d="M19 12H5" />
+          <path d="M12 19l-7-7 7-7" />
+        </svg>
+      </a>
+
+      <div className="fixed bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3">
+        <button
+          type="button"
+          onClick={() => setSidebarOpen(true)}
+          className="cursor-pointer rounded-lg bg-navy px-4 py-2.5 text-base font-semibold text-white shadow-[0_2px_10px_rgb(0_0_0/0.4)] hover:bg-navy-hover"
+        >
+          + Crear
+        </button>
+
+        <a
+          href="https://instagram.com"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Instagram de La Quinta Pata"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-navy text-white shadow-[0_2px_10px_rgb(0_0_0/0.4)] hover:bg-navy-hover"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            aria-hidden="true"
+            className="h-5 w-5"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+            <circle cx="12" cy="12" r="4"></circle>
+            <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle>
+          </svg>
+        </a>
+      </div>
 
       <CircleForm
         open={sidebarOpen}
