@@ -8,6 +8,7 @@ export default defineConfig({
   output: "server",
   adapter: netlify(),
   integrations: [react()],
+  prefetch: { prefetchAll: true, defaultStrategy: "hover" },
 
   vite: {
     plugins: [tailwindcss()],
@@ -17,11 +18,6 @@ export default defineConfig({
     schema: {
       PUBLIC_SUPABASE_URL: envField.string({ context: "client", access: "public" }),
       PUBLIC_SUPABASE_ANON_KEY: envField.string({ context: "client", access: "public" }),
-      SUPABASE_SERVICE_KEY: envField.string({
-        context: "server",
-        access: "secret",
-        optional: true,
-      }),
     },
   },
 });

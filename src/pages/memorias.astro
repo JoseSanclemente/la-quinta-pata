@@ -1,13 +1,10 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import MapCanvas from "@/components/map/MapCanvas";
-import { fetchCircles } from "@/lib/supabase.server";
 
-export const prerender = false;
-
-const circles = await fetchCircles();
+export const prerender = true;
 ---
 
 <Layout lockScroll>
-  <MapCanvas client:load circles={circles} />
+  <MapCanvas client:load />
 </Layout>

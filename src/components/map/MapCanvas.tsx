@@ -6,20 +6,24 @@ import MapTooltip from "@/components/map/MapTooltip";
 import type { Circle } from "@/lib/types";
 
 const MAP_SRC = "/assets/map-3000.webp";
+const MAP_SRCSET = "/assets/map-1600.webp 1600w, /assets/map-3000.webp 3000w";
+const MAP_SIZES = "(width < 48rem) 400px, clamp(1100px, 260vw, 3000px)";
 const FALLBACK_SRC = "/assets/placeholder.svg";
 const MARGIN = 200;
 const SMOOTH_MS = 500;
+const LOADER_MIN_MS = 900;
 
-export default function MapCanvas({ circles: seed }: { circles: Circle[] }) {
+export default function MapCanvas() {
   const viewportRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const [circles, setCircles] = useState(seed);
+  const [circles, setCircles] = useState<Circle[]>([]);
   const [visibleIds, setVisibleIds] = useState<string[]>([]);
   const [selected, setSelected] = useState<Circle | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mapSrc, setMapSrc] = useState(MAP_SRC);
+  const [ready, setReady] = useState(false);
 
   const pos = useRef({ x: 0, y: 0 });
   const start = useRef({ x: 0, y: 0 });
@@ -27,9 +31,16 @@ export default function MapCanvas({ circles: seed }: { circles: Circle[] }) {
   const pan = useRef({ panning: false, moved: false });
   const dropped = useRef(new Set<string>());
   const circlesRef = useRef(circles);
+  const mountedAt = useRef(Date.now());
   const rafPending = useRef(false);
 
   circlesRef.current = circles;
+
+  const finishLoading = useCallback(() => {
+    const left = LOADER_MIN_MS - (Date.now() - mountedAt.current);
+    if (left <= 0) setReady(true);
+    else window.setTimeout(() => setReady(true), left);
+  }, []);
 
   const applyTransform = useCallback(() => {
     const map = mapRef.current;
@@ -168,6 +179,16 @@ export default function MapCanvas({ circles: seed }: { circles: Circle[] }) {
       )
       .subscribe();
 
+    db.from("circles")
+      .select("*")
+      .then(({ data, error }) => {
+        if (error) return;
+        setCircles((prev) => {
+          const known = new Set(prev.map((c) => c.id));
+          return [...prev, ...((data ?? []) as Circle[]).filter((c) => !known.has(c.id))];
+        });
+      });
+
     return () => {
       db.removeChannel(channel);
     };
@@ -179,8 +200,10 @@ export default function MapCanvas({ circles: seed }: { circles: Circle[] }) {
 
   useEffect(() => {
     const image = imageRef.current;
-    if (image?.complete && image.naturalWidth === 0) setMapSrc(FALLBACK_SRC);
-  }, []);
+    if (!image?.complete) return;
+    if (image.naturalWidth === 0) setMapSrc(FALLBACK_SRC);
+    finishLoading();
+  }, [finishLoading]);
 
   const onCreated = useCallback(
     (circle: Circle) => {
@@ -207,16 +230,22 @@ export default function MapCanvas({ circles: seed }: { circles: Circle[] }) {
             id="map-image"
             ref={imageRef}
             src={mapSrc}
+            srcSet={mapSrc === MAP_SRC ? MAP_SRCSET : undefined}
+            sizes={mapSrc === MAP_SRC ? MAP_SIZES : undefined}
             width={3000}
             height={3000}
             alt="Mapa de La Quinta Pata"
             draggable={false}
             fetchPriority="high"
-            onError={() => setMapSrc(FALLBACK_SRC)}
+            onError={() => {
+              setMapSrc(FALLBACK_SRC);
+              finishLoading();
+            }}
             onLoad={() => {
               clamp();
               applyTransform();
               updateVisible();
+              finishLoading();
             }}
           />
           <div id="circles-layer" className="absolute inset-0">
@@ -234,6 +263,15 @@ export default function MapCanvas({ circles: seed }: { circles: Circle[] }) {
           </div>
           <MapTooltip circle={selected} />
         </div>
+      </div>
+
+      <div id="map-loader" className={ready ? "done" : undefined} role="status">
+        <div className="loader-dots" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <p>Desdoblando el mapa</p>
       </div>
 
       <button

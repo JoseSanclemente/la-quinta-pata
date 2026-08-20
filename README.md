@@ -30,8 +30,7 @@ Supabase guarda los círculos y los archivos para que todos los vean.
 ## Paso 2 — Correr la página en tu computador
 
 1. Copia el archivo `.env.example` a **`.env`**.
-2. Pega tu **Project URL** y tu **publishable key**. `SUPABASE_SERVICE_KEY` puede quedar
-   vacío: si lo dejas así, la lectura del servidor usa la clave pública.
+2. Pega tu **Project URL** y tu **publishable key**.
 3. En una terminal, dentro de la carpeta del proyecto (este proyecto usa **pnpm**; si no lo
    tienes, instálalo con `npm install -g pnpm`):
 

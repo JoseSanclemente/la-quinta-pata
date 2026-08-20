@@ -30,7 +30,11 @@ Three routes, no UI framework:
   containing text, an image, or a video. Circles live in Supabase and stream live to all
   visitors. One React client island (`src/components/map/`), hydrated with `client:load`.
 
-Only `/memorias` is server-rendered; the other two set `export const prerender = true`.
+All three routes are prerendered (`export const prerender = true`). `/memorias` used to be SSR
+so it could pass the circle rows in as a prop, but that put a Netlify cold start plus a Supabase
+round trip in front of the first byte and the click felt dead. The island now fetches the rows
+itself. `prefetch` is on in `astro.config.mjs` (`prefetchAll`, `hover`), so the HTML is usually
+already cached when the CTA is clicked.
 
 ## Running locally
 
@@ -48,7 +52,6 @@ Only `/memorias` is server-rendered; the other two set `export const prerender =
   not `undefined`.
 - Requires a `.env` (gitignored): copy `.env.example` and fill it in. `PUBLIC_SUPABASE_URL`
   and `PUBLIC_SUPABASE_ANON_KEY` are required — the build fails without them.
-  `SUPABASE_SERVICE_KEY` is optional; when empty, the SSR read falls back to the public key.
 - Env vars are declared in `astro.config.mjs` under `env.schema` and imported from
   `astro:env/client` / `astro:env/server` — not `import.meta.env`.
 
@@ -97,11 +100,10 @@ the adapter emits the SSR function. The three env vars must be set in the Netlif
 
 ## Architecture
 
-`output: "server"`. `src/pages/index.astro` is the hero landing page;
-the map lives at `src/pages/memorias.astro` (`/memorias`), which reads all circles server-side
-(`src/lib/supabase.server.ts`) and passes them straight into the island as a prop. Astro
-serializes island props itself, so there is no client round-trip and no race between the
-initial load and the first realtime INSERT.
+`output: "server"`, but every route is prerendered today. `src/pages/index.astro` is the hero
+landing page; the map lives at `src/pages/memorias.astro` (`/memorias`), which renders the
+island and nothing else. The island subscribes to realtime FIRST and only then runs the
+`select("*")`, so an INSERT landing mid-fetch is not lost; both paths dedupe by id.
 
 The island is React, in `src/components/map/`:
 
@@ -185,15 +187,18 @@ none }` (preflight would otherwise cap it and break the pan extent).
   turns into `bg-navy`, `text-brand`, etc.
 - **Map image pipeline.** The master is `src/assets/map.webp` — 5000x5000 WebP **lossless**
   (`VP8L`), 36.5 MB. It is gitignored on purpose: shipping it would make Netlify clone 36 MB per
-  build, and Astro cannot optimize it at build time because `/memorias` is `prerender = false`
-  (SSR routes go through the runtime `/_image` endpoint). Instead, derivatives are generated once,
-  offline, and committed:
+  build. Derivatives are generated once, offline, and committed:
 
   ```bash
-  node scripts/map-derivatives.mjs 3000     # -> public/assets/map-3000.webp, ~340 KB, q78
+  node scripts/map-derivatives.mjs 1600 3000   # -> public/assets/map-{1600,3000}.webp, q78
   ```
 
-  Only `public/assets/map-3000.webp` is served. Lossy q78 is visually indistinguishable from the
+  Both are served through a `srcSet` on `#map-image`. `sizes` starts with `(width < 48rem) 400px`
+  — a deliberate lie: the real CSS width is `clamp(1100px, ...)`, so an honest `sizes` makes every
+  2x/3x phone ask for the 3000 file. The 400px hint pins phones to `map-1600.webp` (100 KB,
+  ~10 MB decode instead of ~36 MB); the map is panned, not inspected, so the softness is free.
+  The `onError` fallback to `placeholder.svg` must clear `srcSet`/`sizes` or the browser ignores
+  it. Lossy q78 is visually indistinguishable from the
   master at 1:1 (the paper grain survives) and is ~110x smaller. Keep the master out of the repo;
   regenerate the derivative after any edit to it.
 - The map renders at `width: clamp(1100px, 260vw, 3000px)` (`global.css`, `#map-image`), not at its
@@ -201,6 +206,13 @@ none }` (preflight would otherwise cap it and break the pan extent).
   keeps the pan extent at roughly 2-3 screens on every viewport. Circle coordinates are percentages,
   so they follow the scale for free. Decode memory stays ~34 MB regardless of display size.
 - `MapViewport` falls back to `placeholder.svg` via `onerror`.
+- `#map-loader` is the ink-field loading screen: three circle-palette dots and one line of copy,
+  rendered by `MapCanvas` and killed by the `.done` class once `#map-image` fires `load` (or
+  `error`), but never before `LOADER_MIN_MS` (900 ms) since mount — a cached map otherwise makes
+  the overlay flash on and off. It ships inside the prerendered HTML, so it paints before
+  hydration. If the image is
+  already cached at hydration no `load` event fires, which is why the mount effect also checks
+  `image.complete`.
 
 ## Language note
 
