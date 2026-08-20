@@ -1,55 +1,52 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Circle } from "@/lib/types";
 
-type Status = "loading" | "ready" | "error";
+const EXIT_MS = 150;
 
 export default function MapTooltip({ circle }: { circle: Circle | null }) {
-  const [status, setStatus] = useState<Status>("loading");
+  const [shown, setShown] = useState<Circle | null>(null);
+  const [closing, setClosing] = useState(false);
+  const timeoutRef = useRef<number>(undefined);
 
-  useEffect(() => setStatus("loading"), [circle]);
+  useEffect(() => {
+    window.clearTimeout(timeoutRef.current);
+    if (circle) {
+      setShown(circle);
+      setClosing(false);
+    } else if (shown) {
+      setClosing(true);
+      timeoutRef.current = window.setTimeout(() => setShown(null), EXIT_MS);
+    }
+    return () => window.clearTimeout(timeoutRef.current);
+  }, [circle]);
 
-  if (!circle) return null;
-
-  const isMedia = circle.media_type === "image" || circle.media_type === "video";
-  const mediaClass = status === "ready" ? undefined : "loading";
+  if (!shown) return null;
 
   return (
     <div
       id="tooltip"
-      className="z-40 max-w-[320px] rounded-[10px] bg-white p-3.5 shadow-[0_4px_16px_rgb(0_0_0/0.18)]"
+      className="pointer-events-none z-40 max-w-130"
       style={{
-        left: `${circle.x}%`,
-        top: `${circle.y}%`,
-        transform: "translate(-50%, calc(-100% - 18px))",
+        left: `${shown.x}%`,
+        top: `${shown.y}%`,
+        transform: "translate(calc(-100% + 48px), calc(-100% - 42px))",
       }}
-      onClick={(e) => e.stopPropagation()}
     >
-      <div id="tooltip-content" className="max-h-[70vh] overflow-auto">
-        {circle.title && <p className="m-0 mb-1 font-bold text-navy">{circle.title}</p>}
-        {circle.author && <p className="m-0 mb-2 text-sm text-navy/70">{circle.author}</p>}
-        {circle.text_content && <p>{circle.text_content}</p>}
-        {isMedia && status === "loading" && <div className="tooltip-spinner" />}
-        {isMedia && status === "error" && <p>No se pudo cargar el archivo.</p>}
-        {circle.media_type === "image" && (
-          <img
-            key={circle.id}
-            src={circle.media_url ?? ""}
-            alt=""
-            className={mediaClass}
-            onLoad={() => setStatus("ready")}
-            onError={() => setStatus("error")}
-          />
-        )}
-        {circle.media_type === "video" && (
-          <video
-            key={circle.id}
-            src={circle.media_url ?? ""}
-            controls
-            className={mediaClass}
-            onLoadedData={() => setStatus("ready")}
-            onError={() => setStatus("error")}
-          />
-        )}
+      <div
+        key={shown.id}
+        className={`tooltip-bubble ${closing ? "tooltip-shrink" : "tooltip-grow"}`}
+      >
+        <div
+          id="tooltip-content"
+          className="relative max-h-[70vh] overflow-auto p-11"
+        >
+          <p className="m-0 mb-1 text-sm text-navy/70">
+            Memoria de {shown.author || "anónimo"}:
+          </p>
+          <p className="m-0 font-bold text-navy">
+            {shown.title || "Sin título"}
+          </p>
+        </div>
       </div>
     </div>
   );

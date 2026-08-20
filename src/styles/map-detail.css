@@ -1,0 +1,33 @@
+#detail-panel {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translateY(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease,
+    visibility 0s linear 0.3s;
+}
+#detail-panel.open {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+@media (width >= 48rem) {
+  #detail-panel {
+    left: auto;
+    top: 0;
+    bottom: 0;
+    transform: translateX(100%);
+  }
+  #detail-panel.open {
+    transform: translateX(0);
+  }
+}

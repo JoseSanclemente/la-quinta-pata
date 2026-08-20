@@ -1,0 +1,54 @@
+#tooltip {
+  position: absolute;
+}
+#tooltip > div {
+  transform-origin: 90% 100%;
+}
+.tooltip-grow {
+  animation: tooltip-grow 150ms ease-out both;
+}
+.tooltip-shrink {
+  animation: tooltip-shrink 150ms ease-in both;
+}
+@keyframes tooltip-grow {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes tooltip-shrink {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tooltip-grow,
+  .tooltip-shrink {
+    animation: none;
+  }
+}
+.tooltip-bubble {
+  position: relative;
+  background: #f2f2f2;
+  border-radius: 28px;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.18);
+}
+.tooltip-bubble::after {
+  content: "";
+  position: absolute;
+  right: 24px;
+  bottom: -18px;
+  width: 24px;
+  height: 24px;
+  background: #f2f2f2;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}

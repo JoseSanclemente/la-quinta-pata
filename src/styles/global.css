@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "@fontsource-variable/plus-jakarta-sans";
+@import "./map-detail.css";
+@import "./map-tooltip.css";
 
 @theme {
   --font-sans:
@@ -187,11 +189,13 @@ body.lock-scroll {
 }
 
 .circle {
+  --rot: 0deg;
+  --flip: 1;
   position: absolute;
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) rotate(var(--rot)) scaleY(var(--flip));
   border: 3px solid rgb(255 255 255 / 0.85);
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.5);
   cursor: pointer;
@@ -213,23 +217,23 @@ body.lock-scroll {
   -webkit-mask-position: center;
 }
 .circle:hover {
-  transform: translate(-50%, -50%) scale(1.25);
+  transform: translate(-50%, -50%) scale(1.25) rotate(var(--rot)) scaleY(var(--flip));
 }
 
 @keyframes circle-drop {
   0% {
-    transform: translate(-50%, calc(-50% - 40px));
+    transform: translate(-50%, calc(-50% - 40px)) rotate(var(--rot)) scaleY(var(--flip));
     opacity: 0;
   }
   60% {
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) rotate(var(--rot)) scaleY(var(--flip));
     opacity: 1;
   }
   80% {
-    transform: translate(-50%, calc(-50% - 6px));
+    transform: translate(-50%, calc(-50% - 6px)) rotate(var(--rot)) scaleY(var(--flip));
   }
   100% {
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) rotate(var(--rot)) scaleY(var(--flip));
   }
 }
 .circle.dropping {
@@ -346,34 +350,6 @@ body.lock-scroll {
     0 0 0 4px var(--color-navy);
 }
 
-#tooltip {
-  position: absolute;
-}
-#tooltip::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 10px solid transparent;
-  border-top-color: #fff;
-  border-bottom: 0;
-  filter: drop-shadow(0 3px 2px rgb(0 0 0 / 0.1));
-}
-#tooltip-content img,
-#tooltip-content video {
-  max-width: 100%;
-  border-radius: 6px;
-  display: block;
-}
-#tooltip-content p {
-  margin: 0;
-  white-space: pre-wrap;
-  color: var(--color-navy);
-}
-#tooltip-content .loading {
-  display: none;
-}
 .tooltip-spinner {
   width: 32px;
   height: 32px;

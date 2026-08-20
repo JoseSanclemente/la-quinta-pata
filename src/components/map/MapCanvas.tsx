@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { db } from "@/lib/supabase.client";
 import AddMemoryForm from "@/components/map/AddMemoryForm";
-import MapCircle from "@/components/map/MapCircle";
+import MapCircle from "@/components/map/MapChair";
+import MapDetail from "@/components/map/MapDetail";
 import MapTooltip from "@/components/map/MapTooltip";
 import type { Circle } from "@/lib/types";
 
@@ -20,7 +21,9 @@ export default function MapCanvas() {
 
   const [circles, setCircles] = useState<Circle[]>([]);
   const [visibleIds, setVisibleIds] = useState<string[]>([]);
-  const [selected, setSelected] = useState<Circle | null>(null);
+  const [hovered, setHovered] = useState<Circle | null>(null);
+  const [detailCircle, setDetailCircle] = useState<Circle | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mapSrc, setMapSrc] = useState(MAP_SRC);
   const [ready, setReady] = useState(false);
@@ -44,7 +47,8 @@ export default function MapCanvas() {
 
   const applyTransform = useCallback(() => {
     const map = mapRef.current;
-    if (map) map.style.transform = `translate(${pos.current.x}px, ${pos.current.y}px)`;
+    if (map)
+      map.style.transform = `translate(${pos.current.x}px, ${pos.current.y}px)`;
   }, []);
 
   const clamp = useCallback(() => {
@@ -75,7 +79,9 @@ export default function MapCanvas() {
       .map((c) => c.id);
 
     setVisibleIds((prev) =>
-      prev.length === next.length && prev.every((id, i) => id === next[i]) ? prev : next,
+      prev.length === next.length && prev.every((id, i) => id === next[i])
+        ? prev
+        : next,
     );
   }, []);
 
@@ -94,7 +100,8 @@ export default function MapCanvas() {
       const viewport = viewportRef.current;
       if (!map || !viewport) return;
       pos.current.x = viewport.clientWidth / 2 - (c.x / 100) * map.offsetWidth;
-      pos.current.y = viewport.clientHeight / 2 - (c.y / 100) * map.offsetHeight;
+      pos.current.y =
+        viewport.clientHeight / 2 - (c.y / 100) * map.offsetHeight;
       clamp();
       map.classList.add("smooth");
       applyTransform();
@@ -110,7 +117,8 @@ export default function MapCanvas() {
     const viewport = viewportRef.current;
     if (!viewport) return;
 
-    const point = (e: MouseEvent | TouchEvent) => ("touches" in e ? e.touches[0]! : e);
+    const point = (e: MouseEvent | TouchEvent) =>
+      "touches" in e ? e.touches[0]! : e;
 
     const down = (e: MouseEvent | TouchEvent) => {
       pan.current.panning = true;
@@ -173,7 +181,9 @@ export default function MapCanvas() {
         { event: "INSERT", schema: "public", table: "memories" },
         (payload) => {
           setCircles((prev) =>
-            prev.some((c) => c.id === payload.new.id) ? prev : [...prev, payload.new],
+            prev.some((c) => c.id === payload.new.id)
+              ? prev
+              : [...prev, payload.new],
           );
         },
       )
@@ -185,7 +195,10 @@ export default function MapCanvas() {
         if (error) return;
         setCircles((prev) => {
           const known = new Set(prev.map((c) => c.id));
-          return [...prev, ...((data ?? []) as Circle[]).filter((c) => !known.has(c.id))];
+          return [
+            ...prev,
+            ...((data ?? []) as Circle[]).filter((c) => !known.has(c.id)),
+          ];
         });
       });
 
@@ -207,7 +220,9 @@ export default function MapCanvas() {
 
   const onCreated = useCallback(
     (circle: Circle) => {
-      setCircles((prev) => (prev.some((c) => c.id === circle.id) ? prev : [...prev, circle]));
+      setCircles((prev) =>
+        prev.some((c) => c.id === circle.id) ? prev : [...prev, circle],
+      );
       centerOnCircle(circle);
     },
     [centerOnCircle],
@@ -222,7 +237,7 @@ export default function MapCanvas() {
         ref={viewportRef}
         className="fixed inset-0 overflow-hidden"
         onClick={() => {
-          if (!pan.current.moved) setSelected(null);
+          if (!pan.current.moved) setDetailOpen(false);
         }}
       >
         <div id="map" ref={mapRef} className="absolute top-0 left-0">
@@ -256,12 +271,17 @@ export default function MapCanvas() {
                   key={id}
                   circle={circle}
                   dropped={dropped.current}
-                  onSelect={setSelected}
+                  onHover={setHovered}
+                  onSelect={(c) => {
+                    setDetailCircle(c);
+                    setDetailOpen(true);
+                    setHovered(null);
+                  }}
                 />
               ) : null;
             })}
           </div>
-          <MapTooltip circle={selected} />
+          <MapTooltip circle={hovered} />
         </div>
       </div>
 
@@ -330,6 +350,12 @@ export default function MapCanvas() {
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
         onCreated={onCreated}
+      />
+
+      <MapDetail
+        circle={detailCircle}
+        open={detailOpen}
+        onClose={() => setDetailOpen(false)}
       />
     </>
   );
