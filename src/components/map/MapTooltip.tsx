@@ -27,6 +27,7 @@ export default function MapTooltip({ circle }: { circle: Circle | null }) {
       <div id="tooltip-content" className="max-h-[70vh] overflow-auto">
         {circle.title && <p className="m-0 mb-1 font-bold text-navy">{circle.title}</p>}
         {circle.author && <p className="m-0 mb-2 text-sm text-navy/70">{circle.author}</p>}
+        {circle.text_content && <p>{circle.text_content}</p>}
         {isMedia && status === "loading" && <div className="tooltip-spinner" />}
         {isMedia && status === "error" && <p>No se pudo cargar el archivo.</p>}
         {circle.media_type === "image" && (
@@ -49,7 +50,6 @@ export default function MapTooltip({ circle }: { circle: Circle | null }) {
             onError={() => setStatus("error")}
           />
         )}
-        {circle.media_type === "text" && <p>{circle.text_content || ""}</p>}
       </div>
     </div>
   );

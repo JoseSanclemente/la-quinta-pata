@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { db } from "@/lib/supabase.client";
-import CircleForm from "@/components/map/CircleForm";
+import AddMemoryForm from "@/components/map/AddMemoryForm";
 import MapCircle from "@/components/map/MapCircle";
 import MapTooltip from "@/components/map/MapTooltip";
 import type { Circle } from "@/lib/types";
@@ -326,7 +326,7 @@ export default function MapCanvas() {
         </a>
       </div>
 
-      <CircleForm
+      <AddMemoryForm
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
         onCreated={onCreated}
