@@ -19,3 +19,6 @@ node_modules/
 .DS_Store
 .vscode/
 *.log
+
+# map master (36 MB lossless) — derivatives via scripts/map-derivatives.mjs
+src/assets/map.webp

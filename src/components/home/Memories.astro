@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import MaskedShape from "@/components/MaskedShape.astro";
+import PaperEdge from "@/components/PaperEdge.astro";
 import TapedCard from "@/components/TapedCard.astro";
 import star from "@/assets/blue_star.webp";
 
@@ -25,6 +26,8 @@ const bottomRow = photos.slice(half).map((image, i) => ({ image, width: widths[(
 ---
 
 <section class="relative overflow-hidden bg-magenta pt-28 pb-32 md:pt-32 md:pb-40">
+  <PaperEdge class="top-0 z-10 bg-white" />
+
   <MaskedShape
     image={star}
     width={1400}

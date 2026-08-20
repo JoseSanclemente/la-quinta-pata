@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import purpleChair from "@/assets/purple_chair.webp";
 import boxes from "@/assets/boxes.webp";
 import palmTree from "@/assets/palm_tree.webp";
+import PaperEdge from "@/components/PaperEdge.astro";
 ---
 
 <section
@@ -11,8 +12,12 @@ import palmTree from "@/assets/palm_tree.webp";
 >
   <div class="flex flex-col justify-between">
     <div>
-      <div class="flex min-h-[18vh] w-full items-start bg-cream md:min-h-[20vh]">
-        <div class="page-grid pt-[4vh] md:pt-[6vh]">
+      <div
+        class="relative flex min-h-[18vh] w-full items-start bg-cream md:min-h-[26vh]"
+      >
+        <PaperEdge class="top-0 bg-magenta" />
+        <PaperEdge class="top-full -translate-y-px bg-cream" />
+        <div class="page-grid pt-[4vh] md:pt-[10vw]">
           <p
             class="relative z-20 col-start-2 col-end-5 text-right text-sm leading-snug text-blue md:col-start-5 md:col-end-9 md:text-lead lg:col-start-8 lg:col-end-13"
           >
@@ -24,8 +29,11 @@ import palmTree from "@/assets/palm_tree.webp";
       </div>
     </div>
     <div>
-      <div class="-mt-px flex min-h-[16vh] w-full items-center bg-white md:min-h-[18vh]">
-        <div class="page-grid">
+      <div
+        class="relative -mt-px flex min-h-[16vh] w-full items-center bg-white md:min-h-[28vh]"
+      >
+        <PaperEdge class="top-0 bg-blue" />
+        <div class="page-grid md:pt-[10vw]">
           <p
             class="relative z-20 col-start-2 col-end-5 text-right text-sm leading-snug text-blue md:col-start-5 md:col-end-9 md:text-lead lg:col-start-7 lg:col-end-12"
           >

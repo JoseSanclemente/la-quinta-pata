@@ -1,13 +1,16 @@
 ---
 import { Image } from "astro:assets";
 import MaskedShape from "@/components/MaskedShape.astro";
+import PaperEdge from "@/components/PaperEdge.astro";
 import TapedPhoto from "@/components/TapedPhoto.astro";
 import star from "@/assets/blue_star.webp";
 import chair from "@/assets/chair/yellow_chair.webp";
 import chairPhoto from "@/assets/yellow_chair_photo.webp";
 ---
 
-<section class="relative overflow-hidden bg-magenta pt-20 pb-32 md:pb-16 lg:pb-48">
+<section class="relative overflow-hidden bg-magenta pt-20 pb-32 md:pt-[10vw] md:pb-16 lg:pb-48">
+  <PaperEdge class="top-0 bg-cream" />
+
   <div class="pointer-events-none absolute inset-0" aria-hidden="true">
     <MaskedShape
       image={star}

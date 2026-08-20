@@ -1,0 +1,28 @@
+---
+import { getImage } from "astro:assets";
+import paperEdge from "@/assets/paper_edge.webp";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const mask = await getImage({
+  src: paperEdge,
+  width: paperEdge.width,
+  format: "webp",
+});
+
+const layer = `url(${mask.src}) center / 100% 100% no-repeat`;
+---
+
+<div
+  aria-hidden="true"
+  class:list={["pointer-events-none absolute inset-x-0 -scale-y-100", className]}
+  style={`aspect-ratio: ${paperEdge.width} / ${paperEdge.height};
+          -webkit-mask: ${layer};
+          mask: ${layer}, ${layer}, ${layer};
+          mask-composite: add;`}
+>
+</div>

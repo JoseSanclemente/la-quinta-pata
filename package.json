@@ -15,14 +15,20 @@
   "dependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/netlify": "^8.2.0",
+    "@astrojs/react": "^6.0.4",
     "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
     "@supabase/supabase-js": "^2.112.2",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.2.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3"
   },
   "devDependencies": {
-    "playwright": "^1.62.1"
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "playwright": "^1.62.1",
+    "sharp": "^0.35.3"
   }
 }

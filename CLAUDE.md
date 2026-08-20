@@ -28,7 +28,7 @@ Three routes, no UI framework:
 - `/quienes-somos` — prerendered placeholder, an empty blue page; content still to be written.
 - `/memorias` — the interactive part: a draggable map where any visitor drops colored circles
   containing text, an image, or a video. Circles live in Supabase and stream live to all
-  visitors. Static shell plus one vanilla-TS client island (`src/scripts/`).
+  visitors. One React client island (`src/components/map/`), hydrated with `client:load`.
 
 Only `/memorias` is server-rendered; the other two set `export const prerender = true`.
 
@@ -39,9 +39,13 @@ Only `/memorias` is server-rendered; the other two set `export const prerender =
 - `allowBuilds` in `pnpm-workspace.yaml` allows `esbuild` and `sharp` to run their install
   scripts; pnpm blocks postinstall by default and the build fails without them. (pnpm 11 no
   longer reads the `pnpm` field in `package.json` — settings live in `pnpm-workspace.yaml`.)
-- `.npmrc` sets `node-linker=hoisted`. Don't remove it: with pnpm's default symlinked layout
-  the Netlify adapter's function bundling dies on Windows with
-  `EPERM: operation not permitted, symlink ...\.pnpm\...`.
+- `nodeLinker: hoisted` in `pnpm-workspace.yaml` is load-bearing. Under pnpm's default
+  symlinked layout the Netlify adapter's function bundling dies on Windows with
+  `EPERM: operation not permitted, symlink ...\.pnpm\...`. This setting used to live in
+  `.npmrc` as `node-linker=hoisted`; **pnpm 11 no longer reads it from there** and silently
+  falls back to the symlinked layout, so a `pnpm add` re-links everything and the next
+  `pnpm build` fails. Verify with `pnpm config get node-linker` — it must print `hoisted`,
+  not `undefined`.
 - Requires a `.env` (gitignored): copy `.env.example` and fill it in. `PUBLIC_SUPABASE_URL`
   and `PUBLIC_SUPABASE_ANON_KEY` are required — the build fails without them.
   `SUPABASE_SERVICE_KEY` is optional; when empty, the SSR read falls back to the public key.
@@ -95,43 +99,48 @@ the adapter emits the SSR function. The three env vars must be set in the Netlif
 
 `output: "server"`. `src/pages/index.astro` is the hero landing page;
 the map lives at `src/pages/memorias.astro` (`/memorias`), which reads all circles server-side
-(`src/lib/supabase.server.ts`) and serializes them into a `<script type="application/json"
-id="circles-data">`. The island parses that on boot instead of fetching — no client
-round-trip, and no race between the initial load and the first realtime INSERT.
+(`src/lib/supabase.server.ts`) and passes them straight into the island as a prop. Astro
+serializes island props itself, so there is no client round-trip and no race between the
+initial load and the first realtime INSERT.
 
-The island lives in `src/scripts/`, split along the 5 sections the prototype used:
+The island is React, in `src/components/map/`:
 
-1. `pan.ts` — `pos` translate on `#map`; `clamp()` keeps the image on screen; no zoom by
-   design. Pan is origin-capture (`origin` = `pos` at pointerdown), not delta accumulation.
-   Mouse + touch handlers; the `moved` flag distinguishes a drag from a click.
-2. `circles.ts` — `renderCircle(c)` injects a `.circle` div positioned by x/y percent.
-   Viewport culling: all rows live in `allCircles`, but only those within `MARGIN` px of the
-   viewport are mounted. `scheduleVisible()` throttles the culling pass to one per frame.
-3. `sidebar.ts` — on submit, uploads the file to the `media` bucket (image/video) or takes
-   text, picks a RANDOM x/y, inserts the row, then pushes it and calls `centerOnCircle()`.
-4. `tooltip.ts` — `showTooltip(c)` renders the circle's media behind a spinner. The tooltip
-   lives INSIDE `#map` so it pans together with its circle, always centered above it.
-5. `realtime.ts` — subscribes to `circles` INSERT events, dedupes against `allCircles`, and
-   calls `updateVisible()`.
+1. `MapCanvas.tsx` — the only island, and the only `client:load` on the page. Owns the pan,
+   the culling, the circle list, the realtime subscription, and which circle the tooltip
+   shows. Pan is origin-capture (`origin` = `pos` at pointerdown), not delta accumulation;
+   `clamp()` keeps the image on screen; no zoom by design. It also re-clamps on `resize`,
+   because `#map-image` is sized in `vw`.
+2. `MapCircle.tsx` — one `.circle` div positioned by x/y percent. `memo`'d, since panning
+   re-renders the parent constantly.
+3. `MapTooltip.tsx` — the circle's media behind a spinner, with `loading` / `ready` / `error`
+   states. It renders INSIDE `#map` so it pans together with its circle, always centered
+   above it.
+4. `CircleForm.tsx` — the sidebar drawer. On submit it uploads to the `media` bucket
+   (image/video) or takes text, picks a RANDOM x/y, inserts the row, and hands the new circle
+   back to `MapCanvas`, which calls `centerOnCircle()`.
 
-`main.ts` seeds state and calls the `init*` functions. `dom.ts` holds every element lookup;
-`state.ts` holds shared mutable state (`pos`, `pan`, `allCircles`, `renderedIds`,
-`droppedIds`).
+**The pan must stay imperative.** `pos`, `origin`, `start` and the `panning` / `moved` flags
+live in `useRef`, and the pointermove handler writes `map.style.transform` directly. Putting
+the position in `useState` fires a React render per pointer event and the drag turns to glue.
+React state is only for what changes rarely: the circle list, the visible-id list (recomputed
+in a `requestAnimationFrame`, and only `setState`-ed when the list actually differs), the
+selected circle, and whether the drawer is open.
+
+Culling: every row lives in the `circles` state, but only those within `MARGIN` px of the
+viewport are mounted. `droppedIds` is a `useRef<Set>` so the drop animation plays on a
+circle's first ever mount and never replays when culling remounts it.
 
 ### Key conventions / gotchas
 
-- **No comments. At all.** Not in `.astro`, `.ts`, `.css`, `.sql`, `.mjs` — no explanatory
+- **No comments. At all.** Not in `.astro`, `.ts`, `.tsx`, `.css`, `.sql`, `.mjs` — no explanatory
   blocks, no section headers, no trailing notes, no commented-out code. Name things well and
   let the code stand alone. Anything that genuinely needs prose belongs in this file. When
   touching a file that still has old comments, delete them. Only exception: functional
   directives the toolchain reads, like `// @ts-check` in `astro.config.mjs`.
 - **Absolute imports only.** `tsconfig.json` maps `@/*` to `./src/*`; every import inside
   `src/` goes through it — `@/components/SiteHeader.astro`, `@/assets/hero.webp`,
-  `@/lib/supabase.server`. Never `../` or `./` across directories. (`src/pages/*.astro` and
-  parts of `src/scripts/` still carry relative imports from before the alias landed; convert
-  them as you touch them.)
-- `state.ts` exports containers (objects, arrays, sets), never reassigned primitives — module
-  bindings are read-only for importers, so `pan.moved` works where `let moved` would not.
+  `@/lib/supabase.server`. Never `../` or `./` across directories. (Some `src/pages/*.astro`
+  still carry relative imports from before the alias landed; convert them as you touch them.)
 - Circle positions are percentages (0–100) of the map image box, not pixels — so they stay
   correct across screen sizes and panning.
 - Coordinates assigned randomly on creation; there's no placement UI.
@@ -164,14 +173,34 @@ The island lives in `src/scripts/`, split along the 5 sections the prototype use
   horizontal, así que en lazy no cargan nunca y `scripts/shot.mjs` se cuelga esperando
   `img.complete`. Por lo mismo el script hace la captura con `animations: "disabled"` — si no,
   Playwright espera a que termine una animación infinita.
-- Tailwind is used for the static markup (sidebar, form, buttons). Anything JS creates or
+- The island keeps the DOM ids the vanilla version used — `#viewport`, `#map`, `#map-image`,
+  `#circles-layer`, `#tooltip`, `#tooltip-content`, `#sidebar` — because `global.css` and
+  `scripts/shot.mjs` both select on them. Renaming one silently breaks the styling or the
+  screenshot script, neither of which typechecks.
+- Tailwind is used for the static markup (sidebar, form, buttons). Anything React creates or
   toggles stays in `src/styles/global.css`: `.circle`, `.tooltip-spinner`, `#tooltip::after`,
   `#sidebar.open`, `.swatch:has(input:checked)`, the keyframes, and `#map-image { max-width:
 none }` (preflight would otherwise cap it and break the pan extent).
 - Palette lives in the `@theme` block of `global.css` as `--color-*` tokens, which Tailwind
   turns into `bg-navy`, `text-brand`, etc.
-- Real map image goes at `public/assets/map.png`; `MapViewport.astro` falls back to
-  `placeholder.svg` via `onerror`.
+- **Map image pipeline.** The master is `src/assets/map.webp` — 5000x5000 WebP **lossless**
+  (`VP8L`), 36.5 MB. It is gitignored on purpose: shipping it would make Netlify clone 36 MB per
+  build, and Astro cannot optimize it at build time because `/memorias` is `prerender = false`
+  (SSR routes go through the runtime `/_image` endpoint). Instead, derivatives are generated once,
+  offline, and committed:
+
+  ```bash
+  node scripts/map-derivatives.mjs 3000     # -> public/assets/map-3000.webp, ~340 KB, q78
+  ```
+
+  Only `public/assets/map-3000.webp` is served. Lossy q78 is visually indistinguishable from the
+  master at 1:1 (the paper grain survives) and is ~110x smaller. Keep the master out of the repo;
+  regenerate the derivative after any edit to it.
+- The map renders at `width: clamp(1100px, 260vw, 3000px)` (`global.css`, `#map-image`), not at its
+  natural 3000 px. At 1:1 on a 390 px phone the map is 7.7 screens wide and unreadable; the clamp
+  keeps the pan extent at roughly 2-3 screens on every viewport. Circle coordinates are percentages,
+  so they follow the scale for free. Decode memory stays ~34 MB regardless of display size.
+- `MapViewport` falls back to `placeholder.svg` via `onerror`.
 
 ## Language note
 

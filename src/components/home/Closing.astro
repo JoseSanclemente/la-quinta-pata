@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import PaperEdge from "@/components/PaperEdge.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
 import wordmark from "@/assets/laquintapata.webp";
 import pinkChair from "@/assets/chair/pink_chair.webp";
@@ -7,11 +8,14 @@ import pinkChair from "@/assets/chair/pink_chair.webp";
 
 <section aria-label="La Quinta Pata" class="relative overflow-hidden bg-blue">
   <div class="absolute inset-x-0 top-0" aria-hidden="true">
-    <div class="h-[20vh] w-full bg-white md:h-[22vh]"></div>
+    <div class="relative h-[20vh] w-full bg-white md:h-[32vh]">
+      <PaperEdge class="top-0 bg-magenta" />
+      <PaperEdge class="top-full -translate-y-px bg-white" />
+    </div>
   </div>
 
   <div class="relative z-10">
-    <div class="page-grid pt-10 md:pt-14">
+    <div class="page-grid pt-10 md:pt-[11vw]">
       <p
         class="col-start-1 col-end-5 text-center text-sm leading-snug text-blue md:col-start-2 md:col-end-8 md:text-lead lg:col-start-3 lg:col-end-11"
       >

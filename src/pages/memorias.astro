@@ -1,7 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import MapViewport from "@/components/MapViewport.astro";
-import Sidebar from "@/components/Sidebar.astro";
+import MapCanvas from "@/components/map/MapCanvas";
 import { fetchCircles } from "@/lib/supabase.server";
 
 export const prerender = false;
@@ -10,12 +9,5 @@ const circles = await fetchCircles();
 ---
 
 <Layout lockScroll>
-  <MapViewport />
-  <Sidebar />
-
-  <script id="circles-data" type="application/json" is:inline set:html={JSON.stringify(circles)} />
-
-  <script>
-    import "@/scripts/main";
-  </script>
+  <MapCanvas client:load circles={circles} />
 </Layout>
