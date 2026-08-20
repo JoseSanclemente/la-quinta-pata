@@ -1,0 +1,143 @@
+---
+import { Image } from "astro:assets";
+import MaskedShape from "@/components/MaskedShape.astro";
+import TapedCard from "@/components/TapedCard.astro";
+import star from "@/assets/blue_star.webp";
+
+const photos = Object.entries(
+  import.meta.glob<{ default: ImageMetadata }>("@/assets/carousel/*.png", {
+    eager: true,
+  })
+)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([, mod]) => mod.default);
+
+const widths = [
+  "w-[52vw] md:w-[30vw] lg:w-[19vw]",
+  "w-[64vw] md:w-[36vw] lg:w-[24vw]",
+  "w-[56vw] md:w-[32vw] lg:w-[21vw]",
+  "w-[60vw] md:w-[34vw] lg:w-[22vw]",
+];
+
+const half = Math.ceil(photos.length / 2);
+const topRow = photos.slice(0, half).map((image, i) => ({ image, width: widths[i % widths.length] }));
+const bottomRow = photos.slice(half).map((image, i) => ({ image, width: widths[(i + 2) % widths.length] }));
+---
+
+<section class="relative overflow-hidden bg-magenta pt-28 pb-32 md:pt-32 md:pb-40">
+  <MaskedShape
+    image={star}
+    width={1400}
+    class="absolute top-[42%] left-1/2 w-[170%] -translate-x-1/2 bg-blue/30 md:w-[125%] lg:w-[100%]"
+  />
+
+  <div class="relative z-10 flex flex-col gap-12 md:gap-16">
+    <div class="page-grid">
+      <h2
+        class="col-start-1 col-end-5 text-center text-section leading-tight font-extrabold text-white md:col-end-9 md:text-section-lg lg:col-start-2 lg:col-end-12"
+      >
+        Recuerdos y anécdotas
+      </h2>
+
+      <div
+        class="col-start-1 col-end-5 flex flex-col items-center gap-4 md:col-end-9 lg:col-start-2 lg:col-end-12"
+      >
+        <a
+          href="/memorias"
+          class="on-dark inline-flex min-h-11 items-center rounded-md bg-yellow px-6 py-3 text-sm font-semibold text-blue transition-opacity hover:opacity-90 md:text-base"
+        >
+          Dejá tu recuerdo
+        </a>
+
+        <button
+          type="button"
+          id="marquee-toggle"
+          aria-pressed="false"
+          class="on-dark inline-flex min-h-11 items-center gap-2 rounded-md px-4 text-sm font-semibold text-white underline underline-offset-4 hover:no-underline"
+        >
+          <span id="marquee-toggle-label">Pausar movimiento</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="group relative overflow-hidden">
+      <div
+        class="marquee-track flex w-max animate-marquee pt-8 group-hover:[animation-play-state:paused]"
+      >
+        {
+          [false, true].map((clone) => (
+            <div class="contents" aria-hidden={clone ? "true" : undefined}>
+              {topRow.map((item, i) => (
+                <TapedCard index={i} class:list={["mr-6 shrink-0 md:mr-8", item.width]}>
+                  <Image
+                    src={item.image}
+                    alt=""
+                    aria-hidden="true"
+                    widths={[320, 640]}
+                    sizes="(min-width: 1024px) 22vw, (min-width: 768px) 34vw, 60vw"
+                    loading="eager"
+                    class="aspect-[4/5] w-full object-cover"
+                  />
+                </TapedCard>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="page-grid">
+      <p
+        class="col-start-1 col-end-5 text-center text-sm leading-relaxed text-white md:col-start-2 md:col-end-8 md:text-base lg:col-start-4 lg:col-end-10"
+      >
+        Un mapa abierto donde cualquiera suelta la suya: <strong
+          class="font-extrabold italic">una foto, un video o un cuento.</strong
+        > Memorias que dicen algo sobre <strong class="font-extrabold italic"
+          >quiénes somos</strong
+        > y la forma en que <strong class="font-extrabold italic"
+          >habitamos el mundo.</strong
+        >
+      </p>
+    </div>
+
+    <div class="group relative overflow-hidden">
+      <div
+        class="marquee-track flex w-max animate-marquee-reverse pt-8 group-hover:[animation-play-state:paused]"
+      >
+        {
+          [false, true].map((clone) => (
+            <div class="contents" aria-hidden={clone ? "true" : undefined}>
+              {bottomRow.map((item, i) => (
+                <TapedCard index={i + 2} class:list={["mr-6 shrink-0 md:mr-8", item.width]}>
+                  <Image
+                    src={item.image}
+                    alt=""
+                    aria-hidden="true"
+                    widths={[320, 640]}
+                    sizes="(min-width: 1024px) 22vw, (min-width: 768px) 34vw, 60vw"
+                    loading="eager"
+                    class="aspect-[4/5] w-full object-cover"
+                  />
+                </TapedCard>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const toggle = document.getElementById("marquee-toggle");
+  const label = document.getElementById("marquee-toggle-label");
+  const tracks = document.querySelectorAll<HTMLElement>(".marquee-track");
+
+  toggle?.addEventListener("click", () => {
+    const paused = toggle.getAttribute("aria-pressed") === "true";
+    const next = !paused;
+    toggle.setAttribute("aria-pressed", String(next));
+    tracks.forEach((track) => track.classList.toggle("is-paused", next));
+    if (label) label.textContent = next ? "Reanudar movimiento" : "Pausar movimiento";
+  });
+</script>

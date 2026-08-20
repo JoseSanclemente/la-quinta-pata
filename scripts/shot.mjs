@@ -57,7 +57,7 @@ try {
 
   await page.addStyleTag({ content: "astro-dev-toolbar { display: none !important }" });
 
-  await page.screenshot({ path: out, fullPage: true });
+  await page.screenshot({ path: out, fullPage: true, animations: "disabled" });
   console.log(out);
 } catch (err) {
   console.error(err.message);

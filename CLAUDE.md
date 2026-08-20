@@ -2,14 +2,29 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Mandatory frontend design workflow
+
+For every task that creates, changes, reviews, or otherwise affects the user interface,
+always use all three skills: `$impeccable`, `$ui-ux-pro-max`, and `$frontend-design`.
+
+- Start with `$impeccable` to establish the appropriate workflow, preserve the existing visual
+  world unless a redesign is requested, and complete its bounded visual verification pass.
+- Use `$ui-ux-pro-max` to inspect the Astro stack and obtain relevant design-system, UX,
+  accessibility, responsive, and interaction guidance before making UI decisions.
+- Use `$frontend-design` to develop a subject-specific visual direction, deliberate typography,
+  palette, layout, copy, and one justified signature element; avoid generic template aesthetics.
+
+Treat these skills as complementary, not alternatives: apply all of them on every frontend task.
+Continue to follow the visual UI checks in this file, including desktop and mobile screenshots.
+
 ## What this is
 
 Astro site ("La Quinta Pata"): a digital archive around the Rimax plastic chair, in Spanish.
 Three routes, no UI framework:
 
 - `/` (`src/pages/index.astro`) — prerendered marketing landing, composed of
-  `src/components/home/` sections (`Hero`, `RimaxIntro`, `Discovery`). Editorial layout built
-  from torn-paper `MaskedShape` bands over alternating cream/blue/magenta fields.
+  `src/components/home/` sections (`Hero`, `RimaxIntro`, `Discovery`). Editorial layout of flat
+  alternating cream/blue/magenta fields.
 - `/quienes-somos` — prerendered placeholder, an empty blue page; content still to be written.
 - `/memorias` — the interactive part: a draggable map where any visitor drops colored circles
   containing text, an image, or a video. Circles live in Supabase and stream live to all
@@ -127,7 +142,7 @@ The island lives in `src/scripts/`, split along the 5 sections the prototype use
   `@utility` in `global.css`, driven by the `--gutter` / `--grid-gap` / `--content-max` custom
   properties on `:root` (they change per breakpoint, so they can't be `@theme` tokens).
   `page-gutter` is the escape hatch for things that need the margin but not the columns.
-  Sections stay full-bleed (backgrounds, torn `MaskedShape` bands); only the inner layer is
+  Sections stay full-bleed (backgrounds, color bands); only the inner layer is
   gridded. Collage pieces are placed horizontally by column and freely in the vertical
   (`absolute top-[x%]` inside a `relative h-full` cell) — desordenado, but on the grid.
 - **Place cells with `col-start-*` + `col-end-*`, never `col-span-*`.** `col-span-N` compiles to
@@ -138,6 +153,17 @@ The island lives in `src/scripts/`, split along the 5 sections the prototype use
   any page with `?grid`. `node scripts/shot.mjs "?grid" grid-desktop 1440x900` captures it.
   It uses `[display:none] md:[display:block]` rather than `hidden md:block` because the global
   `.hidden` rule is `!important` and would win.
+- **Carruseles infinitos (`Memories.astro`)**: CSS puro, cero JS. La pista (`.marquee-track`)
+  contiene la lista de tarjetas **duplicada** y `@keyframes marquee` la desplaza `-50%`; para que
+  el salto sea invisible la separación va en `mr-*` por tarjeta, **nunca en `gap`** (con `gap` el
+  `-50%` queda desfasado medio hueco). Velocidad y sentido salen de los tokens `--animate-marquee`
+  / `--animate-marquee-reverse` del `@theme`. Pausa al hover con
+  `group` + `group-hover:[animation-play-state:paused]`, y `prefers-reduced-motion` apaga la
+  animación en `global.css`.
+- Las imágenes dentro de un carrusel llevan `loading="eager"`: quedan fuera del viewport
+  horizontal, así que en lazy no cargan nunca y `scripts/shot.mjs` se cuelga esperando
+  `img.complete`. Por lo mismo el script hace la captura con `animations: "disabled"` — si no,
+  Playwright espera a que termine una animación infinita.
 - Tailwind is used for the static markup (sidebar, form, buttons). Anything JS creates or
   toggles stays in `src/styles/global.css`: `.circle`, `.tooltip-spinner`, `#tooltip::after`,
   `#sidebar.open`, `.swatch:has(input:checked)`, the keyframes, and `#map-image { max-width:

@@ -3,12 +3,18 @@ import Layout from "@/layouts/Layout.astro";
 import Hero from "@/components/home/Hero.astro";
 import RimaxIntro from "@/components/home/RimaxIntro.astro";
 import Discovery from "@/components/home/Discovery.astro";
+import Memories from "@/components/home/Memories.astro";
+import Closing from "@/components/home/Closing.astro";
 
 export const prerender = true;
 ---
 
 <Layout title="La Quinta Pata — Archivo digital de la silla Rimax">
-  <Hero />
-  <RimaxIntro />
-  <Discovery />
+  <main id="contenido">
+    <Hero />
+    <RimaxIntro />
+    <Discovery />
+    <Memories />
+    <Closing />
+  </main>
 </Layout>

@@ -1,18 +1,23 @@
 ---
 import "@/styles/global.css";
 import GridOverlay from "@/components/GridOverlay.astro";
+import ogFallback from "@/assets/hero.webp";
 
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
   lockScroll?: boolean;
 }
 
 const {
   title = "La Quinta Pata",
   description = "El primer archivo digital de la silla Rimax. Anécdotas de todo el mundo, en un mapa.",
+  image = ogFallback.src,
   lockScroll = false,
 } = Astro.props;
+
+const ogImage = new URL(image, Astro.url).href;
 
 const viewport = lockScroll
   ? "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
@@ -26,12 +31,18 @@ const viewport = lockScroll
     <meta name="viewport" content={viewport} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={Astro.url.href} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="es_CO" />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body class:list={["relative m-0", lockScroll && "lock-scroll"]}>
+    {!lockScroll && <a href="#contenido" class="skip-link">Saltar al contenido</a>}
     <slot />
     {import.meta.env.DEV && <GridOverlay />}
   </body>

@@ -1,0 +1,39 @@
+---
+import { Image } from "astro:assets";
+import tape1 from "@/assets/tape_1.webp";
+import tape2 from "@/assets/tape_2.webp";
+import tape3 from "@/assets/tape_3.webp";
+import tape4 from "@/assets/tape_4.webp";
+import tape5 from "@/assets/tape_5.webp";
+
+interface Props {
+  index?: number;
+  class?: string;
+}
+
+const { index = 0, class: className } = Astro.props;
+
+const tapes = [tape1, tape2, tape3, tape4, tape5];
+const rotations = ["-rotate-6", "rotate-3", "-rotate-2", "rotate-6", "rotate-1"];
+
+const tape = tapes[index % tapes.length];
+const rotation = rotations[index % rotations.length];
+---
+
+<div class:list={["relative", className]}>
+  <div
+    class="overflow-hidden rounded-sm shadow-[0_4px_24px_rgba(0,0,0,0.25)]"
+  >
+    <slot />
+  </div>
+  <Image
+    src={tape}
+    alt=""
+    aria-hidden="true"
+    loading="eager"
+    class:list={[
+      "absolute -top-4 left-1/2 h-auto w-28 -translate-x-1/2 md:-top-6 md:w-40",
+      rotation,
+    ]}
+  />
+</div>

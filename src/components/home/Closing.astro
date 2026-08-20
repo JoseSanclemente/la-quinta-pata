@@ -1,0 +1,58 @@
+---
+import { Image } from "astro:assets";
+import SiteFooter from "@/components/SiteFooter.astro";
+import wordmark from "@/assets/laquintapata.webp";
+import pinkChair from "@/assets/chair/pink_chair.webp";
+---
+
+<section aria-label="La Quinta Pata" class="relative overflow-hidden bg-blue">
+  <div class="absolute inset-x-0 top-0" aria-hidden="true">
+    <div class="h-[20vh] w-full bg-white md:h-[22vh]"></div>
+  </div>
+
+  <div class="relative z-10">
+    <div class="page-grid pt-10 md:pt-14">
+      <p
+        class="col-start-1 col-end-5 text-center text-sm leading-snug text-blue md:col-start-2 md:col-end-8 md:text-lead lg:col-start-3 lg:col-end-11"
+      >
+        Porque aunque el tiempo nos deje tirados, <strong
+          class="font-extrabold italic"
+          >esos momentos siempre estarán con nosotros.</strong
+        >
+      </p>
+    </div>
+
+    <div class="page-grid items-center gap-y-12 pt-[18vh] pb-20 md:pt-[16vh]">
+      <Image
+        src={pinkChair}
+        alt="Silla Rimax fucsia"
+        widths={[320, 640, pinkChair.width]}
+        sizes="(min-width: 1024px) 32vw, (min-width: 768px) 34vw, 44vw"
+        class="col-start-1 col-end-4 w-full object-contain md:col-end-4 lg:col-end-5"
+      />
+
+      <div
+        class="col-start-1 col-end-5 text-center md:col-start-4 md:col-end-9 lg:col-start-6 lg:col-end-12"
+      >
+        <h2>
+          <Image
+            src={wordmark}
+            alt="La Quinta Pata, archivo digital"
+            widths={[480, 960, wordmark.width]}
+            sizes="(min-width: 1024px) 48vw, (min-width: 768px) 58vw, 92vw"
+            class="mx-auto w-full"
+          />
+        </h2>
+
+        <a
+          href="/memorias"
+          class="on-dark mt-8 inline-flex min-h-11 items-center rounded-md bg-yellow px-6 py-3 text-sm font-semibold text-blue transition-opacity hover:opacity-90 md:text-base"
+        >
+          Dejá tu recuerdo
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <SiteFooter />
+</section>

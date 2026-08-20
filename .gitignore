@@ -2,6 +2,7 @@
 dist/
 .astro/
 .netlify/
+.impeccable/
 
 # dependencies
 node_modules/

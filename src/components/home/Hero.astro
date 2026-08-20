@@ -4,59 +4,59 @@ import SiteHeader from "@/components/SiteHeader.astro";
 import MaskedShape from "@/components/MaskedShape.astro";
 import hero from "@/assets/hero.webp";
 import star from "@/assets/blue_star.webp";
-import tornEdge from "@/assets/torn_edge_3.webp";
+import texture from "@/assets/texture.webp";
 ---
 
-<main class="relative min-h-dvh overflow-hidden bg-cream">
+<section class="relative min-h-dvh overflow-hidden bg-cream">
+  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+    <MaskedShape
+      image={star}
+      width={1000}
+      class="absolute top-[6%] -left-[14%] w-[86%] bg-magenta/25 lg:top-[2%] lg:left-[-10%] lg:w-[80%]"
+    />
+    <Image
+      src={star}
+      alt=""
+      aria-hidden="true"
+      widths={[400, 800, 1100]}
+      sizes="(min-width: 1024px) 52vw, 76vw"
+      class="absolute top-[10%] -right-[14%] w-[92%] opacity-45 lg:top-[4%] lg:-right-[8%] lg:w-[100%]"
+    />
+  </div>
+
   <div class="relative z-10 flex min-h-dvh flex-col">
     <SiteHeader />
 
-    <div class="page-grid relative flex-1 content-center items-center gap-y-8 pb-28">
-      <div class="pointer-events-none absolute inset-0 col-span-full">
-        <MaskedShape
-          image={star}
-          width={800}
-          class="absolute top-[2%] left-[14%] w-[50%] bg-magenta/25"
-        />
-        <Image
-          src={star}
-          alt=""
-          aria-hidden="true"
-          widths={[400, 800, 1100]}
-          sizes="52vw"
-          class="absolute top-[10%] right-[18%] w-[52%] opacity-45"
-        />
-      </div>
-
+    <div class="page-grid relative flex-1 content-center gap-y-6 pb-24">
       <div
-        class="relative z-10 col-start-1 col-end-5 self-center text-blue"
+        class="relative z-10 col-start-1 col-end-5 self-start text-blue lg:row-start-1 lg:mt-[14vh]"
       >
         <h1 class="text-hero leading-tight font-extrabold">
           ¡Quiubo, Hola, Hello!
         </h1>
         <p class="mt-4 text-lead leading-relaxed">
-          Bienvenidx a La Quinta Pata. Pasá y conocé el primero archivo digital
+          Bienvenidx a La Quinta Pata. Pasá y conocé el primer archivo digital
           de la <strong class="font-bold">silla Rimax</strong>.
         </p>
+
+        <a
+          href="/memorias"
+          class="mt-8 inline-flex min-h-11 items-center rounded-md bg-blue px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 md:text-base"
+        >
+          Dejá tu recuerdo
+        </a>
       </div>
 
       <Image
         src={hero}
         alt="Mesa con sillas Rimax, sombrilla y radio bajo un letrero de 'Al aire'"
         widths={[480, 768, 1152, hero.width]}
-        sizes="(min-width: 1024px) 60vw, (min-width: 768px) 90vw, 100vw"
+        sizes="(min-width: 1024px) 85vw, 100vw"
         loading="eager"
         fetchpriority="high"
         decoding="sync"
-        class="relative col-start-1 col-end-5 w-full self-center object-contain md:col-end-9 md:max-h-[80vh] lg:col-start-5 lg:col-end-13"
+        class="col-start-1 col-end-5 h-[36vh] w-auto max-w-none justify-self-center object-contain md:col-end-9 md:h-[44vh] lg:col-end-13 lg:row-start-1 lg:h-auto lg:max-h-[80vh] lg:max-w-full lg:self-center"
       />
     </div>
   </div>
-
-  <MaskedShape
-    image={tornEdge}
-    size="100% 100%"
-    width={1600}
-    class="absolute inset-x-0 -bottom-10 z-20 w-full bg-magenta"
-  />
-</main>
+</section>

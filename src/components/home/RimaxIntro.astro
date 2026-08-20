@@ -5,10 +5,9 @@ import TapedPhoto from "@/components/TapedPhoto.astro";
 import star from "@/assets/blue_star.webp";
 import chair from "@/assets/chair/yellow_chair.webp";
 import chairPhoto from "@/assets/yellow_chair_photo.webp";
-import tornEdgeCream from "@/assets/torn_edge_1.webp";
 ---
 
-<section class="relative overflow-hidden bg-magenta pt-20 pb-20 md:pb-16">
+<section class="relative overflow-hidden bg-magenta pt-20 pb-32 md:pb-16 lg:pb-48">
   <div class="pointer-events-none absolute inset-0" aria-hidden="true">
     <MaskedShape
       image={star}
@@ -40,24 +39,22 @@ import tornEdgeCream from "@/assets/torn_edge_1.webp";
       />
     </div>
 
-    <TapedPhoto
-      image={chairPhoto}
-      alt="Un parrillero lleva una silla Rimax amarilla en moto, entre el tráfico"
-      sizes="(min-width: 1024px) 52vw, (min-width: 768px) 58vw, 100vw"
-      class="col-start-1 col-end-5 md:col-start-5 md:col-end-9 lg:col-start-6 lg:col-end-13"
-    />
-  </div>
-
-  <div
-    aria-hidden="true"
-    class="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex flex-col justify-end"
-  >
-    <MaskedShape
-      image={tornEdgeCream}
-      size="100% 100%"
-      width={1600}
-      class="w-full shrink-0 bg-cream"
-    />
-    <div class="h-14 w-full bg-cream md:h-20"></div>
+    <a
+      href="/memorias"
+      class="on-dark group col-start-1 col-end-5 rounded-sm md:col-start-5 md:col-end-9 lg:col-start-6 lg:col-end-13"
+    >
+      <TapedPhoto
+        image={chairPhoto}
+        alt="Un parrillero lleva una silla Rimax amarilla en moto, entre el tráfico"
+        sizes="(min-width: 1024px) 52vw, (min-width: 768px) 58vw, 100vw"
+        class="transition-transform duration-300 group-hover:-rotate-1"
+      />
+      <span class="mt-6 block text-sm leading-relaxed text-white md:text-base">
+        ¿Y la tuya dónde estaba? <strong
+          class="font-extrabold italic underline underline-offset-4 group-hover:no-underline"
+          >Dejá tu recuerdo.</strong
+        >
+      </span>
+    </a>
   </div>
 </section>
