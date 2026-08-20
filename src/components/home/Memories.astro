@@ -8,7 +8,7 @@ import star from "@/assets/blue_star.webp";
 const photos = Object.entries(
   import.meta.glob<{ default: ImageMetadata }>("@/assets/carousel/*.png", {
     eager: true,
-  })
+  }),
 )
   .sort(([a], [b]) => a.localeCompare(b))
   .map(([, mod]) => mod.default);
@@ -21,11 +21,17 @@ const widths = [
 ];
 
 const half = Math.ceil(photos.length / 2);
-const topRow = photos.slice(0, half).map((image, i) => ({ image, width: widths[i % widths.length] }));
-const bottomRow = photos.slice(half).map((image, i) => ({ image, width: widths[(i + 2) % widths.length] }));
+const topRow = photos
+  .slice(0, half)
+  .map((image, i) => ({ image, width: widths[i % widths.length] }));
+const bottomRow = photos
+  .slice(half)
+  .map((image, i) => ({ image, width: widths[(i + 2) % widths.length] }));
 ---
 
-<section class="relative overflow-hidden bg-magenta pt-28 pb-32 md:pt-32 md:pb-40">
+<section
+  class="relative overflow-hidden bg-magenta pt-28 pb-32 md:pt-32 md:pb-40"
+>
   <PaperEdge class="top-0 z-10 bg-white" />
 
   <MaskedShape
@@ -45,13 +51,6 @@ const bottomRow = photos.slice(half).map((image, i) => ({ image, width: widths[(
       <div
         class="col-start-1 col-end-5 flex flex-col items-center gap-4 md:col-end-9 lg:col-start-2 lg:col-end-12"
       >
-        <a
-          href="/memorias"
-          class="on-dark inline-flex min-h-11 items-center rounded-md bg-yellow px-6 py-3 text-sm font-semibold text-blue transition-opacity hover:opacity-90 md:text-base"
-        >
-          Dejá tu recuerdo
-        </a>
-
         <button
           type="button"
           id="marquee-toggle"
@@ -71,7 +70,10 @@ const bottomRow = photos.slice(half).map((image, i) => ({ image, width: widths[(
           [false, true].map((clone) => (
             <div class="contents" aria-hidden={clone ? "true" : undefined}>
               {topRow.map((item, i) => (
-                <TapedCard index={i} class:list={["mr-6 shrink-0 md:mr-8", item.width]}>
+                <TapedCard
+                  index={i}
+                  class:list={["mr-6 shrink-0 md:mr-8", item.width]}
+                >
                   <Image
                     src={item.image}
                     alt=""
@@ -111,7 +113,10 @@ const bottomRow = photos.slice(half).map((image, i) => ({ image, width: widths[(
           [false, true].map((clone) => (
             <div class="contents" aria-hidden={clone ? "true" : undefined}>
               {bottomRow.map((item, i) => (
-                <TapedCard index={i + 2} class:list={["mr-6 shrink-0 md:mr-8", item.width]}>
+                <TapedCard
+                  index={i + 2}
+                  class:list={["mr-6 shrink-0 md:mr-8", item.width]}
+                >
                   <Image
                     src={item.image}
                     alt=""
@@ -141,6 +146,7 @@ const bottomRow = photos.slice(half).map((image, i) => ({ image, width: widths[(
     const next = !paused;
     toggle.setAttribute("aria-pressed", String(next));
     tracks.forEach((track) => track.classList.toggle("is-paused", next));
-    if (label) label.textContent = next ? "Reanudar movimiento" : "Pausar movimiento";
+    if (label)
+      label.textContent = next ? "Reanudar movimiento" : "Pausar movimiento";
   });
 </script>

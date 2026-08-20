@@ -30,12 +30,14 @@
   --color-ink: #0d1b2a;
   --color-navy: #1d3557;
   --color-navy-hover: #274b73;
-  --color-brand: #e63946;
-  --color-brand-hover: #c5303c;
+  --color-brand: #2743f0;
+  --color-brand-hover: #1c31c0;
   --color-paper: #f1faee;
   --color-line: #a8c0d6;
 
   --color-magenta: #cb1c85;
+  --color-secondary: var(--color-magenta);
+  --color-secondary-hover: #a3156a;
   --color-cream: #f9f5eb;
   --color-blue: #2743f0;
   --color-orange: #fc8503;
@@ -313,9 +315,10 @@ body.lock-scroll {
 
 #sidebar {
   position: fixed;
-  top: 0;
+  left: 0;
   right: 0;
-  transform: translateX(100%);
+  bottom: 0;
+  transform: translateY(100%);
   opacity: 0;
   visibility: hidden;
   transition:
@@ -324,12 +327,24 @@ body.lock-scroll {
     visibility 0s linear 0.3s;
 }
 #sidebar.open {
-  transform: translateX(0);
+  transform: translateY(0);
   opacity: 1;
   visibility: visible;
   transition:
     transform 0.3s ease,
     opacity 0.3s ease;
+}
+@media (width >= 48rem) {
+  #sidebar {
+    left: auto;
+    bottom: auto;
+    top: 0;
+    right: 0;
+    transform: translateX(100%);
+  }
+  #sidebar.open {
+    transform: translateX(0);
+  }
 }
 
 .swatch {

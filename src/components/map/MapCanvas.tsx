@@ -299,33 +299,26 @@ export default function MapCanvas() {
         href="/"
         aria-label="Volver al inicio"
         inert={detailOpen}
-        className="fixed top-4 left-4 z-20 inline-flex h-11 w-11 items-center justify-center rounded-lg bg-navy text-white shadow-[0_2px_10px_rgb(0_0_0/0.4)] hover:bg-navy-hover"
+        className="fixed top-4 left-4 z-20 inline-flex h-11 w-11 items-center justify-center rounded-full bg-secondary text-white shadow-[0_2px_10px_rgb(0_0_0/0.4)] hover:bg-secondary-hover md:h-12 md:w-12"
       >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-          className="h-5 w-5"
-        >
-          <path d="M19 12H5" />
-          <path d="M12 19l-7-7 7-7" />
+        <svg aria-hidden="true" className="h-5 w-5 md:h-6 md:w-6">
+          <use href="/icons/sprite.svg#icon-back" />
         </svg>
       </a>
 
       <div
-        className="fixed bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3"
+        className="fixed bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 md:bottom-6 md:gap-4"
         inert={detailOpen}
       >
         <button
           type="button"
           onClick={() => setSidebarOpen(true)}
-          className="cursor-pointer rounded-lg bg-navy px-4 py-2.5 text-base font-semibold text-white shadow-[0_2px_10px_rgb(0_0_0/0.4)] hover:bg-navy-hover"
+          className="flex h-11 w-48 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-brand px-6 text-base font-semibold text-white shadow-[0_2px_10px_rgb(0_0_0/0.4)] hover:bg-brand-hover md:h-14 md:w-64 md:gap-2 md:px-8 md:text-lg"
         >
-          + Crear
+          <svg aria-hidden="true" className="h-4 w-4 shrink-0 md:h-5 md:w-5">
+            <use href="/icons/sprite.svg#icon-add" />
+          </svg>
+          Crear memoria
         </button>
 
         <a
@@ -333,20 +326,10 @@ export default function MapCanvas() {
           target="_blank"
           rel="noreferrer"
           aria-label="Instagram de La Quinta Pata"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-navy text-white shadow-[0_2px_10px_rgb(0_0_0/0.4)] hover:bg-navy-hover"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-secondary text-white shadow-[0_2px_10px_rgb(0_0_0/0.4)] hover:bg-secondary-hover md:h-14 md:w-14"
         >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            aria-hidden="true"
-            className="h-5 w-5"
-          >
-            <rect x="3" y="3" width="18" height="18" rx="5"></rect>
-            <circle cx="12" cy="12" r="4"></circle>
-            <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle>
+          <svg aria-hidden="true" className="h-5 w-5 md:h-6 md:w-6">
+            <use href="/icons/sprite.svg#icon-instagram" />
           </svg>
         </a>
       </div>

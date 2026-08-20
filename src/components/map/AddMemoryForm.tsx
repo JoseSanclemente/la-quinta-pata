@@ -15,7 +15,7 @@ function errorMessage(err: unknown): string {
 }
 
 const asideClass =
-  "rounded-l-2xl z-30 h-full w-140 max-w-[90vw] overflow-y-auto bg-paper p-6 shadow-[-4px_0_20px_rgb(0_0_0/0.4)]";
+  "rounded-t-2xl md:rounded-t-none md:rounded-l-2xl z-30 w-full max-h-[85vh] md:h-full md:max-h-none md:w-140 md:max-w-[90vw] overflow-y-auto bg-paper p-6 shadow-[0_-4px_20px_rgb(0_0_0/0.4)] md:shadow-[-4px_0_20px_rgb(0_0_0/0.4)]";
 const fieldClass =
   "w-full rounded-xl border-none bg-line/25 px-5 py-3 font-normal text-navy placeholder:text-navy/50";
 const MEDIA_OPTIONS: {
@@ -322,7 +322,7 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
         <button
           type="submit"
           disabled={!filled || busy}
-          className="mx-auto cursor-pointer rounded-full border-none bg-brand px-8 py-3.5 text-base font-bold text-white hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-60"
+          className="mx-auto cursor-pointer rounded-full border-none bg-brand px-8 py-4 text-base font-bold text-white hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-60"
         >
           Soltar en el mapa
         </button>
