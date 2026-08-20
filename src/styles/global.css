@@ -200,6 +200,9 @@ body.lock-scroll {
 
 .chair {
   background-color: var(--c);
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
   mask-image: var(--chair-src);
   mask-size: contain;
   mask-repeat: no-repeat;
