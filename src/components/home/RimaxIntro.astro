@@ -9,28 +9,32 @@ import chairPhoto from "@/assets/yellow_chair_photo.webp";
 ---
 
 <section
-  class="relative overflow-hidden bg-magenta pt-20 pb-32 md:pt-[10vw] md:pb-16 lg:pb-48"
+  class="bg-magenta relative overflow-hidden py-25 md:pt-[10vw] md:pb-24 lg:pb-30"
 >
-  <PaperEdge class="top-0 bg-cream" />
+  <PaperEdge class="bg-cream top-0 -translate-y-px" />
 
   <div class="pointer-events-none absolute inset-0" aria-hidden="true">
     <MaskedShape
       image={star}
       width={1000}
-      class="absolute top-[4%] left-[2%] w-[70%] bg-blue/20 md:top-0 md:left-0 md:w-[44%]"
+      class="bg-blue/20 absolute top-65 -left-7.5 w-[112%] md:top-[25%] md:left-[15%] md:w-[70%] lg:top-[30%] lg:left-[-10%]"
     />
   </div>
 
-  <div class="page-grid relative z-10 gap-y-12 md:items-center">
-    <div class="col-start-1 col-end-5 md:col-end-5 lg:col-end-6">
+  <div class="page-grid relative z-10 gap-y-12 md:items-center md:pt-20">
+    <div
+      class="col-start-1 col-end-5 flex flex-col items-center space-y-4 md:col-end-9 lg:col-end-6"
+    >
       <h2
-        class="max-w-sm text-section leading-tight font-normal text-white md:text-section-lg"
+        class="text-section md:text-section-lg max-w-sm leading-tight font-normal text-white md:max-w-xl"
       >
         La Rimax es de esas cosas que uno ve a diario y <em
           class="font-extrabold italic">ni le para bolas.</em
         >
       </h2>
-      <p class="mt-5 max-w-sm text-sm leading-relaxed text-white md:text-base">
+      <p
+        class="max-w-sm text-base leading-relaxed text-white md:max-w-xl md:text-base lg:text-lg"
+      >
         Está en la terraza, en la tienda, en el cumpleaños, en el patio y hasta
         en el velorio cogiendo airecito.
       </p>
@@ -40,20 +44,15 @@ import chairPhoto from "@/assets/yellow_chair_photo.webp";
         alt="Silla Rimax amarilla"
         widths={[320, 640]}
         sizes="(min-width: 1024px) 320px, (min-width: 768px) 288px, 224px"
-        class="mt-10 w-56 md:w-72 lg:w-80"
+        class="w-56 md:w-72 lg:w-90"
       />
     </div>
 
-    <a
-      href="/memorias"
-      class="on-dark group col-start-1 col-end-5 rounded-sm md:col-start-5 md:col-end-9 lg:col-start-6 lg:col-end-13"
-    >
-      <TapedPhoto
-        image={chairPhoto}
-        alt="Un parrillero lleva una silla Rimax amarilla en moto, entre el tráfico"
-        sizes="(min-width: 1024px) 52vw, (min-width: 768px) 58vw, 100vw"
-        class="transition-transform duration-300 group-hover:-rotate-1"
-      />
-    </a>
+    <TapedPhoto
+      image={chairPhoto}
+      alt="Un parrillero lleva una silla Rimax amarilla en moto, entre el tráfico"
+      sizes="(min-width: 1024px) 52vw, (min-width: 768px) 58vw, 100vw"
+      class="col-start-1 col-end-5 transition-transform duration-300 group-hover:-rotate-1 md:col-end-9 lg:col-start-7 lg:col-end-13"
+    />
   </div>
 </section>
