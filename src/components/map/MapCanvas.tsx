@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { db } from "@/lib/supabase.client";
 import AddMemoryForm from "@/components/map/AddMemoryForm";
-import MapCircle from "@/components/map/MapChair";
+import MapChair from "@/components/map/MapChair";
 import MapDetail from "@/components/map/MapDetail";
 import MapTooltip from "@/components/map/MapTooltip";
-import type { Circle } from "@/lib/types";
+import type { Chair } from "@/lib/types";
 
 const MAP_SRC = "/assets/map-3000.webp";
 const MAP_SRCSET = "/assets/map-1600.webp 1600w, /assets/map-3000.webp 3000w";
@@ -19,10 +19,10 @@ export default function MapCanvas() {
   const mapRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const [circles, setCircles] = useState<Circle[]>([]);
+  const [circles, setCircles] = useState<Chair[]>([]);
   const [visibleIds, setVisibleIds] = useState<string[]>([]);
-  const [hovered, setHovered] = useState<Circle | null>(null);
-  const [detailCircle, setDetailCircle] = useState<Circle | null>(null);
+  const [hovered, setHovered] = useState<Chair | null>(null);
+  const [detailCircle, setDetailCircle] = useState<Chair | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mapSrc, setMapSrc] = useState(MAP_SRC);
@@ -95,7 +95,7 @@ export default function MapCanvas() {
   }, [updateVisible]);
 
   const centerOnCircle = useCallback(
-    (c: Pick<Circle, "x" | "y">) => {
+    (c: Pick<Chair, "x" | "y">) => {
       const map = mapRef.current;
       const viewport = viewportRef.current;
       if (!map || !viewport) return;
@@ -175,8 +175,8 @@ export default function MapCanvas() {
 
   useEffect(() => {
     const channel = db
-      .channel("circles-changes")
-      .on<Circle>(
+      .channel("chairs-changes")
+      .on<Chair>(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "memories" },
         (payload) => {
@@ -197,7 +197,7 @@ export default function MapCanvas() {
           const known = new Set(prev.map((c) => c.id));
           return [
             ...prev,
-            ...((data ?? []) as Circle[]).filter((c) => !known.has(c.id)),
+            ...((data ?? []) as Chair[]).filter((c) => !known.has(c.id)),
           ];
         });
       });
@@ -219,11 +219,11 @@ export default function MapCanvas() {
   }, [finishLoading]);
 
   const onCreated = useCallback(
-    (circle: Circle) => {
+    (chair: Chair) => {
       setCircles((prev) =>
-        prev.some((c) => c.id === circle.id) ? prev : [...prev, circle],
+        prev.some((c) => c.id === chair.id) ? prev : [...prev, chair],
       );
-      centerOnCircle(circle);
+      centerOnCircle(chair);
     },
     [centerOnCircle],
   );
@@ -268,7 +268,7 @@ export default function MapCanvas() {
             {visibleIds.map((id) => {
               const circle = byId.get(id);
               return circle ? (
-                <MapCircle
+                <MapChair
                   key={id}
                   circle={circle}
                   dropped={dropped.current}

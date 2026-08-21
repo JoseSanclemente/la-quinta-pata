@@ -3,20 +3,25 @@ import type { CSSProperties } from "react";
 import chairUrl from "@/assets/chair/pink_chair.webp";
 import MapReportButton from "@/components/map/MapReportButton";
 import { useMediaStatus } from "@/lib/useMediaStatus";
-import type { Circle } from "@/lib/types";
+import type { Chair } from "@/lib/types";
 
 const AVATAR_BG_ALPHA = "4d";
 const panelClass =
   "space-y-6 rounded-t-2xl md:rounded-t-none md:rounded-l-2xl z-30 w-full max-h-[85vh] md:h-full md:max-h-none md:w-140 md:max-w-[90vw] overflow-y-auto bg-paper p-6 shadow-[0_-4px_20px_rgb(0_0_0/0.4)] md:shadow-[-4px_0_20px_rgb(0_0_0/0.4)]";
 
 type Props = {
-  circle: Circle | null;
+  circle: Chair | null;
   open: boolean;
   onClose: () => void;
   onReported: (id: string) => void;
 };
 
-export default function MapDetail({ circle, open, onClose, onReported }: Props) {
+export default function MapDetail({
+  circle,
+  open,
+  onClose,
+  onReported,
+}: Props) {
   const [status, setStatus] = useMediaStatus(circle?.id);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -60,7 +65,10 @@ export default function MapDetail({ circle, open, onClose, onReported }: Props) 
 
       {circle && (
         <>
-          <h2 id="detail-panel-title" className="m-0 text-2xl font-bold text-navy">
+          <h2
+            id="detail-panel-title"
+            className="m-0 text-2xl font-bold text-navy"
+          >
             {circle.title || "Sin título"}
           </h2>
           {circle.author && (
@@ -75,8 +83,12 @@ export default function MapDetail({ circle, open, onClose, onReported }: Props) 
                 {circle.text_content}
               </p>
             )}
-            {isMedia && status === "loading" && <div className="tooltip-spinner" />}
-            {isMedia && status === "error" && <p>No se pudo cargar el archivo.</p>}
+            {isMedia && status === "loading" && (
+              <div className="tooltip-spinner" />
+            )}
+            {isMedia && status === "error" && (
+              <p>No se pudo cargar el archivo.</p>
+            )}
             {circle.media_type === "image" && (
               <img
                 key={circle.id}

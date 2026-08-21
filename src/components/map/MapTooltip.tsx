@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import type { Circle } from "@/lib/types";
+import type { Chair } from "@/lib/types";
 
 const EXIT_MS = 150;
 
-export default function MapTooltip({ circle }: { circle: Circle | null }) {
-  const [shown, setShown] = useState<Circle | null>(null);
+export default function MapTooltip({ circle }: { circle: Chair | null }) {
+  const [shown, setShown] = useState<Chair | null>(null);
   const [closing, setClosing] = useState(false);
   const timeoutRef = useRef<number>(undefined);
 

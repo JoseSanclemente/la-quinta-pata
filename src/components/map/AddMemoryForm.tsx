@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, JSX } from "react";
 import chairUrl from "@/assets/chair/pink_chair.webp";
 import { CHAIR_COLORS } from "@/lib/chairColors";
-import { insertCircle, uploadMedia } from "@/lib/supabase.client";
-import type { Circle, MediaType } from "@/lib/types";
+import { insertChair, uploadMedia } from "@/lib/supabase.client";
+import type { Chair, MediaType } from "@/lib/types";
 
 const AVATAR_BG_ALPHA = "4d";
 
@@ -75,7 +75,7 @@ const MEDIA_OPTIONS: {
 type Props = {
   open: boolean;
   onClose: () => void;
-  onCreated: (circle: Circle) => void;
+  onCreated: (chair: Chair) => void;
 };
 
 export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
@@ -128,7 +128,7 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
         media_url = await uploadMedia(file);
       }
 
-      const circle = await insertCircle({
+      const circle = await insertChair({
         x: Math.round(Math.random() * 90 + 5),
         y: Math.round(Math.random() * 90 + 5),
         color,

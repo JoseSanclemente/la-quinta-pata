@@ -1,13 +1,13 @@
 import { memo, useState } from "react";
 import type { CSSProperties } from "react";
 import chairUrl from "@/assets/chair/pink_chair.webp";
-import type { Circle } from "@/lib/types";
+import type { Chair } from "@/lib/types";
 
 type Props = {
-  circle: Circle;
+  circle: Chair;
   dropped: Set<string>;
-  onSelect: (circle: Circle) => void;
-  onHover: (circle: Circle | null) => void;
+  onSelect: (circle: Chair) => void;
+  onHover: (circle: Chair | null) => void;
 };
 
 function hashId(id: string): number {
@@ -16,7 +16,7 @@ function hashId(id: string): number {
   return hash;
 }
 
-function MapCircle({ circle, dropped, onSelect, onHover }: Props) {
+function MapChair({ circle, dropped, onSelect, onHover }: Props) {
   const [dropping, setDropping] = useState(() => {
     if (dropped.has(circle.id)) return false;
     dropped.add(circle.id);
@@ -47,4 +47,4 @@ function MapCircle({ circle, dropped, onSelect, onHover }: Props) {
   );
 }
 
-export default memo(MapCircle);
+export default memo(MapChair);

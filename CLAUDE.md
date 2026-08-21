@@ -113,7 +113,7 @@ The island is React, in `src/components/map/`:
    shows. Pan is origin-capture (`origin` = `pos` at pointerdown), not delta accumulation;
    `clamp()` keeps the image on screen; no zoom by design. It also re-clamps on `resize`,
    because `#map-image` is sized in `vw`.
-2. `MapCircle.tsx` — one `.circle` div positioned by x/y percent. `memo`'d, since panning
+2. `MapChair.tsx` — one `.circle` div positioned by x/y percent. `memo`'d, since panning
    re-renders the parent constantly.
 3. `MapTooltip.tsx` — the circle's media behind a spinner, with `loading` / `ready` / `error`
    states. It renders INSIDE `#map` so it pans together with its circle, always centered
@@ -205,6 +205,7 @@ none }` (preflight would otherwise cap it and break the pan extent).
   it. Lossy q78 is visually indistinguishable from the
   master at 1:1 (the paper grain survives) and is ~110x smaller. Keep the master out of the repo;
   regenerate the derivative after any edit to it.
+
 - The map renders at `width: clamp(1100px, 260vw, 3000px)` (`global.css`, `#map-image`), not at its
   natural 3000 px. At 1:1 on a 390 px phone the map is 7.7 screens wide and unreadable; the clamp
   keeps the pan extent at roughly 2-3 screens on every viewport. Circle coordinates are percentages,

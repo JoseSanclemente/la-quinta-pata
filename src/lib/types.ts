@@ -1,6 +1,6 @@
 export type MediaType = "text" | "image" | "video";
 
-export interface Circle {
+export interface Chair {
   id: string;
   x: number;
   y: number;
@@ -13,4 +13,4 @@ export interface Circle {
   created_at: string;
 }
 
-export type NewCircle = Omit<Circle, "id" | "created_at">;
+export type NewChair = Omit<Chair, "id" | "created_at">;

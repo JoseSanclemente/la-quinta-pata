@@ -1,6 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
-import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from "astro:env/client";
-import type { Circle, NewCircle } from "@/lib/types";
+import {
+  PUBLIC_SUPABASE_ANON_KEY,
+  PUBLIC_SUPABASE_URL,
+} from "astro:env/client";
+import type { Chair, NewChair } from "@/lib/types";
 
 export const db = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
 
@@ -14,8 +17,12 @@ export async function uploadMedia(file: File): Promise<string> {
   return data.publicUrl;
 }
 
-export async function insertCircle(circle: NewCircle): Promise<Circle> {
-  const { data, error } = await db.from("memories").insert(circle).select().single();
+export async function insertChair(chair: NewChair): Promise<Chair> {
+  const { data, error } = await db
+    .from("memories")
+    .insert(chair)
+    .select()
+    .single();
   if (error) throw error;
-  return data as Circle;
+  return data as Chair;
 }
