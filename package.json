@@ -16,7 +16,7 @@
     "@astrojs/check": "^0.9.10",
     "@astrojs/netlify": "^8.2.0",
     "@astrojs/react": "^6.0.4",
-    "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
+    "@fontsource-variable/nunito": "^5.3.0",
     "@supabase/supabase-js": "^2.112.2",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.2.0",

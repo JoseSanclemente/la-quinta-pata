@@ -20,52 +20,48 @@ const widths = [
   "w-[60vw] md:w-[34vw] lg:w-[22vw]",
 ];
 
+const randomTilt = () => `${(Math.random() * 8 - 4).toFixed(2)}deg`;
+
 const half = Math.ceil(photos.length / 2);
-const topRow = photos
-  .slice(0, half)
-  .map((image, i) => ({ image, width: widths[i % widths.length] }));
-const bottomRow = photos
-  .slice(half)
-  .map((image, i) => ({ image, width: widths[(i + 2) % widths.length] }));
+const topRow = photos.slice(0, half).map((image, i) => ({
+  image,
+  width: widths[i % widths.length],
+  tilt: randomTilt(),
+}));
+const bottomRow = photos.slice(half).map((image, i) => ({
+  image,
+  width: widths[(i + 2) % widths.length],
+  tilt: randomTilt(),
+}));
 ---
 
 <section
-  class="relative overflow-hidden bg-magenta pt-28 pb-32 md:pt-32 md:pb-40"
+  class="bg-magenta relative overflow-hidden pt-28 pb-32 md:pt-32 md:pb-40 lg:pt-72"
 >
-  <PaperEdge class="top-0 z-10 bg-white" />
+  <PaperEdge class="bg-blue top-0 z-10" />
 
   <MaskedShape
     image={star}
     width={1400}
-    class="absolute top-[42%] left-1/2 w-[170%] -translate-x-1/2 bg-blue/30 md:w-[125%] lg:w-[100%]"
+    class="bg-blue/60 absolute top-10 left-1/2 w-[170%] -translate-x-1/2 md:w-[125%] lg:top-40 lg:w-2/3"
+  />
+  <MaskedShape
+    image={star}
+    width={1400}
+    class="bg-blue/60 absolute bottom-0 left-1/2 w-[170%] -translate-x-1/2 md:w-[125%] lg:bottom-30 lg:w-2/3"
   />
 
-  <div class="relative z-10 flex flex-col gap-12 md:gap-16">
+  <div class="relative z-10 flex flex-col gap-12 md:gap-16 lg:gap-28">
     <div class="page-grid">
       <h2
-        class="col-start-1 col-end-5 text-center text-section leading-tight font-extrabold text-white md:col-end-9 md:text-section-lg lg:col-start-2 lg:col-end-12"
+        class="text-section md:text-section-lg col-start-1 col-end-5 text-center leading-tight font-extrabold text-white md:col-end-9 lg:col-start-2 lg:col-end-12"
       >
         Recuerdos y anécdotas
       </h2>
-
-      <div
-        class="col-start-1 col-end-5 flex flex-col items-center gap-4 md:col-end-9 lg:col-start-2 lg:col-end-12"
-      >
-        <button
-          type="button"
-          id="marquee-toggle"
-          aria-pressed="false"
-          class="on-dark inline-flex min-h-11 items-center gap-2 rounded-md px-4 text-sm font-semibold text-white underline underline-offset-4 hover:no-underline"
-        >
-          <span id="marquee-toggle-label">Pausar movimiento</span>
-        </button>
-      </div>
     </div>
 
     <div class="group relative overflow-hidden">
-      <div
-        class="marquee-track flex w-max animate-marquee pt-8 group-hover:[animation-play-state:paused]"
-      >
+      <div class="marquee-track animate-marquee flex w-max pt-8">
         {
           [false, true].map((clone) => (
             <div class="contents" aria-hidden={clone ? "true" : undefined}>
@@ -73,6 +69,7 @@ const bottomRow = photos
                 <TapedCard
                   index={i}
                   class:list={["mr-6 shrink-0 md:mr-8", item.width]}
+                  style={`rotate: ${item.tilt}`}
                 >
                   <Image
                     src={item.image}
@@ -81,7 +78,7 @@ const bottomRow = photos
                     widths={[320, 640]}
                     sizes="(min-width: 1024px) 22vw, (min-width: 768px) 34vw, 60vw"
                     loading="eager"
-                    class="aspect-[4/5] w-full object-cover"
+                    class="aspect-4/5 w-full object-cover"
                   />
                 </TapedCard>
               ))}
@@ -93,22 +90,18 @@ const bottomRow = photos
 
     <div class="page-grid">
       <p
-        class="col-start-1 col-end-5 text-center text-sm leading-relaxed text-white md:col-start-2 md:col-end-8 md:text-base lg:col-start-4 lg:col-end-10"
+        class="col-start-1 col-end-5 text-center text-base leading-snug text-white md:col-start-2 md:col-end-8 md:text-base lg:col-start-4 lg:col-end-10 lg:text-xl"
       >
-        Un mapa abierto donde cualquiera suelta la suya: <strong
-          class="font-extrabold italic">una foto, un video o un cuento.</strong
-        > Memorias que dicen algo sobre <strong class="font-extrabold italic"
+        Memorias que dicen algo sobre <strong class="font-extrabold italic"
           >quiénes somos</strong
         > y la forma en que <strong class="font-extrabold italic"
-          >habitamos el mundo.</strong
+          >vivimos el mundo.</strong
         >
       </p>
     </div>
 
     <div class="group relative overflow-hidden">
-      <div
-        class="marquee-track flex w-max animate-marquee-reverse pt-8 group-hover:[animation-play-state:paused]"
-      >
+      <div class="marquee-track animate-marquee-reverse flex w-max pt-8">
         {
           [false, true].map((clone) => (
             <div class="contents" aria-hidden={clone ? "true" : undefined}>
@@ -116,6 +109,7 @@ const bottomRow = photos
                 <TapedCard
                   index={i + 2}
                   class:list={["mr-6 shrink-0 md:mr-8", item.width]}
+                  style={`rotate: ${item.tilt}`}
                 >
                   <Image
                     src={item.image}

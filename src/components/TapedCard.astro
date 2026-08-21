@@ -9,9 +9,10 @@ import tape5 from "@/assets/tape_5.webp";
 interface Props {
   index?: number;
   class?: string;
+  style?: string;
 }
 
-const { index = 0, class: className } = Astro.props;
+const { index = 0, class: className, style } = Astro.props;
 
 const tapes = [tape1, tape2, tape3, tape4, tape5];
 const rotations = ["-rotate-6", "rotate-3", "-rotate-2", "rotate-6", "rotate-1"];
@@ -20,7 +21,7 @@ const tape = tapes[index % tapes.length];
 const rotation = rotations[index % rotations.length];
 ---
 
-<div class:list={["relative", className]}>
+<div class:list={["relative", className]} style={style}>
   <div
     class="overflow-hidden rounded-sm shadow-[0_4px_24px_rgba(0,0,0,0.25)]"
   >

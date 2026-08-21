@@ -77,7 +77,7 @@ images visually.
 
 - **Pass the route WITHOUT a leading slash.** Under Git Bash, MSYS path translation rewrites
   `/memorias` into `C:/Program Files/Git/memorias` before node sees the argument.
-- The script waits on `document.fonts.ready` (Plus Jakarta Sans is a `@fontsource-variable`
+- The script waits on `document.fonts.ready` (Nunito is a `@fontsource-variable`
   package — an early shot captures fallback metrics and every spacing judgement is wrong),
   waits for `#map-image`, and hides `astro-dev-toolbar`, which otherwise floats over the
   bottom-centre of every dev page.
@@ -188,7 +188,7 @@ none }` (preflight would otherwise cap it and break the pan extent).
   turns into `bg-navy`, `text-brand`, etc.
 - The tooltip bubble (`map-tooltip.css`, `.tooltip-bubble`) is `#f2f2f2`, a neutral gray with no
   `--color-*` token — deliberate, not a gap. It reads as a paper card against colored map fields;
-  the warm `--color-cream` would blend into them instead of standing apart.
+  the warm `--color-neutral` would blend into them instead of standing apart.
 - **Map image pipeline.** The master is `src/assets/map.webp` — 5000x5000 WebP **lossless**
   (`VP8L`), 36.5 MB. It is gitignored on purpose: shipping it would make Netlify clone 36 MB per
   build. Derivatives are generated once, offline, and committed:

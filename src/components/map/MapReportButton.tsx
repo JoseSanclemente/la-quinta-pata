@@ -33,7 +33,7 @@ export default function MapReportButton({ circleId, onReported }: Props) {
         onClick={report}
         disabled={status === "sending" || status === "sent"}
         aria-label="Reportar contenido"
-        className="flex size-12 cursor-pointer items-center justify-center rounded-lg border-none bg-transparent text-2xl text-navy/70 hover:bg-navy/5 focus-visible:outline-2 focus-visible:outline-navy disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex size-12 cursor-pointer items-center justify-center rounded-lg border-none bg-transparent text-2xl text-secondary hover:bg-navy/5 focus-visible:outline-2 focus-visible:outline-navy disabled:cursor-not-allowed disabled:opacity-50"
       >
         <svg aria-hidden="true" className="h-5 w-5">
           <use href="/icons/sprite.svg#icon-report" />

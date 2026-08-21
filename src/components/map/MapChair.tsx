@@ -7,7 +7,6 @@ type Props = {
   circle: Chair;
   dropped: Set<string>;
   onSelect: (circle: Chair) => void;
-  onHover: (circle: Chair | null) => void;
 };
 
 function hashId(id: string): number {
@@ -16,7 +15,7 @@ function hashId(id: string): number {
   return hash;
 }
 
-function MapChair({ circle, dropped, onSelect, onHover }: Props) {
+function MapChair({ circle, dropped, onSelect }: Props) {
   const [dropping, setDropping] = useState(() => {
     if (dropped.has(circle.id)) return false;
     dropped.add(circle.id);
@@ -40,8 +39,6 @@ function MapChair({ circle, dropped, onSelect, onHover }: Props) {
         e.stopPropagation();
         onSelect(circle);
       }}
-      onMouseEnter={() => onHover(circle)}
-      onMouseLeave={() => onHover(null)}
       onAnimationEnd={() => setDropping(false)}
     />
   );

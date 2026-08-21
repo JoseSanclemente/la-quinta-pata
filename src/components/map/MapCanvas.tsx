@@ -4,6 +4,8 @@ import AddMemoryForm from "@/components/map/AddMemoryForm";
 import MapChair from "@/components/map/MapChair";
 import MapDetail from "@/components/map/MapDetail";
 import MapTooltip from "@/components/map/MapTooltip";
+import chairUrl from "@/assets/chair/pink_chair.webp";
+import logoUrl from "@/assets/logo.webp";
 import type { Chair } from "@/lib/types";
 
 const MAP_SRC = "/assets/map-3000.webp";
@@ -21,7 +23,7 @@ export default function MapCanvas() {
 
   const [circles, setCircles] = useState<Chair[]>([]);
   const [visibleIds, setVisibleIds] = useState<string[]>([]);
-  const [hovered, setHovered] = useState<Chair | null>(null);
+  const [tooltipCircle, setTooltipCircle] = useState<Chair | null>(null);
   const [detailCircle, setDetailCircle] = useState<Chair | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -238,7 +240,10 @@ export default function MapCanvas() {
         className="fixed inset-0 overflow-hidden"
         inert={detailOpen}
         onClick={() => {
-          if (!pan.current.moved) setDetailOpen(false);
+          if (!pan.current.moved) {
+            setDetailOpen(false);
+            setTooltipCircle(null);
+          }
         }}
       >
         <div id="map" ref={mapRef} className="absolute top-0 left-0">
@@ -272,17 +277,23 @@ export default function MapCanvas() {
                   key={id}
                   circle={circle}
                   dropped={dropped.current}
-                  onHover={setHovered}
-                  onSelect={(c) => {
-                    setDetailCircle(c);
-                    setDetailOpen(true);
-                    setHovered(null);
-                  }}
+                  onSelect={(c) => setTooltipCircle(c)}
                 />
               ) : null;
             })}
           </div>
-          <MapTooltip circle={hovered} />
+          <MapTooltip
+            circle={tooltipCircle}
+            onShowMore={(c) => {
+              setDetailCircle(c);
+              setDetailOpen(true);
+              setTooltipCircle(null);
+            }}
+            onReported={(id) => {
+              setCircles((prev) => prev.filter((c) => c.id !== id));
+              setTooltipCircle(null);
+            }}
+          />
         </div>
       </div>
 
@@ -299,39 +310,41 @@ export default function MapCanvas() {
         href="/"
         aria-label="Volver al inicio"
         inert={detailOpen}
-        className="fixed top-4 left-4 z-20 inline-flex h-11 w-11 items-center justify-center rounded-full bg-secondary text-white shadow-[0_2px_10px_rgb(0_0_0/0.4)] hover:bg-secondary-hover md:h-12 md:w-12"
+        className="fixed top-4 left-1/2 z-20 -translate-x-1/2"
       >
-        <svg aria-hidden="true" className="h-5 w-5 md:h-6 md:w-6">
-          <use href="/icons/sprite.svg#icon-back" />
-        </svg>
+        <img
+          src={logoUrl.src}
+          alt="La Quinta Pata"
+          className="h-24 w-auto scale-100 transition-transform duration-200 hover:scale-105 md:h-32"
+        />
       </a>
 
       <div
-        className="fixed bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 md:bottom-6 md:gap-4"
+        className="fixed bottom-2 left-1/2 z-20 flex -translate-x-1/2 items-center md:bottom-4"
         inert={detailOpen}
       >
         <button
           type="button"
           onClick={() => setSidebarOpen(true)}
-          className="flex h-11 w-48 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-brand px-6 text-base font-semibold text-white shadow-[0_2px_10px_rgb(0_0_0/0.4)] hover:bg-brand-hover md:h-14 md:w-64 md:gap-2 md:px-8 md:text-lg"
+          aria-label="Crear memoria"
+          className="group relative flex h-40 w-40 scale-100 cursor-pointer items-center justify-center transition-transform duration-200 hover:scale-105 md:h-48 md:w-48"
         >
-          <svg aria-hidden="true" className="h-4 w-4 shrink-0 md:h-5 md:w-5">
-            <use href="/icons/sprite.svg#icon-add" />
+          <svg
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+            className="fill-secondary group-hover:fill-secondary-hover absolute inset-0 h-full w-full"
+          >
+            <path d="M50,2 56.9,33.4 83.9,16.1 66.6,43.1 98,50 66.6,56.9 83.9,83.9 56.9,66.6 50,98 43.1,66.6 16.1,83.9 33.4,56.9 2,50 33.4,43.1 16.1,16.1 43.1,33.4Z" />
           </svg>
-          Crear memoria
+          <div
+            aria-hidden="true"
+            className="relative h-18 w-18 bg-white md:h-22 md:w-22"
+            style={{
+              WebkitMask: `url(${chairUrl.src}) center / contain no-repeat`,
+              mask: `url(${chairUrl.src}) center / contain no-repeat`,
+            }}
+          />
         </button>
-
-        <a
-          href="https://instagram.com"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="Instagram de La Quinta Pata"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-secondary text-white shadow-[0_2px_10px_rgb(0_0_0/0.4)] hover:bg-secondary-hover md:h-14 md:w-14"
-        >
-          <svg aria-hidden="true" className="h-5 w-5 md:h-6 md:w-6">
-            <use href="/icons/sprite.svg#icon-instagram" />
-          </svg>
-        </a>
       </div>
 
       <AddMemoryForm

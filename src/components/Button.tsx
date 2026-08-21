@@ -2,12 +2,15 @@ import type { ComponentProps, ReactNode } from "react";
 
 type Variant = "primary" | "secondary" | "link";
 
+const baseClasses =
+  "transition-transform duration-200 ease-out hover:scale-105 disabled:hover:scale-100";
+
 const variantClasses: Record<Variant, string> = {
   primary:
-    "inline-flex min-h-11 items-center justify-center rounded-xl bg-brand px-6 py-4 text-base font-bold whitespace-nowrap text-white hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-60 md:min-h-14 md:px-8 md:text-lg",
+    "inline-flex min-h-11 items-center justify-center rounded-xl bg-brand px-6 py-4 text-base font-bold whitespace-nowrap text-white hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-60 md:min-h-14 md:px-8 md:text-base",
   secondary:
     "inline-flex min-h-11 items-center justify-center rounded-full bg-magenta px-6 text-base font-bold whitespace-nowrap text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 md:min-h-14 md:px-8 md:text-lg",
-  link: "inline-flex min-h-11 items-center px-1 text-base whitespace-nowrap text-blue hover:underline",
+  link: "inline-flex min-h-11 items-center px-1 text-base whitespace-nowrap text-neutral hover:underline",
 };
 
 type BaseProps = {
@@ -32,7 +35,7 @@ export default function Button({
   children,
   ...props
 }: Props) {
-  const classes = [variantClasses[variant], className]
+  const classes = [baseClasses, variantClasses[variant], className]
     .filter(Boolean)
     .join(" ");
 
