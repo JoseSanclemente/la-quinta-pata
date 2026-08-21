@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, JSX } from "react";
+import Button from "@/components/Button";
 import chairUrl from "@/assets/chair/pink_chair.webp";
 import { CHAIR_COLORS } from "@/lib/chairColors";
 import { insertChair, uploadMedia } from "@/lib/supabase.client";
@@ -319,13 +320,13 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
           </button>
         )}
 
-        <button
+        <Button
           type="submit"
           disabled={!filled || busy}
-          className="mx-auto cursor-pointer rounded-full border-none bg-brand px-8 py-4 text-base font-bold text-white hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-60"
+          className="mx-auto"
         >
           Soltar en el mapa
-        </button>
+        </Button>
         <p
           className="m-0 min-h-4.5 text-center text-sm text-navy"
           role="status"
