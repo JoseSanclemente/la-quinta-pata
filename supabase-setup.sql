@@ -8,13 +8,18 @@ create table if not exists memories (
   text_content text,
   title        text,
   author       text,
+  hidden       boolean not null default false,
   created_at   timestamptz not null default now()
 );
 
+alter table memories add column if not exists hidden boolean not null default false;
+
 alter table memories enable row level security;
 
+drop policy if exists "anyone can read memories" on memories;
+
 create policy "anyone can read memories"
-  on memories for select using (true);
+  on memories for select using (hidden = false);
 
 create policy "anyone can add memories"
   on memories for insert with check (true);

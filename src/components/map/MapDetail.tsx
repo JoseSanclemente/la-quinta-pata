@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { CSSProperties } from "react";
 import chairUrl from "@/assets/chair/pink_chair.webp";
+import MapReportButton from "@/components/map/MapReportButton";
 import { useMediaStatus } from "@/lib/useMediaStatus";
 import type { Circle } from "@/lib/types";
 
@@ -12,9 +13,10 @@ type Props = {
   circle: Circle | null;
   open: boolean;
   onClose: () => void;
+  onReported: (id: string) => void;
 };
 
-export default function MapDetail({ circle, open, onClose }: Props) {
+export default function MapDetail({ circle, open, onClose, onReported }: Props) {
   const [status, setStatus] = useMediaStatus(circle?.id);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -115,16 +117,13 @@ export default function MapDetail({ circle, open, onClose }: Props) {
           </div>
 
           <div className="mt-6 flex justify-center border-t border-navy/10 pt-6">
-            <button
-              type="button"
-              onClick={() => console.info("Reportar contenido", circle.id)}
-              aria-label="Reportar contenido"
-              className="flex size-12 cursor-pointer items-center justify-center rounded-lg border-none bg-transparent text-2xl text-navy/70 hover:bg-navy/5 focus-visible:outline-2 focus-visible:outline-navy"
-            >
-              <svg aria-hidden="true" className="h-5 w-5">
-                <use href="/icons/sprite.svg#icon-report" />
-              </svg>
-            </button>
+            <MapReportButton
+              circleId={circle.id}
+              onReported={(id) => {
+                onReported(id);
+                onClose();
+              }}
+            />
           </div>
         </>
       )}

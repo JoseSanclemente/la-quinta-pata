@@ -344,6 +344,9 @@ export default function MapCanvas() {
         circle={detailCircle}
         open={detailOpen}
         onClose={() => setDetailOpen(false)}
+        onReported={(id) =>
+          setCircles((prev) => prev.filter((c) => c.id !== id))
+        }
       />
     </>
   );
