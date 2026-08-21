@@ -7,30 +7,30 @@ import logo from "@/assets/logo.webp";
   <a
     href="/"
     aria-label="La Quinta Pata, inicio"
-    class="col-start-1 col-end-3 rounded-md transition-opacity hover:opacity-80 md:col-end-4 lg:col-end-5"
+    class="col-start-1 col-end-5 rounded-md transition-opacity hover:opacity-80 md:col-start-1 lg:col-end-5"
   >
     <Image
       src={logo}
       alt="La Quinta Pata — Archivo digital"
       widths={[256, 512]}
       sizes="(min-width: 768px) 228px, 128px"
-      class="h-18 w-auto md:h-32"
+      class="mx-auto h-32 w-auto md:mx-0 md:h-24"
     />
   </a>
 
   <nav
     aria-label="Principal"
-    class="col-start-1 col-end-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 md:col-start-6 md:col-end-9 md:justify-end md:gap-x-8 lg:col-start-9 lg:col-end-13"
+    class="col-start-1 col-end-5 [display:none] items-center justify-between gap-x-4 gap-y-2 md:col-start-6 md:col-end-9 md:[display:flex] md:justify-end md:gap-x-8 lg:col-start-9 lg:col-end-13"
   >
     <a
       href="/quienes-somos"
-      class="inline-flex min-h-11 items-center rounded-md px-1 text-sm whitespace-nowrap text-blue hover:underline md:text-base"
+      class="text-blue inline-flex min-h-11 items-center rounded-md px-1 text-sm whitespace-nowrap hover:underline md:text-base"
     >
       ¿Quiénes Somos?
     </a>
     <a
       href="/memorias"
-      class="inline-flex min-h-11 items-center rounded-md bg-blue px-5 py-3 text-sm font-semibold whitespace-nowrap text-white transition-opacity hover:opacity-90 md:text-base"
+      class="bg-blue inline-flex min-h-11 items-center rounded-md px-5 py-3 text-sm font-semibold whitespace-nowrap text-white transition-opacity hover:opacity-90 md:text-base"
     >
       Dejá tu recuerdo
     </a>
