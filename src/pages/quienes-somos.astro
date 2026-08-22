@@ -1,9 +1,96 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "@/layouts/Layout.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import wordmark from "@/assets/laquintapata.webp";
+import fotoNati from "@/assets/foto_nati.webp";
+import fotoLina from "@/assets/foto_lina.webp";
+import burbujaNati from "@/assets/about_us/burbuja_nati.webp";
+import burbujaLina from "@/assets/about_us/burbuja_lina.webp";
 
 export const prerender = true;
 ---
 
 <Layout title="¿Quiénes Somos? | La Quinta Pata">
-  <main id="contenido" class="min-h-dvh bg-blue"></main>
+  <SiteHeader />
+  <main
+    id="contenido"
+    class="bg-blue min-h-dvh bg-[repeating-linear-gradient(0deg,rgba(255,255,255,0.08)_0_1px,transparent_1px_40px),repeating-linear-gradient(90deg,rgba(255,255,255,0.08)_0_1px,transparent_1px_40px)] pt-50 pb-20 md:pt-48"
+  >
+    <div class="page-grid gap-y-32 md:gap-y-14">
+      <div
+        class="col-start-1 col-end-5 flex flex-col items-center gap-8 md:col-end-9 lg:col-start-3 lg:col-end-11"
+      >
+        <Image
+          src={wordmark}
+          alt="La Quinta Pata — Archivo digital"
+          widths={[320, 640]}
+          sizes="(min-width: 768px) 480px, 320px"
+          class="col-start-1 col-end-5 mx-auto w-72 md:col-start-3 md:col-end-7 md:w-96 lg:col-start-4 lg:col-end-10"
+        />
+
+        <h1
+          class="text-section md:text-section-lg col-start-1 col-end-5 text-center leading-none font-normal text-white md:col-end-9 lg:col-start-3 lg:col-end-11"
+        >
+          Somos La Quinta Pata, un archivo digital dedicado a la silla Rimax en
+          Colombia.
+        </h1>
+      </div>
+
+      <div
+        class="col-start-1 col-end-5 flex flex-col items-center justify-center gap-32 md:col-end-9 md:flex-row md:gap-8 lg:col-start-4 lg:col-end-10"
+      >
+        <div class="flex flex-col items-start gap-2">
+          <div class="relative">
+            <Image
+              src={burbujaNati}
+              alt=""
+              widths={[320, 640]}
+              sizes="260px"
+              class="absolute -top-24 left-0 z-10 w-48 md:-top-16 md:-left-40 md:w-64"
+            />
+            <Image
+              src={fotoNati}
+              alt="Nati"
+              widths={[320, 640]}
+              sizes="(min-width: 768px) 280px, 240px"
+              class="relative w-60 md:w-70"
+            />
+          </div>
+          <div>
+            <p class="font-bold text-white">NATI</p>
+            <p class="text-yellow">
+              <span class="font-bold">Fundadora</span> - Diseñadora Gráfica
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-col items-start gap-2">
+          <div class="relative">
+            <Image
+              src={burbujaLina}
+              alt=""
+              widths={[320, 640]}
+              sizes="260px"
+              class="absolute -top-24 right-0 z-10 w-48 md:-top-16 md:-right-40 md:w-64"
+            />
+            <Image
+              src={fotoLina}
+              alt="Lina"
+              widths={[320, 640]}
+              sizes="(min-width: 768px) 280px, 240px"
+              class="relative w-60 md:w-70"
+            />
+          </div>
+          <div>
+            <p class="font-bold text-white">LINA</p>
+            <p class="text-yellow">
+              <span class="font-bold">Fundadora</span> - Diseñadora Gráfica
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <SiteFooter />
 </Layout>

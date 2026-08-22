@@ -10,48 +10,50 @@ const links = [
 
 <footer
   id="site-footer"
-  class="page-grid w-full items-center gap-y-3 border-t border-white bg-blue py-4 text-xs text-neutral"
+  class="bg-blue text-neutral w-full border-t border-white py-4 text-sm"
 >
-  <div
-    class="col-start-1 col-end-5 flex items-center gap-3 md:col-end-5 lg:col-end-6"
-  >
-    <span>{year} © La Quinta Pata</span>
-    <a
-      href="https://instagram.com"
-      target="_blank"
-      rel="noreferrer"
-      aria-label="Instagram de La Quinta Pata"
-      class="on-dark inline-flex min-h-11 min-w-11 items-center justify-center rounded-md transition-opacity hover:opacity-70"
-    >
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.8"
-        stroke-linecap="round"
-        aria-hidden="true"
-        class="h-4 w-4"
+  <div class="page-gutter flex items-end justify-between gap-3 md:items-center">
+    <div class="flex flex-col items-start gap-2">
+      <a
+        href="https://instagram.com"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Instagram de La Quinta Pata"
+        class="on-dark inline-flex items-center justify-center rounded-md transition-opacity hover:opacity-70"
       >
-        <rect x="3" y="3" width="18" height="18" rx="5"></rect>
-        <circle cx="12" cy="12" r="4"></circle>
-        <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle>
-      </svg>
-    </a>
-  </div>
-
-  <nav
-    aria-label="Legal"
-    class="col-start-1 col-end-5 flex flex-wrap items-center gap-x-5 gap-y-1 md:col-start-5 md:col-end-9 md:justify-self-end lg:col-start-6 lg:col-end-13 lg:justify-self-end"
-  >
-    {
-      links.map((link) => (
-        <a
-          href={link.href}
-          class="on-dark inline-flex min-h-11 items-center rounded-md hover:underline"
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          aria-hidden="true"
+          class="h-6 w-6"
         >
-          {link.label}
-        </a>
-      ))
-    }
-  </nav>
+          <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+          <circle cx="12" cy="12" r="4"></circle>
+          <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle>
+        </svg>
+      </a>
+      <span class="flex items-center">{year} © La Quinta Pata</span>
+    </div>
+
+    <div class="flex items-center justify-center md:items-center">
+      <nav
+        aria-label="Legal"
+        class="flex flex-col items-end justify-center gap-2 md:flex-row md:flex-wrap md:items-center md:gap-x-5 md:gap-y-1"
+      >
+        {
+          links.map((link) => (
+            <a
+              href={link.href}
+              class="on-dark inline-flex items-center rounded-md hover:underline"
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </div>
 </footer>
