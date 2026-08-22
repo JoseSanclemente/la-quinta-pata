@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import type { CSSProperties } from "react";
 import chairUrl from "@/assets/chair/pink_chair.webp";
 import MapReportButton from "@/components/map/MapReportButton";
+import VoicePlayer from "@/components/map/VoicePlayer";
 import { useMediaStatus } from "@/lib/useMediaStatus";
 import type { Chair } from "@/lib/types";
 
@@ -57,7 +58,7 @@ export default function MapDetail({
           type="button"
           onClick={onClose}
           aria-label="Cerrar"
-          className="flex size-11 cursor-pointer items-center justify-center rounded-xl border-none bg-transparent text-2xl leading-none text-navy hover:bg-navy/5 focus-visible:outline-2 focus-visible:outline-navy"
+          className="text-navy hover:bg-navy/5 focus-visible:outline-navy flex size-11 cursor-pointer items-center justify-center rounded-xl border-none bg-transparent text-2xl leading-none focus-visible:outline-2"
         >
           ×
         </button>
@@ -65,21 +66,23 @@ export default function MapDetail({
 
       {circle && (
         <>
-          <h2
-            id="detail-panel-title"
-            className="m-0 text-2xl font-bold text-navy"
-          >
-            {circle.title || "Sin título"}
-          </h2>
-          {circle.author && (
-            <p className="text-sm text-navy/70">
-              Memoria escrita por {circle.author}.
-            </p>
-          )}
+          <div className="space-y-1">
+            <h2
+              id="detail-panel-title"
+              className="text-navy text-2xl font-bold"
+            >
+              {circle.title || "Sin título"}
+            </h2>
+            {circle.author && (
+              <p className="text-navy/70 text-sm">
+                Memoria escrita por {circle.author}.
+              </p>
+            )}
+          </div>
 
-          <div className="mt-6 space-y-4">
+          <div className="mt-6 space-y-10">
             {circle.text_content && (
-              <p className="m-0 whitespace-pre-wrap text-navy">
+              <p className="text-navy whitespace-pre-wrap">
                 {circle.text_content}
               </p>
             )}
@@ -109,6 +112,9 @@ export default function MapDetail({
                 onError={() => setStatus("error")}
               />
             )}
+            {circle.media_type === "audio" && circle.media_url && (
+              <VoicePlayer key={circle.id} src={circle.media_url} />
+            )}
           </div>
 
           <div className="flex h-40 items-center justify-center">
@@ -128,7 +134,7 @@ export default function MapDetail({
             </div>
           </div>
 
-          <div className="mt-6 flex justify-center border-t border-navy/10 pt-6">
+          <div className="border-navy/10 mt-6 flex justify-center border-t pt-6">
             <MapReportButton
               circleId={circle.id}
               onReported={(id) => {

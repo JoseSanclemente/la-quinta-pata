@@ -1,4 +1,4 @@
-export type MediaType = "text" | "image" | "video";
+export type MediaType = "text" | "image" | "video" | "audio";
 
 export interface Chair {
   id: string;

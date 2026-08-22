@@ -4,9 +4,11 @@ import Button from "@/components/Button";
 import chairUrl from "@/assets/chair/pink_chair.webp";
 import { CHAIR_COLORS } from "@/lib/chairColors";
 import { insertChair, uploadMedia } from "@/lib/supabase.client";
+import VoicePlayer from "@/components/map/VoicePlayer";
 import type { Chair, MediaType } from "@/lib/types";
 
 const AVATAR_BG_ALPHA = "4d";
+const RECORDING_LIMIT_MS = 60_000;
 
 function errorMessage(err: unknown): string {
   if (err instanceof Error) return err.message;
@@ -24,6 +26,15 @@ const MEDIA_OPTIONS: {
   label: string;
   icon: JSX.Element;
 }[] = [
+  {
+    type: "audio",
+    label: "Audio",
+    icon: (
+      <svg className="size-5.5" aria-hidden="true">
+        <use href="/icons/sprite.svg#icon-mic" />
+      </svg>
+    ),
+  },
   {
     type: "video",
     label: "Video",
@@ -88,9 +99,17 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
   const [hasFile, setHasFile] = useState(false);
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [recordedSeconds, setRecordedSeconds] = useState(0);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const firstFieldRef = useRef<HTMLInputElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+  const recordingTimeoutRef = useRef<number>(undefined);
+  const recordingIntervalRef = useRef<number>(undefined);
 
   useEffect(() => {
     if (open) {
@@ -106,12 +125,68 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
     }
   }, [open]);
 
-  const filled = text.trim() !== "" && (mediaType === "text" || hasFile);
+  const filled =
+    text.trim() !== "" &&
+    (mediaType === "text" ||
+      (mediaType === "audio" ? audioBlob !== null : hasFile));
+
+  function stopRecording() {
+    window.clearTimeout(recordingTimeoutRef.current);
+    window.clearInterval(recordingIntervalRef.current);
+    recorderRef.current?.stop();
+  }
+
+  async function startRecording() {
+    setAudioBlob(null);
+    setAudioUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return null;
+    });
+    setStatus("");
+
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const recorder = new MediaRecorder(stream);
+    chunksRef.current = [];
+
+    recorder.ondataavailable = (e) => {
+      if (e.data.size > 0) chunksRef.current.push(e.data);
+    };
+    recorder.onstop = () => {
+      stream.getTracks().forEach((track) => track.stop());
+      const blob = new Blob(chunksRef.current, {
+        type: recorder.mimeType || "audio/webm",
+      });
+      setAudioBlob(blob);
+      setAudioUrl(URL.createObjectURL(blob));
+      setRecording(false);
+    };
+
+    recorderRef.current = recorder;
+    setRecordedSeconds(0);
+    recorder.start();
+    setRecording(true);
+
+    const startedAt = Date.now();
+    recordingIntervalRef.current = window.setInterval(() => {
+      setRecordedSeconds(Math.floor((Date.now() - startedAt) / 1000));
+    }, 250);
+    recordingTimeoutRef.current = window.setTimeout(
+      stopRecording,
+      RECORDING_LIMIT_MS,
+    );
+  }
 
   function deselectAttachment() {
     setMediaType("text");
     setHasFile(false);
     if (fileRef.current) fileRef.current.value = "";
+    if (recording) stopRecording();
+    setAudioBlob(null);
+    setAudioUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return null;
+    });
+    setRecordedSeconds(0);
   }
 
   async function submit() {
@@ -123,7 +198,13 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
       if (!text_content) throw new Error("Escribe algo de texto.");
 
       let media_url: string | null = null;
-      if (mediaType !== "text") {
+      if (mediaType === "audio") {
+        if (!audioBlob) throw new Error("Graba un audio.");
+        const file = new File([audioBlob], "voice.webm", {
+          type: audioBlob.type,
+        });
+        media_url = await uploadMedia(file);
+      } else if (mediaType !== "text") {
         const file = fileRef.current?.files?.[0];
         if (!file) throw new Error("Elige un archivo.");
         media_url = await uploadMedia(file);
@@ -263,7 +344,7 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
 
         <fieldset className="flex gap-2.5 border-none p-0">
           <legend className="sr-only">
-            Adjuntar video o imagen (opcional)
+            Adjuntar audio, video o imagen (opcional)
           </legend>
           {MEDIA_OPTIONS.map((opt) => (
             <button
@@ -297,7 +378,7 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
           />
         </fieldset>
 
-        {mediaType !== "text" && (
+        {(mediaType === "video" || mediaType === "image") && (
           <button
             type="button"
             onClick={() => fileRef.current?.click()}
@@ -318,6 +399,47 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
               </span>
             )}
           </button>
+        )}
+
+        {mediaType === "audio" && !recording && !audioBlob && (
+          <button
+            type="button"
+            onClick={() => void startRecording()}
+            className="flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-dashed border-line bg-transparent text-navy"
+          >
+            <span className="size-7 text-navy/60 [&_svg]:size-full">
+              {MEDIA_OPTIONS.find((opt) => opt.type === "audio")?.icon}
+            </span>
+            <span className="text-navy/60">Grabar audio.</span>
+          </button>
+        )}
+
+        {mediaType === "audio" && recording && (
+          <button
+            type="button"
+            onClick={stopRecording}
+            className="flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-solid border-blue bg-blue/10 text-navy"
+          >
+            <span className="size-7 text-navy/60 [&_svg]:size-full">
+              {MEDIA_OPTIONS.find((opt) => opt.type === "audio")?.icon}
+            </span>
+            <span className="font-semibold">
+              Detener ({recordedSeconds}s / 60s)
+            </span>
+          </button>
+        )}
+
+        {mediaType === "audio" && !recording && audioBlob && audioUrl && (
+          <div className="flex h-24 w-full flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-dashed border-line bg-transparent px-4 text-navy">
+            <VoicePlayer src={audioUrl} />
+            <button
+              type="button"
+              onClick={() => void startRecording()}
+              className="cursor-pointer border-none bg-transparent text-sm text-navy/60 underline"
+            >
+              Grabar de nuevo
+            </button>
+          </div>
         )}
 
         <Button

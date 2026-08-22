@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import MapReportButton from "@/components/map/MapReportButton";
+import VoicePlayer from "@/components/map/VoicePlayer";
 import { useMediaStatus } from "@/lib/useMediaStatus";
 import type { Chair } from "@/lib/types";
 
@@ -81,7 +82,7 @@ export default function MapTooltip({ circle, onShowMore, onReported }: Props) {
           id="tooltip-content"
           className="relative max-h-[70vh] space-y-5 overflow-auto p-11"
         >
-          <p className="text-navy/85 m-0 text-sm">
+          <p className="text-navy/85 text-sm">
             Memoria de {shown.author || "anónimo"}:
           </p>
 
@@ -110,6 +111,9 @@ export default function MapTooltip({ circle, onShowMore, onReported }: Props) {
               onLoadedData={() => setStatus("ready")}
               onError={() => setStatus("error")}
             />
+          )}
+          {shown.media_type === "audio" && shown.media_url && (
+            <VoicePlayer key={shown.id} src={shown.media_url} />
           )}
 
           <p className="text-navy font-bold">{shown.title || "Sin título"}</p>
