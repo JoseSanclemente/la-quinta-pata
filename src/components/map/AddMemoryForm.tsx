@@ -44,9 +44,9 @@ function errorMessage(err: unknown): string {
 }
 
 const asideClass =
-  "rounded-t-2xl md:rounded-t-none md:rounded-l-2xl z-30 w-full max-h-[85vh] md:h-full md:max-h-none md:w-140 md:max-w-[90vw] overflow-y-auto bg-paper p-6 shadow-[0_-4px_20px_rgb(0_0_0/0.4)] md:shadow-[-4px_0_20px_rgb(0_0_0/0.4)]";
+  "rounded-t-2xl md:rounded-t-none md:rounded-l-2xl z-30 w-full max-h-[85vh] md:h-full md:max-h-none md:w-140 md:max-w-[90vw] overflow-y-auto bg-[#F8FAFF] bg-[repeating-linear-gradient(0deg,#E6EAFF_0_2px,transparent_2px_40px),repeating-linear-gradient(90deg,#E6EAFF_0_2px,transparent_2px_40px)] p-6 shadow-[0_-4px_20px_rgb(0_0_0/0.4)] md:shadow-[-4px_0_20px_rgb(0_0_0/0.4)]";
 const fieldClass =
-  "w-full rounded-xl border-none bg-line/25 px-5 py-3 font-normal text-navy placeholder:text-navy/50";
+  "w-full rounded-xl border-none bg-[#E6EFFE] px-5 py-3 font-normal text-navy placeholder:text-navy/50";
 const MEDIA_OPTIONS: {
   type: Exclude<MediaType, "text">;
   label: string;
