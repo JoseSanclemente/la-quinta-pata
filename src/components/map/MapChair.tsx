@@ -23,7 +23,11 @@ function MapChair({ circle, dropped, onSelect }: Props) {
   });
 
   return (
-    <div
+    <button
+      type="button"
+      aria-label={
+        circle.title || `Memoria de ${circle.author || "anónimo"}`
+      }
       className={dropping ? "circle dropping chair" : "circle chair"}
       style={
         {

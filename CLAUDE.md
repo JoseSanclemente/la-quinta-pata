@@ -21,17 +21,20 @@ for regular UI changes outside the audit flow.
 ## What this is
 
 Astro site ("La Quinta Pata"): a digital archive around the Rimax plastic chair, in Spanish.
-Three routes, no UI framework:
+Five routes, no UI framework:
 
 - `/` (`src/pages/index.astro`) — prerendered marketing landing, composed of
-  `src/components/home/` sections (`Hero`, `RimaxIntro`, `Discovery`). Editorial layout of flat
-  alternating cream/blue/magenta fields.
-- `/quienes-somos` — prerendered placeholder, an empty blue page; content still to be written.
-- `/memorias` — the interactive part: a draggable map where any visitor drops colored circles
-  containing text, an image, or a video. Circles live in Supabase and stream live to all
-  visitors. One React client island (`src/components/map/`), hydrated with `client:load`.
+  `src/components/home/` sections (`Hero`, `RimaxIntro`, `Discovery`, `Memories`, `Closing`).
+  Editorial layout of flat alternating cream/blue/magenta fields.
+- `/quienes-somos` — prerendered, blue page with the two founders.
+- `/politicas-de-privacidad`, `/terminos-y-condiciones` — prerendered legal pages, both built on
+  `src/components/LegalPage.astro` (blue shell + `.legal-prose` scoped styles). Copy is a first
+  draft written from how the app actually behaves; the contact address is a placeholder.
+- `/memorias` — the interactive part: a draggable map where any visitor drops colored chairs
+  containing text, an image, a video, or a recorded audio. Rows live in Supabase and stream live
+  to all visitors. One React client island (`src/components/map/`), hydrated with `client:load`.
 
-All three routes are prerendered (`export const prerender = true`). `/memorias` used to be SSR
+All routes are prerendered (`export const prerender = true`). `/memorias` used to be SSR
 so it could pass the circle rows in as a prop, but that put a Netlify cold start plus a Supabase
 round trip in front of the first byte and the click felt dead. The island now fetches the rows
 itself. `prefetch` is on in `astro.config.mjs` (`prefetchAll`, `hover`), so the HTML is usually
@@ -88,7 +91,7 @@ images visually.
 
 ## Backend setup (Supabase)
 
-- Run `supabase-setup.sql` once in the Supabase SQL Editor. It creates the `circles` table,
+- Run `supabase-setup.sql` once in the Supabase SQL Editor. It creates the `memories` table,
   enables RLS with fully-open read+insert policies (public toy — no auth), adds the table to
   the `supabase_realtime` publication, and defines open storage policies.
 - Manually create a PUBLIC storage bucket named `media` (uploads land here).
@@ -113,14 +116,36 @@ The island is React, in `src/components/map/`:
    shows. Pan is origin-capture (`origin` = `pos` at pointerdown), not delta accumulation;
    `clamp()` keeps the image on screen; no zoom by design. It also re-clamps on `resize`,
    because `#map-image` is sized in `vw`.
-2. `MapChair.tsx` — one `.circle` div positioned by x/y percent. `memo`'d, since panning
-   re-renders the parent constantly.
+2. `MapChair.tsx` — one `.circle` **button** positioned by x/y percent. `memo`'d, since panning
+   re-renders the parent constantly. It must stay a `<button>`: it is the only way to reach a
+   memory by keyboard, and its `aria-label` is the memory's accessible name.
 3. `MapTooltip.tsx` — the circle's media behind a spinner, with `loading` / `ready` / `error`
    states. It renders INSIDE `#map` so it pans together with its circle, always centered
    above it.
-4. `CircleForm.tsx` — the sidebar drawer. On submit it uploads to the `media` bucket
-   (image/video) or takes text, picks a RANDOM x/y, inserts the row, and hands the new circle
-   back to `MapCanvas`, which calls `centerOnCircle()`.
+4. `AddMemoryForm.tsx` — the sidebar drawer. On submit it uploads to the `media` bucket
+   (image/video/audio) or takes text, picks x/y via `pickPosition()`, inserts the row, and hands
+   the new circle back to `MapCanvas`, which calls `centerOnCircle()`.
+5. `MapHint.tsx` — the one-line chip over the map. Shows until the visitor first pans; its copy
+   depends on whether the archive is empty.
+
+`MapCanvas` centers the initial view once — on the centroid of the loaded circles, or on the map
+middle if none have arrived yet (`didCenter`). Without it the map opened on its empty top-left
+corner and first-time visitors saw nothing.
+
+**Rows are fetched on mount and on `visibilitychange`, not on a timer.** Realtime already covers
+the open tab; a poll on top of it re-`select`ed the whole table every 15s per tab forever. The
+refetch replaces the list rather than appending, so reported rows disappear — it only keeps local
+rows whose `created_at` is newer than the moment the query started, which is what protects an
+INSERT that lands mid-fetch.
+
+**Modals are native `<dialog>` + `showModal()`** (`src/lib/useModalDialog.ts`), used by
+`IntroPopup` and the report popup. That is what gives them the focus trap, Escape, top-layer
+escape from `#map`'s transform, and an inert background for free — all of which were missing when
+they were plain divs. A `<dialog>` paints an opaque UA background, so any panel with its own
+artwork needs `border-none bg-transparent` and a `backdrop:` colour.
+The two sliding drawers (`#sidebar`, `#detail-panel`) stay CSS-driven because they animate on
+exit; they are made modal instead by the `blocked` flag in `MapCanvas`, which puts `inert` on the
+viewport, the logo and the create button whenever any of the three is open.
 
 **The pan must stay imperative.** `pos`, `origin`, `start` and the `panning` / `moved` flags
 live in `useRef`, and the pointermove handler writes `map.style.transform` directly. Putting
@@ -176,6 +201,13 @@ circle's first ever mount and never replays when culling remounts it.
   horizontal, así que en lazy no cargan nunca y `scripts/shot.mjs` se cuelga esperando
   `img.complete`. Por lo mismo el script hace la captura con `animations: "disabled"` — si no,
   Playwright espera a que termine una animación infinita.
+- **Never re-disable zoom.** `#viewport` is `touch-action: pinch-zoom`, not `none`, and the
+  viewport meta carries no `maximum-scale` / `user-scalable=no`. One finger pans the map, two
+  fingers are the browser's. The old combination was a WCAG 1.4.4 failure.
+- `/api/report` hides a memory and emails a notice with no auth, so it is capped at 5 calls per
+  `clientAddress` per hour. The counter is an in-process `Map`: it resets on cold start and is
+  per-instance, which is enough to stop a script but not a distributed flood. Move it to a
+  Supabase table if that ever matters.
 - The island keeps the DOM ids the vanilla version used — `#viewport`, `#map`, `#map-image`,
   `#circles-layer`, `#tooltip`, `#tooltip-content`, `#sidebar` — because `global.css` and
   `scripts/shot.mjs` both select on them. Renaming one silently breaks the styling or the

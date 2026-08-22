@@ -1,0 +1,67 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+
+interface Props {
+  title: string;
+  heading: string;
+  updated: string;
+}
+
+const { title, heading, updated } = Astro.props;
+---
+
+<Layout title={title}>
+  <SiteHeader />
+  <main id="contenido" class="bg-blue min-h-dvh pt-40 pb-24 md:pt-48">
+    <div class="page-grid gap-y-8">
+      <header
+        class="col-start-1 col-end-5 md:col-end-9 lg:col-start-3 lg:col-end-11"
+      >
+        <h1
+          class="text-section md:text-section-lg leading-tight font-extrabold text-white"
+        >
+          {heading}
+        </h1>
+        <p class="text-yellow mt-3 text-sm">Última actualización: {updated}</p>
+      </header>
+
+      <div
+        class="legal-prose col-start-1 col-end-5 text-white md:col-end-9 lg:col-start-3 lg:col-end-11"
+      >
+        <slot />
+      </div>
+    </div>
+  </main>
+  <SiteFooter />
+</Layout>
+
+<style>
+  .legal-prose :global(h2) {
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    font-size: var(--text-xl);
+    font-weight: 800;
+  }
+
+  .legal-prose :global(p),
+  .legal-prose :global(li) {
+    line-height: 1.7;
+  }
+
+  .legal-prose :global(p) {
+    margin-bottom: 1rem;
+  }
+
+  .legal-prose :global(ul) {
+    margin-bottom: 1rem;
+    padding-left: 1.25rem;
+    list-style: disc;
+  }
+
+  .legal-prose :global(a) {
+    font-weight: 700;
+    text-decoration: underline;
+  }
+</style>

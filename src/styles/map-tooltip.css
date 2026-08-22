@@ -36,6 +36,13 @@
     animation: none;
   }
 }
+#tooltip img.loading,
+#tooltip video.loading,
+#detail-panel img.loading,
+#detail-panel video.loading {
+  display: none;
+}
+
 .tooltip-bubble {
   position: relative;
   background: #f2f2f2;

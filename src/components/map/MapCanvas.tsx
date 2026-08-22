@@ -4,6 +4,7 @@ import AddMemoryForm from "@/components/map/AddMemoryForm";
 import IntroPopup from "@/components/map/IntroPopup";
 import MapChair from "@/components/map/MapChair";
 import MapDetail from "@/components/map/MapDetail";
+import MapHint from "@/components/map/MapHint";
 import MapTooltip from "@/components/map/MapTooltip";
 import chairUrl from "@/assets/chair/pink_chair.webp";
 import logoUrl from "@/assets/logo.webp";
@@ -34,7 +35,6 @@ const INTRO_SEEN_KEY = "quinta-pata-intro-seen";
 const MARGIN = 200;
 const SMOOTH_MS = 500;
 const LOADER_MIN_MS = 900;
-const POLL_MS = 15000;
 
 export default function MapCanvas() {
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -50,6 +50,7 @@ export default function MapCanvas() {
   const [introOpen, setIntroOpen] = useState(false);
   const [mapSrc, setMapSrc] = useState(MAP_SRC);
   const [ready, setReady] = useState(false);
+  const [hasPanned, setHasPanned] = useState(false);
 
   const pos = useRef({ x: 0, y: 0 });
   const start = useRef({ x: 0, y: 0 });
@@ -59,6 +60,7 @@ export default function MapCanvas() {
   const circlesRef = useRef(circles);
   const mountedAt = useRef(Date.now());
   const rafPending = useRef(false);
+  const didCenter = useRef(false);
 
   circlesRef.current = circles;
 
@@ -162,6 +164,7 @@ export default function MapCanvas() {
       if (!pan.current.moved) {
         pan.current.moved = true;
         setTooltipCircle(null);
+        setHasPanned(true);
       }
       const p = point(e);
       pos.current.x = origin.current.x + (p.clientX - start.current.x);
@@ -223,25 +226,32 @@ export default function MapCanvas() {
       .subscribe();
 
     const fetchAll = () => {
+      const startedAt = Date.now();
       db.from("memories")
         .select("*")
         .then(({ data, error }) => {
           if (error) return;
-          setCircles((prev) => {
-            const known = new Set(prev.map((c) => c.id));
-            return [
-              ...prev,
-              ...((data ?? []) as Chair[]).filter((c) => !known.has(c.id)),
-            ];
-          });
+          const rows = (data ?? []) as Chair[];
+          const fetched = new Set(rows.map((c) => c.id));
+          setCircles((prev) => [
+            ...rows,
+            ...prev.filter(
+              (c) =>
+                !fetched.has(c.id) &&
+                new Date(c.created_at).getTime() >= startedAt,
+            ),
+          ]);
         });
     };
 
     fetchAll();
-    const poll = window.setInterval(fetchAll, POLL_MS);
+    const refetchWhenVisible = () => {
+      if (document.visibilityState === "visible") fetchAll();
+    };
+    document.addEventListener("visibilitychange", refetchWhenVisible);
 
     return () => {
-      window.clearInterval(poll);
+      document.removeEventListener("visibilitychange", refetchWhenVisible);
       db.removeChannel(channel);
     };
   }, []);
@@ -266,6 +276,14 @@ export default function MapCanvas() {
     finishLoading();
   }, [finishLoading]);
 
+  useEffect(() => {
+    if (didCenter.current || !circles.length || pan.current.moved) return;
+    didCenter.current = true;
+    const x = circles.reduce((sum, c) => sum + c.x, 0) / circles.length;
+    const y = circles.reduce((sum, c) => sum + c.y, 0) / circles.length;
+    centerOnCircle({ x, y });
+  }, [circles, centerOnCircle]);
+
   const onCreated = useCallback(
     (chair: Chair) => {
       setCircles((prev) =>
@@ -277,6 +295,7 @@ export default function MapCanvas() {
   );
 
   const byId = new Map(circles.map((c) => [c.id, c]));
+  const blocked = detailOpen || introOpen || sidebarOpen;
 
   return (
     <>
@@ -284,7 +303,7 @@ export default function MapCanvas() {
         id="viewport"
         ref={viewportRef}
         className="fixed inset-0 overflow-hidden"
-        inert={detailOpen || introOpen}
+        inert={blocked}
         onClick={() => {
           if (!pan.current.moved) {
             setDetailOpen(false);
@@ -309,6 +328,8 @@ export default function MapCanvas() {
               finishLoading();
             }}
             onLoad={() => {
+              if (!didCenter.current && !pan.current.moved)
+                centerOnCircle({ x: 50, y: 50 });
               clamp();
               applyTransform();
               updateVisible();
@@ -362,10 +383,15 @@ export default function MapCanvas() {
         <p>Desdoblando el mapa</p>
       </div>
 
+      <MapHint
+        count={circles.length}
+        visible={ready && !hasPanned && !blocked}
+      />
+
       <a
         href="/"
         aria-label="Volver al inicio"
-        inert={detailOpen || introOpen}
+        inert={blocked}
         className="fixed top-4 left-1/2 z-20 -translate-x-1/2"
       >
         <img
@@ -378,7 +404,7 @@ export default function MapCanvas() {
 
       <div
         className="fixed bottom-2 left-1/2 z-20 flex -translate-x-1/2 items-center md:bottom-4"
-        inert={detailOpen || introOpen}
+        inert={blocked}
       >
         <button
           type="button"

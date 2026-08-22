@@ -1,9 +1,70 @@
 ---
-import Layout from "@/layouts/Layout.astro";
+import LegalPage from "@/components/LegalPage.astro";
 
 export const prerender = true;
 ---
 
-<Layout title="Políticas de privacidad | La Quinta Pata">
-  <main class="min-h-dvh bg-blue"></main>
-</Layout>
+<LegalPage
+  title="Políticas de privacidad | La Quinta Pata"
+  heading="Políticas de privacidad"
+  updated="21 de agosto de 2026"
+>
+  <p>
+    La Quinta Pata es un archivo digital abierto sobre la silla Rimax. Esta
+    página explica qué datos recogemos cuando dejás un recuerdo en el mapa y qué
+    hacemos con ellos.
+  </p>
+
+  <h2>Qué guardamos</h2>
+  <p>
+    Solo guardamos lo que vos escribís o subís en el formulario: el título, el
+    nombre o seudónimo que quieras usar, tu relato, el color de la silla y el
+    archivo de imagen, video o audio que adjuntes. También guardamos la posición
+    de tu silla en el mapa y la fecha en que la dejaste.
+  </p>
+  <p>
+    No pedimos correo, no creamos cuentas, no usamos cookies de seguimiento y no
+    tenemos herramientas de analítica publicitaria.
+  </p>
+
+  <h2>Todo lo que dejás es público</h2>
+  <p>
+    Cualquier persona que entre al mapa puede ver, leer y escuchar tu recuerdo.
+    No lo subas si contiene información que no querés que sea pública: no
+    escribas direcciones, números de documento, teléfonos ni datos de otras
+    personas sin su permiso.
+  </p>
+  <p>
+    El nombre es opcional. Si lo dejás vacío, tu recuerdo aparece como anónimo.
+  </p>
+
+  <h2>Dónde vive la información</h2>
+  <p>
+    Los recuerdos y los archivos se almacenan en Supabase, y el sitio se sirve
+    desde Netlify. Ambos son proveedores externos con servidores fuera de
+    Colombia, así que al dejar un recuerdo aceptás esa transferencia.
+  </p>
+
+  <h2>Contenido reportado</h2>
+  <p>
+    Cada recuerdo tiene un botón para reportarlo. Al reportarlo se oculta del
+    mapa de inmediato y nos llega un aviso para revisarlo. Si el contenido
+    incumple los <a href="/terminos-y-condiciones">términos y condiciones</a>, lo
+    eliminamos.
+  </p>
+
+  <h2>Borrar tu recuerdo</h2>
+  <p>
+    Escribinos a <a href="mailto:hola@laquintapata.co">hola@laquintapata.co</a> con
+    el título de tu recuerdo y lo sacamos del archivo. Como no hay cuentas, no
+    podemos verificar quién lo dejó, así que también podés usar el botón de
+    reporte.
+  </p>
+
+  <h2>Cambios</h2>
+  <p>
+    Si cambiamos esta política, actualizamos la fecha del encabezado. Los
+    recuerdos que ya estén publicados siguen rigiéndose por lo que aceptaste al
+    subirlos.
+  </p>
+</LegalPage>

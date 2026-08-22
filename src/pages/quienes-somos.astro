@@ -10,6 +10,11 @@ import burbujaNati from "@/assets/about_us/burbuja_nati.webp";
 import burbujaLina from "@/assets/about_us/burbuja_lina.webp";
 
 export const prerender = true;
+
+const bios = {
+  nati: "Me encanta armar rompecabezas, coleccionar juegos de mesa, descubrir lugares ricos para comer y escuchar a Rawayana. Soy fan de Friends y disfruto encontrar la lógica detrás de las cosas, incluso cuando parecen un enredo.",
+  lina: "Me gusta hacer collages, las totebags, comer empanadas y guardar recuerdos de cualquier plan, tengo la costumbre de coleccionar papelitos, entradas, fotos y cualquier objeto que me ayude a volver a ese momento.",
+};
 ---
 
 <Layout title="¿Quiénes Somos? | La Quinta Pata">
@@ -45,7 +50,7 @@ export const prerender = true;
           <div class="relative">
             <Image
               src={burbujaNati}
-              alt=""
+              alt={bios.nati}
               widths={[320, 640]}
               sizes="260px"
               class="absolute -top-24 left-0 z-10 w-48 md:-top-16 md:-left-40 md:w-64"
@@ -69,7 +74,7 @@ export const prerender = true;
           <div class="relative">
             <Image
               src={burbujaLina}
-              alt=""
+              alt={bios.lina}
               widths={[320, 640]}
               sizes="260px"
               class="absolute -top-24 right-0 z-10 w-48 md:-top-16 md:-right-40 md:w-64"

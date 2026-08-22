@@ -1,9 +1,76 @@
 ---
-import Layout from "@/layouts/Layout.astro";
+import LegalPage from "@/components/LegalPage.astro";
 
 export const prerender = true;
 ---
 
-<Layout title="Términos y Condiciones | La Quinta Pata">
-  <main class="min-h-dvh bg-blue"></main>
-</Layout>
+<LegalPage
+  title="Términos y Condiciones | La Quinta Pata"
+  heading="Términos y condiciones"
+  updated="21 de agosto de 2026"
+>
+  <p>
+    Al dejar un recuerdo en el mapa de La Quinta Pata aceptás estas reglas. Son
+    cortas y son las de cualquier barrio: cuidá el espacio y cuidá a los vecinos.
+  </p>
+
+  <h2>Qué podés subir</h2>
+  <p>
+    Recuerdos, anécdotas, fotos, videos y audios propios que tengan que ver con
+    la silla Rimax y con la vida alrededor de ella. Solo subí material que hayas
+    hecho vos o sobre el que tengas permiso.
+  </p>
+
+  <h2>Qué no podés subir</h2>
+  <ul>
+    <li>Contenido sexual explícito o material que involucre menores de edad.</li>
+    <li>
+      Insultos, amenazas, acoso o discriminación por raza, género, orientación
+      sexual, religión, origen o discapacidad.
+    </li>
+    <li>
+      Datos personales de terceros: nombres completos, direcciones, teléfonos,
+      documentos o fotos de personas que no dieron su permiso.
+    </li>
+    <li>Publicidad, spam, enlaces a estafas o software malicioso.</li>
+    <li>Material del que no tengas los derechos.</li>
+  </ul>
+
+  <h2>Permiso que nos das</h2>
+  <p>
+    Seguís siendo dueño de lo que subís. Al publicarlo nos das permiso para
+    mostrarlo en el mapa y en las piezas de difusión del archivo, siempre con el
+    nombre o seudónimo que hayas puesto. No lo vendemos ni lo licenciamos a
+    terceros.
+  </p>
+
+  <h2>Moderación</h2>
+  <p>
+    Cualquier visitante puede reportar un recuerdo con el botón de reporte. El
+    contenido reportado se oculta del mapa de inmediato mientras lo revisamos.
+    Podemos eliminar cualquier recuerdo que incumpla estas reglas, sin aviso
+    previo.
+  </p>
+  <p>
+    Reportar de mala fe también es incumplir estas reglas. Si detectamos reportes
+    masivos o automatizados, bloqueamos el origen.
+  </p>
+
+  <h2>El archivo se ofrece como está</h2>
+  <p>
+    Este es un proyecto independiente y sin ánimo de lucro. Hacemos lo posible
+    por mantener el mapa en pie y por no perder nada, pero no podemos garantizar
+    disponibilidad permanente ni la conservación indefinida de los archivos.
+    Guardá una copia de lo que sea importante para vos.
+  </p>
+  <p>
+    No tenemos ninguna relación comercial con Rimax ni con ninguna otra marca
+    mencionada en el archivo.
+  </p>
+
+  <h2>Contacto</h2>
+  <p>
+    Para dudas, reclamos o solicitudes de eliminación:
+    <a href="mailto:hola@laquintapata.co">hola@laquintapata.co</a>.
+  </p>
+</LegalPage>

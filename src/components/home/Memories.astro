@@ -61,7 +61,9 @@ const bottomRow = photos.slice(half).map((image, i) => ({
     </div>
 
     <div class="group relative overflow-hidden">
-      <div class="marquee-track animate-marquee flex w-max pt-8">
+      <div
+        class="marquee-track animate-marquee flex w-max pt-8 group-hover:[animation-play-state:paused]"
+      >
         {
           [false, true].map((clone) => (
             <div class="contents" aria-hidden={clone ? "true" : undefined}>
@@ -101,7 +103,9 @@ const bottomRow = photos.slice(half).map((image, i) => ({
     </div>
 
     <div class="group relative overflow-hidden">
-      <div class="marquee-track animate-marquee-reverse flex w-max pt-8">
+      <div
+        class="marquee-track animate-marquee-reverse flex w-max pt-8 group-hover:[animation-play-state:paused]"
+      >
         {
           [false, true].map((clone) => (
             <div class="contents" aria-hidden={clone ? "true" : undefined}>
@@ -129,18 +133,3 @@ const bottomRow = photos.slice(half).map((image, i) => ({
     </div>
   </div>
 </section>
-
-<script>
-  const toggle = document.getElementById("marquee-toggle");
-  const label = document.getElementById("marquee-toggle-label");
-  const tracks = document.querySelectorAll<HTMLElement>(".marquee-track");
-
-  toggle?.addEventListener("click", () => {
-    const paused = toggle.getAttribute("aria-pressed") === "true";
-    const next = !paused;
-    toggle.setAttribute("aria-pressed", String(next));
-    tracks.forEach((track) => track.classList.toggle("is-paused", next));
-    if (label)
-      label.textContent = next ? "Reanudar movimiento" : "Pausar movimiento";
-  });
-</script>

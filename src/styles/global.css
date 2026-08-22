@@ -63,10 +63,6 @@
   }
 }
 
-.marquee-track.is-paused {
-  animation-play-state: paused;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .marquee-track {
     animation: none;
@@ -176,7 +172,7 @@ body.lock-scroll {
 
 #viewport {
   cursor: grab;
-  touch-action: none;
+  touch-action: pinch-zoom;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
@@ -185,7 +181,8 @@ body.lock-scroll {
   cursor: grabbing;
 }
 
-#map {
+#viewport.dragging #map,
+#map.smooth {
   will-change: transform;
 }
 
@@ -359,6 +356,20 @@ body.lock-scroll {
   }
   #sidebar.open {
     transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #sidebar,
+  #sidebar.open {
+    transform: none;
+  }
+
+  .circle {
+    transition: none;
+  }
+  .circle.dropping {
+    animation: none;
   }
 }
 

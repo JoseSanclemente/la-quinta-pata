@@ -47,6 +47,7 @@ const asideClass =
   "rounded-t-2xl md:rounded-t-none md:rounded-l-2xl z-30 w-full max-h-[85vh] md:h-full md:max-h-none md:w-140 md:max-w-[90vw] overflow-y-auto bg-[#F8FAFF] bg-[repeating-linear-gradient(0deg,#E6EAFF_0_2px,transparent_2px_40px),repeating-linear-gradient(90deg,#E6EAFF_0_2px,transparent_2px_40px)] p-6 shadow-[0_-4px_20px_rgb(0_0_0/0.4)] md:shadow-[-4px_0_20px_rgb(0_0_0/0.4)]";
 const fieldClass =
   "w-full rounded-xl border-none bg-[#E6EFFE] px-5 py-3 font-normal text-navy placeholder:text-navy/50";
+const labelClass = "mb-1.5 block text-sm font-bold text-navy";
 const MEDIA_OPTIONS: {
   type: Exclude<MediaType, "text">;
   label: string;
@@ -146,6 +147,7 @@ export default function AddMemoryForm({
   useEffect(() => {
     if (open) {
       previousFocusRef.current = document.activeElement as HTMLElement;
+      firstFieldRef.current?.focus();
     } else {
       previousFocusRef.current?.focus();
       setStatus("");
@@ -205,6 +207,15 @@ export default function AddMemoryForm({
       stopRecording,
       RECORDING_LIMIT_MS,
     );
+  }
+
+  function beginRecording() {
+    startRecording().catch(() => {
+      setRecording(false);
+      setStatus(
+        "No pudimos usar el micrófono. Revisá los permisos del navegador.",
+      );
+    });
   }
 
   function deselectAttachment() {
@@ -284,7 +295,7 @@ export default function AddMemoryForm({
           type="button"
           onClick={onClose}
           aria-label="Cerrar"
-          className="flex size-11 cursor-pointer items-center justify-center rounded-xl border-none bg-transparent text-2xl leading-none text-navy"
+          className="text-navy flex size-11 cursor-pointer items-center justify-center rounded-xl border-none bg-transparent text-2xl leading-none"
         >
           ×
         </button>
@@ -338,85 +349,97 @@ export default function AddMemoryForm({
           </fieldset>
         </div>
 
-        <label className="sr-only" htmlFor="circle-title">
-          Título
-        </label>
-        <input
-          id="circle-title"
-          ref={firstFieldRef}
-          type="text"
-          placeholder="Título"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className={fieldClass}
-        />
-
-        <label className="sr-only" htmlFor="circle-author">
-          Nombre o seudónimo
-        </label>
-        <input
-          id="circle-author"
-          type="text"
-          placeholder="Nombre"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-          className={fieldClass}
-        />
-
-        <label className="sr-only" htmlFor="circle-text">
-          Relato
-        </label>
-        <textarea
-          id="circle-text"
-          placeholder="Deja tu relato"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          className={`${fieldClass} h-44 resize-none rounded-3xl`}
-        />
-
-        <fieldset className="flex gap-2.5 border-none p-0">
-          <legend className="sr-only">
-            Adjuntar audio, video o imagen (opcional)
-          </legend>
-          {MEDIA_OPTIONS.map((opt) => (
-            <button
-              key={opt.type}
-              type="button"
-              aria-pressed={mediaType === opt.type}
-              aria-label={opt.label}
-              onClick={() => {
-                if (mediaType === opt.type) {
-                  deselectAttachment();
-                } else {
-                  setMediaType(opt.type);
-                  setHasFile(false);
-                }
-              }}
-              className={`flex size-11 cursor-pointer items-center justify-center rounded-xl border-none text-navy transition-colors ${
-                mediaType === opt.type ? "bg-line/60" : "bg-line/25"
-              }`}
-            >
-              {opt.icon}
-            </button>
-          ))}
+        <div>
+          <label className={labelClass} htmlFor="circle-title">
+            Título <span className="text-secondary">*</span>
+          </label>
           <input
-            type="file"
-            ref={fileRef}
-            tabIndex={-1}
-            aria-hidden="true"
-            accept={mediaType === "video" ? "video/*" : "image/*"}
-            onChange={(e) => setHasFile((e.target.files?.length ?? 0) > 0)}
-            className="sr-only cursor-pointer"
+            id="circle-title"
+            ref={firstFieldRef}
+            type="text"
+            placeholder="Ej: La silla del abuelo"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className={fieldClass}
           />
+        </div>
+
+        <div>
+          <label className={labelClass} htmlFor="circle-author">
+            Nombre o seudónimo{" "}
+            <span className="text-navy/60 font-normal">(opcional)</span>
+          </label>
+          <input
+            id="circle-author"
+            type="text"
+            placeholder="Si lo dejás vacío, aparecés como anónimo"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            className={fieldClass}
+          />
+        </div>
+
+        <div>
+          <label className={labelClass} htmlFor="circle-text">
+            Tu relato <span className="text-secondary">*</span>
+          </label>
+          <textarea
+            id="circle-text"
+            required
+            aria-describedby="circle-text-help"
+            placeholder="Contá el cuento"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            className={`${fieldClass} h-44 resize-none rounded-3xl`}
+          />
+        </div>
+
+        <fieldset className="border-none p-0">
+          <legend className={labelClass}>
+            Adjuntá algo{" "}
+            <span className="text-navy/60 font-normal">(opcional)</span>
+          </legend>
+          <div className="flex gap-2.5">
+            {MEDIA_OPTIONS.map((opt) => (
+              <button
+                key={opt.type}
+                type="button"
+                aria-pressed={mediaType === opt.type}
+                aria-label={opt.label}
+                onClick={() => {
+                  if (mediaType === opt.type) {
+                    deselectAttachment();
+                  } else {
+                    setMediaType(opt.type);
+                    setHasFile(false);
+                  }
+                }}
+                className={`text-navy flex size-11 cursor-pointer items-center justify-center rounded-xl border-none transition-colors ${
+                  mediaType === opt.type ? "bg-line/60" : "bg-line/25"
+                }`}
+              >
+                {opt.icon}
+              </button>
+            ))}
+            <input
+              type="file"
+              ref={fileRef}
+              tabIndex={-1}
+              aria-hidden="true"
+              accept={mediaType === "video" ? "video/*" : "image/*"}
+              onChange={(e) => setHasFile((e.target.files?.length ?? 0) > 0)}
+              className="sr-only cursor-pointer"
+            />
+          </div>
         </fieldset>
 
         {(mediaType === "video" || mediaType === "image") && (
           <button
             type="button"
             onClick={() => fileRef.current?.click()}
-            className="flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-dashed border-line bg-transparent text-navy"
+            className="border-line text-navy flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-dashed bg-transparent"
           >
-            <span className="size-7 text-navy/60 [&_svg]:size-full">
+            <span className="text-navy/60 size-7 [&_svg]:size-full">
               {MEDIA_OPTIONS.find((opt) => opt.type === mediaType)?.icon}
             </span>
             {hasFile ? (
@@ -436,10 +459,10 @@ export default function AddMemoryForm({
         {mediaType === "audio" && !recording && !audioBlob && (
           <button
             type="button"
-            onClick={() => void startRecording()}
-            className="flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-dashed border-line bg-transparent text-navy"
+            onClick={beginRecording}
+            className="border-line text-navy flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-dashed bg-transparent"
           >
-            <span className="size-7 text-navy/60 [&_svg]:size-full">
+            <span className="text-navy/60 size-7 [&_svg]:size-full">
               {MEDIA_OPTIONS.find((opt) => opt.type === "audio")?.icon}
             </span>
             <span className="text-navy/60">Grabar audio.</span>
@@ -450,9 +473,9 @@ export default function AddMemoryForm({
           <button
             type="button"
             onClick={stopRecording}
-            className="flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-solid border-blue bg-blue/10 text-navy"
+            className="border-blue bg-blue/10 text-navy flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-solid"
           >
-            <span className="size-7 text-navy/60 [&_svg]:size-full">
+            <span className="text-navy/60 size-7 [&_svg]:size-full">
               {MEDIA_OPTIONS.find((opt) => opt.type === "audio")?.icon}
             </span>
             <span className="font-semibold">
@@ -462,27 +485,32 @@ export default function AddMemoryForm({
         )}
 
         {mediaType === "audio" && !recording && audioBlob && audioUrl && (
-          <div className="flex h-24 w-full flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-dashed border-line bg-transparent px-4 text-navy">
+          <div className="border-line text-navy flex h-24 w-full flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-dashed bg-transparent px-4">
             <VoicePlayer src={audioUrl} />
             <button
               type="button"
-              onClick={() => void startRecording()}
-              className="cursor-pointer border-none bg-transparent text-sm text-navy/60 underline"
+              onClick={beginRecording}
+              className="text-navy/60 cursor-pointer border-none bg-transparent text-sm underline"
             >
               Grabar de nuevo
             </button>
           </div>
         )}
 
-        <Button
-          type="submit"
-          disabled={!filled || busy}
-          className="mx-auto"
-        >
-          Soltar en el mapa
+        <Button type="submit" disabled={!filled || busy} className="mx-auto">
+          {busy ? "Soltando..." : "Soltar en el mapa"}
         </Button>
+        {!filled && !busy && (
+          <p className="text-navy/70 m-0 text-center text-sm">
+            {text.trim() === ""
+              ? "Escribí tu relato para poder soltarla."
+              : mediaType === "audio"
+                ? "Grabá el audio o quitá el adjunto."
+                : "Elegí el archivo o quitá el adjunto."}
+          </p>
+        )}
         <p
-          className="m-0 min-h-4.5 text-center text-sm text-navy"
+          className="text-navy m-0 min-h-4.5 text-center text-sm"
           role="status"
         >
           {status}

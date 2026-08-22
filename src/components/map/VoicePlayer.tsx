@@ -78,17 +78,6 @@ export default function VoicePlayer({ src }: Props) {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!playing) return;
-    let frame: number;
-    const tick = () => {
-      setCurrentTime(audioRef.current?.currentTime ?? 0);
-      frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [playing]);
-
   function togglePlay() {
     const audio = audioRef.current;
     if (!audio) return;
@@ -140,9 +129,22 @@ export default function VoicePlayer({ src }: Props) {
       <div
         ref={trackRef}
         onClick={(e) => seek(e.clientX)}
-        className="relative h-9 flex-1 cursor-pointer"
+        className="relative h-9 flex-1 cursor-pointer rounded-md has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-3 has-[:focus-visible]:outline-blue"
       >
-        <div className="absolute inset-0 flex items-center gap-[2px]">
+        <input
+          type="range"
+          min={0}
+          max={duration || 0}
+          step={0.1}
+          value={currentTime}
+          aria-label="Posición del audio"
+          onChange={(e) => {
+            const audio = audioRef.current;
+            if (audio) audio.currentTime = Number(e.target.value);
+          }}
+          className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
+        />
+        <div aria-hidden="true" className="absolute inset-0 flex items-center gap-[2px]">
           {bars.map((p, i) => (
             <span
               key={i}
@@ -152,6 +154,7 @@ export default function VoicePlayer({ src }: Props) {
           ))}
         </div>
         <div
+          aria-hidden="true"
           className="absolute inset-y-0 left-0 overflow-hidden"
           style={{ width: `${progress * 100}%` }}
         >
