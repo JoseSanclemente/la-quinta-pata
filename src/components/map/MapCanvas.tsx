@@ -1,17 +1,36 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { db } from "@/lib/supabase.client";
 import AddMemoryForm from "@/components/map/AddMemoryForm";
+import IntroPopup from "@/components/map/IntroPopup";
 import MapChair from "@/components/map/MapChair";
 import MapDetail from "@/components/map/MapDetail";
 import MapTooltip from "@/components/map/MapTooltip";
 import chairUrl from "@/assets/chair/pink_chair.webp";
 import logoUrl from "@/assets/logo.webp";
+import palmTreeUrl from "@/assets/palm_tree.webp";
+import treeUrl from "@/assets/map_assets/10_arbol.webp";
+import tree2Url from "@/assets/map_assets/11_arbol_2.webp";
+
+const DECORATIONS = [
+  { src: palmTreeUrl.src, x: 22, y: 64, w: "18rem" },
+  { src: treeUrl.src, x: 71, y: 38, w: "18rem" },
+  { src: palmTreeUrl.src, x: 8, y: 20, w: "14rem" },
+  { src: treeUrl.src, x: 90, y: 12, w: "14rem" },
+  { src: palmTreeUrl.src, x: 40, y: 85, w: "16rem" },
+  { src: treeUrl.src, x: 15, y: 90, w: "14rem" },
+  { src: palmTreeUrl.src, x: 82, y: 70, w: "16rem" },
+  { src: treeUrl.src, x: 55, y: 8, w: "14rem" },
+  { src: tree2Url.src, x: 65, y: 60, w: "16rem" },
+  { src: tree2Url.src, x: 22, y: 45, w: "14rem" },
+  { src: tree2Url.src, x: 95, y: 90, w: "14rem" },
+] as const;
 import type { Chair } from "@/lib/types";
 
 const MAP_SRC = "/assets/map-3000.webp";
 const MAP_SRCSET = "/assets/map-1600.webp 1600w, /assets/map-3000.webp 3000w";
 const MAP_SIZES = "(width < 48rem) 400px, clamp(1100px, 260vw, 3000px)";
 const FALLBACK_SRC = "/assets/placeholder.svg";
+const INTRO_SEEN_KEY = "quinta-pata-intro-seen";
 const MARGIN = 200;
 const SMOOTH_MS = 500;
 const LOADER_MIN_MS = 900;
@@ -27,6 +46,7 @@ export default function MapCanvas() {
   const [detailCircle, setDetailCircle] = useState<Chair | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [introOpen, setIntroOpen] = useState(false);
   const [mapSrc, setMapSrc] = useState(MAP_SRC);
   const [ready, setReady] = useState(false);
 
@@ -123,6 +143,7 @@ export default function MapCanvas() {
       "touches" in e ? e.touches[0]! : e;
 
     const down = (e: MouseEvent | TouchEvent) => {
+      if (e.type === "mousedown") e.preventDefault();
       pan.current.panning = true;
       pan.current.moved = false;
       viewport.classList.add("dragging");
@@ -133,6 +154,10 @@ export default function MapCanvas() {
 
     const move = (e: MouseEvent | TouchEvent) => {
       if (!pan.current.panning) return;
+      if ("buttons" in e && e.buttons === 0) {
+        up();
+        return;
+      }
       pan.current.moved = true;
       const p = point(e);
       pos.current.x = origin.current.x + (p.clientX - start.current.x);
@@ -160,6 +185,7 @@ export default function MapCanvas() {
     window.addEventListener("mouseup", up);
     window.addEventListener("touchend", up);
     window.addEventListener("resize", resize);
+    window.addEventListener("blur", up);
 
     applyTransform();
     updateVisible();
@@ -172,6 +198,7 @@ export default function MapCanvas() {
       window.removeEventListener("mouseup", up);
       window.removeEventListener("touchend", up);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("blur", up);
     };
   }, [applyTransform, clamp, scheduleVisible, updateVisible]);
 
@@ -214,6 +241,15 @@ export default function MapCanvas() {
   }, [circles, updateVisible]);
 
   useEffect(() => {
+    if (!localStorage.getItem(INTRO_SEEN_KEY)) setIntroOpen(true);
+  }, []);
+
+  const closeIntro = useCallback(() => {
+    localStorage.setItem(INTRO_SEEN_KEY, "1");
+    setIntroOpen(false);
+  }, []);
+
+  useEffect(() => {
     const image = imageRef.current;
     if (!image?.complete) return;
     if (image.naturalWidth === 0) setMapSrc(FALLBACK_SRC);
@@ -238,7 +274,7 @@ export default function MapCanvas() {
         id="viewport"
         ref={viewportRef}
         className="fixed inset-0 overflow-hidden"
-        inert={detailOpen}
+        inert={detailOpen || introOpen}
         onClick={() => {
           if (!pan.current.moved) {
             setDetailOpen(false);
@@ -269,6 +305,16 @@ export default function MapCanvas() {
               finishLoading();
             }}
           />
+          {DECORATIONS.map((d, i) => (
+            <img
+              key={i}
+              src={d.src}
+              alt=""
+              draggable={false}
+              className="pointer-events-none absolute h-auto select-none"
+              style={{ left: `${d.x}%`, top: `${d.y}%`, width: d.w }}
+            />
+          ))}
           <div id="circles-layer" className="absolute inset-0">
             {visibleIds.map((id) => {
               const circle = byId.get(id);
@@ -309,19 +355,20 @@ export default function MapCanvas() {
       <a
         href="/"
         aria-label="Volver al inicio"
-        inert={detailOpen}
+        inert={detailOpen || introOpen}
         className="fixed top-4 left-1/2 z-20 -translate-x-1/2"
       >
         <img
           src={logoUrl.src}
           alt="La Quinta Pata"
-          className="h-24 w-auto scale-100 transition-transform duration-200 hover:scale-105 md:h-32"
+          draggable={false}
+          className="h-24 w-auto scale-100 transition-transform duration-200 select-none hover:scale-105 md:h-32"
         />
       </a>
 
       <div
         className="fixed bottom-2 left-1/2 z-20 flex -translate-x-1/2 items-center md:bottom-4"
-        inert={detailOpen}
+        inert={detailOpen || introOpen}
       >
         <button
           type="button"
@@ -332,7 +379,7 @@ export default function MapCanvas() {
           <svg
             viewBox="0 0 100 100"
             aria-hidden="true"
-            className="fill-secondary group-hover:fill-secondary-hover absolute inset-0 h-full w-full"
+            className="fill-secondary group-hover:fill-secondary-hover absolute inset-0 h-full w-full transition-transform duration-200 group-hover:rotate-12"
           >
             <path d="M50,2 56.9,33.4 83.9,16.1 66.6,43.1 98,50 66.6,56.9 83.9,83.9 56.9,66.6 50,98 43.1,66.6 16.1,83.9 33.4,56.9 2,50 33.4,43.1 16.1,16.1 43.1,33.4Z" />
           </svg>
@@ -361,6 +408,8 @@ export default function MapCanvas() {
           setCircles((prev) => prev.filter((c) => c.id !== id))
         }
       />
+
+      <IntroPopup open={introOpen} onClose={closeIntro} />
     </>
   );
 }
