@@ -4,6 +4,7 @@ import PaperEdge from "@/components/PaperEdge.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
 import wordmark from "@/assets/laquintapata.webp";
 import pinkChair from "@/assets/chair/pink_chair.webp";
+import Button from "@/components/Button.tsx";
 ---
 
 <section aria-label="La Quinta Pata" class="bg-blue relative overflow-hidden">
@@ -26,13 +27,13 @@ import pinkChair from "@/assets/chair/pink_chair.webp";
       </p>
     </div>
 
-    <div class="page-grid items-center gap-y-12 pt-[18vh] pb-20 md:pt-[16vh]">
+    <div class="page-grid items-center gap-y-12 pt-[18vh] pb-20 md:pt-[25vh]">
       <Image
         src={pinkChair}
         alt="Silla Rimax fucsia"
         widths={[320, 640, pinkChair.width]}
         sizes="(min-width: 1024px) 32vw, (min-width: 768px) 34vw, 44vw"
-        class="col-start-1 col-end-4 w-full object-contain md:col-end-4 lg:col-end-5"
+        class="col-start-1 col-end-5 w-full object-contain md:col-end-4 lg:col-end-6"
       />
 
       <div
@@ -44,16 +45,11 @@ import pinkChair from "@/assets/chair/pink_chair.webp";
             alt="La Quinta Pata, archivo digital"
             widths={[480, 960, wordmark.width]}
             sizes="(min-width: 1024px) 48vw, (min-width: 768px) 58vw, 92vw"
-            class="mx-auto w-full"
+            class="mx-auto mb-8 w-full"
           />
         </h2>
 
-        <a
-          href="/memorias"
-          class="on-dark bg-yellow text-blue mt-8 inline-flex min-h-11 items-center rounded-md px-6 py-3 text-sm font-semibold transition-opacity hover:opacity-90 md:text-base"
-        >
-          Dejá tu recuerdo
-        </a>
+        <Button href="/memorias" variant="secondary"> Dejá tu recuerdo </Button>
       </div>
     </div>
   </div>

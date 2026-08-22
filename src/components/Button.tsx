@@ -9,7 +9,7 @@ const variantClasses: Record<Variant, string> = {
   primary:
     "inline-flex min-h-11 items-center justify-center rounded-xl bg-brand px-6 py-4 text-base font-bold whitespace-nowrap text-white hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-60 md:min-h-14 md:px-8 md:text-base",
   secondary:
-    "inline-flex min-h-11 items-center justify-center rounded-full bg-magenta px-6 text-base font-bold whitespace-nowrap text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 md:min-h-14 md:px-8 md:text-lg",
+    "inline-flex min-h-11 items-center justify-center rounded-xl bg-magenta px-6 text-base font-bold whitespace-nowrap text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 md:min-h-14 md:px-8 md:text-lg",
   link: "inline-flex min-h-11 items-center px-1 text-base whitespace-nowrap text-neutral hover:underline",
 };
 
