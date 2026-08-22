@@ -22,6 +22,7 @@ async function computePeaks(src: string): Promise<number[]> {
       .webkitAudioContext;
   const ctx = new AudioCtx();
   try {
+    if (ctx.state === "suspended") await ctx.resume().catch(() => {});
     const res = await fetch(src);
     const arrayBuffer = await res.arrayBuffer();
     const audioBuffer = await ctx.decodeAudioData(arrayBuffer);

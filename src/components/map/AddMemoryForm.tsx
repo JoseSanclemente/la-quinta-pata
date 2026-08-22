@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { CSSProperties, JSX } from "react";
+import type { CSSProperties, JSX, RefObject } from "react";
 import Button from "@/components/Button";
 import chairUrl from "@/assets/chair/pink_chair.webp";
 import { CHAIR_COLORS } from "@/lib/chairColors";
@@ -9,6 +9,32 @@ import type { Chair, MediaType } from "@/lib/types";
 
 const AVATAR_BG_ALPHA = "4d";
 const RECORDING_LIMIT_MS = 60_000;
+const BORDER_MARGIN = 9;
+const MIN_GAP = 10;
+const PLACEMENT_ATTEMPTS = 40;
+
+function pickPosition(existing: Chair[]) {
+  let best = { x: 50, y: 50 };
+  let bestMinDist = -1;
+  for (let i = 0; i < PLACEMENT_ATTEMPTS; i++) {
+    const x = Math.round(
+      Math.random() * (100 - 2 * BORDER_MARGIN) + BORDER_MARGIN,
+    );
+    const y = Math.round(
+      Math.random() * (100 - 2 * BORDER_MARGIN) + BORDER_MARGIN,
+    );
+    const minDist = existing.reduce((min, c) => {
+      const d = Math.hypot(c.x - x, c.y - y);
+      return Math.min(min, d);
+    }, Infinity);
+    if (minDist >= MIN_GAP) return { x, y };
+    if (minDist > bestMinDist) {
+      bestMinDist = minDist;
+      best = { x, y };
+    }
+  }
+  return best;
+}
 
 function errorMessage(err: unknown): string {
   if (err instanceof Error) return err.message;
@@ -88,9 +114,15 @@ type Props = {
   open: boolean;
   onClose: () => void;
   onCreated: (chair: Chair) => void;
+  existingChairsRef: RefObject<Chair[]>;
 };
 
-export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
+export default function AddMemoryForm({
+  open,
+  onClose,
+  onCreated,
+  existingChairsRef,
+}: Props) {
   const [color, setColor] = useState(CHAIR_COLORS[0]!.hex);
   const [mediaType, setMediaType] = useState<MediaType>("text");
   const [title, setTitle] = useState("");
@@ -114,7 +146,6 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
   useEffect(() => {
     if (open) {
       previousFocusRef.current = document.activeElement as HTMLElement;
-      firstFieldRef.current?.focus();
     } else {
       previousFocusRef.current?.focus();
       setStatus("");
@@ -210,9 +241,10 @@ export default function AddMemoryForm({ open, onClose, onCreated }: Props) {
         media_url = await uploadMedia(file);
       }
 
+      const { x, y } = pickPosition(existingChairsRef.current);
       const circle = await insertChair({
-        x: Math.round(Math.random() * 90 + 5),
-        y: Math.round(Math.random() * 90 + 5),
+        x,
+        y,
         color,
         media_type: mediaType,
         media_url,

@@ -12,17 +12,17 @@ import treeUrl from "@/assets/map_assets/10_arbol.webp";
 import tree2Url from "@/assets/map_assets/11_arbol_2.webp";
 
 const DECORATIONS = [
-  { src: palmTreeUrl.src, x: 22, y: 64, w: "18rem" },
-  { src: treeUrl.src, x: 71, y: 38, w: "18rem" },
-  { src: palmTreeUrl.src, x: 8, y: 20, w: "14rem" },
-  { src: treeUrl.src, x: 90, y: 12, w: "14rem" },
-  { src: palmTreeUrl.src, x: 40, y: 85, w: "16rem" },
-  { src: treeUrl.src, x: 15, y: 90, w: "14rem" },
-  { src: palmTreeUrl.src, x: 82, y: 70, w: "16rem" },
-  { src: treeUrl.src, x: 55, y: 8, w: "14rem" },
-  { src: tree2Url.src, x: 65, y: 60, w: "16rem" },
-  { src: tree2Url.src, x: 22, y: 45, w: "14rem" },
-  { src: tree2Url.src, x: 95, y: 90, w: "14rem" },
+  { src: palmTreeUrl.src, x: 22, y: 64, w: "clamp(13rem, 6vw, 18rem)" },
+  { src: treeUrl.src, x: 71, y: 38, w: "clamp(13rem, 6vw, 18rem)" },
+  { src: palmTreeUrl.src, x: 8, y: 20, w: "clamp(10rem, 5vw, 14rem)" },
+  { src: treeUrl.src, x: 90, y: 12, w: "clamp(10rem, 5vw, 14rem)" },
+  { src: palmTreeUrl.src, x: 40, y: 85, w: "clamp(11rem, 5.5vw, 16rem)" },
+  { src: treeUrl.src, x: 15, y: 90, w: "clamp(10rem, 5vw, 14rem)" },
+  { src: palmTreeUrl.src, x: 82, y: 70, w: "clamp(11rem, 5.5vw, 16rem)" },
+  { src: treeUrl.src, x: 55, y: 8, w: "clamp(10rem, 5vw, 14rem)" },
+  { src: tree2Url.src, x: 65, y: 60, w: "clamp(11rem, 5.5vw, 16rem)" },
+  { src: tree2Url.src, x: 22, y: 45, w: "clamp(10rem, 5vw, 14rem)" },
+  { src: tree2Url.src, x: 95, y: 90, w: "clamp(10rem, 5vw, 14rem)" },
 ] as const;
 import type { Chair } from "@/lib/types";
 
@@ -34,6 +34,7 @@ const INTRO_SEEN_KEY = "quinta-pata-intro-seen";
 const MARGIN = 200;
 const SMOOTH_MS = 500;
 const LOADER_MIN_MS = 900;
+const POLL_MS = 15000;
 
 export default function MapCanvas() {
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -158,7 +159,10 @@ export default function MapCanvas() {
         up();
         return;
       }
-      pan.current.moved = true;
+      if (!pan.current.moved) {
+        pan.current.moved = true;
+        setTooltipCircle(null);
+      }
       const p = point(e);
       pos.current.x = origin.current.x + (p.clientX - start.current.x);
       pos.current.y = origin.current.y + (p.clientY - start.current.y);
@@ -218,20 +222,26 @@ export default function MapCanvas() {
       )
       .subscribe();
 
-    db.from("memories")
-      .select("*")
-      .then(({ data, error }) => {
-        if (error) return;
-        setCircles((prev) => {
-          const known = new Set(prev.map((c) => c.id));
-          return [
-            ...prev,
-            ...((data ?? []) as Chair[]).filter((c) => !known.has(c.id)),
-          ];
+    const fetchAll = () => {
+      db.from("memories")
+        .select("*")
+        .then(({ data, error }) => {
+          if (error) return;
+          setCircles((prev) => {
+            const known = new Set(prev.map((c) => c.id));
+            return [
+              ...prev,
+              ...((data ?? []) as Chair[]).filter((c) => !known.has(c.id)),
+            ];
+          });
         });
-      });
+    };
+
+    fetchAll();
+    const poll = window.setInterval(fetchAll, POLL_MS);
 
     return () => {
+      window.clearInterval(poll);
       db.removeChannel(channel);
     };
   }, []);
@@ -398,6 +408,7 @@ export default function MapCanvas() {
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
         onCreated={onCreated}
+        existingChairsRef={circlesRef}
       />
 
       <MapDetail
