@@ -73,11 +73,9 @@ export default function MapDetail({
             >
               {circle.title || "Sin título"}
             </h2>
-            {circle.author && (
-              <p className="text-navy/70 text-sm">
-                Memoria escrita por {circle.author}.
-              </p>
-            )}
+            <p className="text-navy/70 text-sm">
+              Memoria escrita por {circle.author || "anónimo"}.
+            </p>
           </div>
 
           <div className="mt-6 space-y-10">

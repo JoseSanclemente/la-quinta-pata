@@ -1,0 +1,118 @@
+@keyframes hero-drop {
+  0% {
+    transform: translateY(-120vh) rotate(-8deg);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(0) rotate(-8deg);
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(-3%) rotate(-4deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes header-drop {
+  0% {
+    transform: translateY(-160%);
+    opacity: 0;
+  }
+  70% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  85% {
+    transform: translateY(-18%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes star-spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+.star-spin {
+  animation: star-spin 35s linear infinite;
+}
+
+@keyframes chair-slide {
+  0% {
+    transform: translateX(-120vw) rotate(0deg);
+    animation-timing-function: cubic-bezier(0.2, 0.55, 0.45, 0.9);
+  }
+  45% {
+    transform: translateX(-14%) rotate(9deg);
+    animation-timing-function: cubic-bezier(0.35, 0, 0.35, 1);
+  }
+  72% {
+    transform: translateX(3%) rotate(5deg);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+@keyframes text-pop {
+  from {
+    scale: 0.55;
+    opacity: 0;
+  }
+  to {
+    scale: 1;
+    opacity: 1;
+  }
+}
+
+[data-reveal] .text-pop {
+  display: inline-block;
+  transform-origin: left center;
+  animation: text-pop 0.7s cubic-bezier(0.34, 1.4, 0.5, 1) 0.15s backwards;
+  animation-play-state: paused;
+}
+
+[data-reveal].revealed .text-pop {
+  animation-play-state: running;
+}
+
+[data-reveal] .chair-slide {
+  animation: chair-slide 0.95s linear backwards;
+  animation-play-state: paused;
+}
+
+[data-reveal].revealed .chair-slide {
+  animation-play-state: running;
+}
+
+.hero-logo {
+  animation: hero-drop 1.4s cubic-bezier(0.33, 0.8, 0.4, 1) backwards;
+}
+
+.header-drop > * {
+  animation: header-drop 0.9s cubic-bezier(0.33, 0.8, 0.4, 1) backwards;
+}
+
+.header-drop > *:nth-child(1) {
+  animation-delay: 1.2s;
+}
+
+.header-drop > *:nth-child(2) {
+  animation-delay: 1.5s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo,
+  .chair-slide,
+  [data-reveal] .text-pop,
+  .star-spin,
+  .header-drop > * {
+    animation: none;
+  }
+}

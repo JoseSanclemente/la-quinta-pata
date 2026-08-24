@@ -54,6 +54,7 @@ const ogImage = new URL(image, Astro.url).href;
     </div>
     {import.meta.env.DEV && <GridOverlay />}
     <script>
+      import "@/scripts/reveal";
       import { gsap } from "gsap";
       import { ScrollTrigger } from "gsap/ScrollTrigger";
       import { ScrollSmoother } from "gsap/ScrollSmoother";

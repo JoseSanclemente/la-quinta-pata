@@ -14,12 +14,13 @@ import chairPhoto from "@/assets/yellow_chair_photo.webp";
     <MaskedShape
       image={star}
       width={1000}
-      class="bg-blue/60 absolute top-65 -left-7.5 w-[112%] md:top-[25%] md:left-[15%] md:w-[70%] lg:top-[30%] lg:left-[-10%]"
+      class="star-spin bg-blue/60 absolute top-65 -left-7.5 w-[112%] md:top-[25%] md:left-[15%] md:w-[70%] lg:top-[30%] lg:left-[-10%]"
     />
   </div>
 
   <div class="page-grid relative z-10 gap-y-12 md:items-center">
     <div
+      data-reveal
       class="col-start-1 col-end-5 flex flex-col items-center space-y-4 md:col-end-9 lg:col-end-6"
     >
       <h2
@@ -41,7 +42,7 @@ import chairPhoto from "@/assets/yellow_chair_photo.webp";
         alt="Silla Rimax amarilla"
         widths={[320, 640]}
         sizes="(min-width: 1024px) 320px, (min-width: 768px) 288px, 224px"
-        class="w-56 md:w-72 lg:w-90"
+        class="chair-slide w-56 md:w-72 lg:w-90"
       />
     </div>
 

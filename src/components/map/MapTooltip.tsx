@@ -97,6 +97,7 @@ export default function MapTooltip({ circle, onShowMore, onReported }: Props) {
               key={shown.id}
               src={shown.media_url ?? ""}
               alt={shown.title || "Imagen de la memoria"}
+              decoding="async"
               className={mediaClass}
               onLoad={() => setStatus("ready")}
               onError={() => setStatus("error")}
@@ -107,8 +108,9 @@ export default function MapTooltip({ circle, onShowMore, onReported }: Props) {
               key={shown.id}
               src={shown.media_url ?? ""}
               controls
+              preload="metadata"
               className={mediaClass}
-              onLoadedData={() => setStatus("ready")}
+              onLoadedMetadata={() => setStatus("ready")}
               onError={() => setStatus("error")}
             />
           )}

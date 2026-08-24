@@ -3,6 +3,7 @@ import type { CSSProperties, JSX, RefObject } from "react";
 import Button from "@/components/Button";
 import chairUrl from "@/assets/chair/pink_chair.webp";
 import { CHAIR_COLORS } from "@/lib/chairColors";
+import { downscaleImage } from "@/lib/downscaleImage";
 import { insertChair, uploadMedia } from "@/lib/supabase.client";
 import VoicePlayer from "@/components/map/VoicePlayer";
 import type { Chair, MediaType } from "@/lib/types";
@@ -249,7 +250,7 @@ export default function AddMemoryForm({
       } else if (mediaType !== "text") {
         const file = fileRef.current?.files?.[0];
         if (!file) throw new Error("Elige un archivo.");
-        media_url = await uploadMedia(file);
+        media_url = await uploadMedia(await downscaleImage(file));
       }
 
       const { x, y } = pickPosition(existingChairsRef.current);

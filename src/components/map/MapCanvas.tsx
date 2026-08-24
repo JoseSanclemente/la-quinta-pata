@@ -375,11 +375,13 @@ export default function MapCanvas() {
       </div>
 
       <div id="map-loader" className={ready ? "done" : undefined} role="status">
-        <div className="loader-dots" aria-hidden="true">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
+        <img
+          src={chairUrl.src}
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+          className="loader-chair select-none"
+        />
         <p>Desdoblando el mapa</p>
       </div>
 

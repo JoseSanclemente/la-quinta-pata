@@ -58,7 +58,7 @@ export default function MapReportButton({ circleId, onReported }: Props) {
           type="button"
           onClick={() => setOpen(false)}
           aria-label="Cerrar"
-          className="absolute top-3 left-3 flex size-9 cursor-pointer items-center justify-center rounded-lg border-none bg-transparent text-xl leading-none text-white hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-white"
+          className="on-dark absolute top-3 left-3 flex size-9 cursor-pointer items-center justify-center rounded-lg border-none bg-transparent text-xl leading-none text-white hover:bg-white/10"
         >
           ×
         </button>
