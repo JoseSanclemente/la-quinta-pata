@@ -1,6 +1,7 @@
 ---
 import "@/styles/global.css";
 import GridOverlay from "@/components/GridOverlay.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
 import ogFallback from "@/assets/hero.webp";
 
 interface Props {
@@ -38,8 +39,46 @@ const ogImage = new URL(image, Astro.url).href;
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body class:list={["relative m-0", lockScroll && "lock-scroll"]}>
-    {!lockScroll && <a href="#contenido" class="skip-link">Saltar al contenido</a>}
-    <slot />
+    {
+      !lockScroll && (
+        <a href="#contenido" class="skip-link">
+          Saltar al contenido
+        </a>
+      )
+    }
+    {!lockScroll && <SiteHeader />}
+    <div id="smooth-wrapper">
+      <div id="smooth-content">
+        <slot />
+      </div>
+    </div>
     {import.meta.env.DEV && <GridOverlay />}
+    <script>
+      import { gsap } from "gsap";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
+      import { ScrollSmoother } from "gsap/ScrollSmoother";
+
+      const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (!document.body.classList.contains("lock-scroll") && !reduced) {
+        gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+        const smoother = ScrollSmoother.create({
+          smooth: 1.2,
+          effects: true,
+          smoothTouch: 0,
+        });
+
+        document
+          .querySelectorAll<HTMLAnchorElement>('a[href^="#"]')
+          .forEach((link) => {
+            link.addEventListener("click", (event) => {
+              const target = document.querySelector(link.getAttribute("href")!);
+              if (!target) return;
+              event.preventDefault();
+              smoother.scrollTo(target, true);
+            });
+          });
+      }
+    </script>
   </body>
 </html>

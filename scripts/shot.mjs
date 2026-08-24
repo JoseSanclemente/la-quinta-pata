@@ -8,11 +8,14 @@ const route = "/" + rawPath.replace(/^[./\\]+/, "");
 
 const BASE = process.env.SHOT_BASE ?? "http://localhost:4321";
 const outDir = resolve(process.env.SHOT_DIR ?? ".screenshots");
-const name = nameArg ?? (route.replace(/\W+/g, "-").replace(/^-|-$/g, "") || "home");
+const name =
+  nameArg ?? (route.replace(/\W+/g, "-").replace(/^-|-$/g, "") || "home");
 const [width, height] = viewportArg.split("x").map(Number);
 
 if (!Number.isFinite(width) || !Number.isFinite(height)) {
-  console.error(`Bad viewport "${viewportArg}" — expected WIDTHxHEIGHT, e.g. 1440x900`);
+  console.error(
+    `Bad viewport "${viewportArg}" — expected WIDTHxHEIGHT, e.g. 1440x900`,
+  );
   process.exit(1);
 }
 
@@ -23,6 +26,7 @@ const browser = await chromium.launch();
 const page = await browser.newPage({
   viewport: { width, height },
   deviceScaleFactor: 2,
+  reducedMotion: "reduce",
 });
 
 try {
@@ -37,7 +41,11 @@ try {
   const mapImage = page.locator("#map-image");
   if (await mapImage.count()) {
     await mapImage
-      .evaluate((img) => img.complete || new Promise((r) => img.addEventListener("load", r, { once: true })))
+      .evaluate(
+        (img) =>
+          img.complete ||
+          new Promise((r) => img.addEventListener("load", r, { once: true })),
+      )
       .catch(() => {});
   }
 
@@ -51,11 +59,16 @@ try {
     await Promise.all(
       [...document.images]
         .filter((img) => !img.complete)
-        .map((img) => new Promise((r) => img.addEventListener("load", r, { once: true }))),
+        .map(
+          (img) =>
+            new Promise((r) => img.addEventListener("load", r, { once: true })),
+        ),
     );
   });
 
-  await page.addStyleTag({ content: "astro-dev-toolbar { display: none !important }" });
+  await page.addStyleTag({
+    content: "astro-dev-toolbar { display: none !important }",
+  });
 
   await page.screenshot({ path: out, fullPage: true, animations: "disabled" });
   console.log(out);

@@ -1,11 +1,10 @@
 ---
 import { Image } from "astro:assets";
 import Layout from "@/layouts/Layout.astro";
-import SiteHeader from "@/components/SiteHeader.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
 import wordmark from "@/assets/laquintapata.webp";
-import fotoNati from "@/assets/foto_nati.webp";
-import fotoLina from "@/assets/foto_lina.webp";
+import fotoNati from "@/assets/about_us/foto_nati.webp";
+import fotoLina from "@/assets/about_us/foto_lina.webp";
 import burbujaNati from "@/assets/about_us/burbuja_nati.webp";
 import burbujaLina from "@/assets/about_us/burbuja_lina.webp";
 
@@ -18,7 +17,6 @@ const bios = {
 ---
 
 <Layout title="¿Quiénes Somos? | La Quinta Pata">
-  <SiteHeader />
   <main
     id="contenido"
     class="bg-blue min-h-dvh bg-[repeating-linear-gradient(0deg,rgba(255,255,255,0.08)_0_1px,transparent_1px_40px),repeating-linear-gradient(90deg,rgba(255,255,255,0.08)_0_1px,transparent_1px_40px)] pt-50 pb-20 md:pt-48"
@@ -36,7 +34,7 @@ const bios = {
         />
 
         <h1
-          class="text-section md:text-section-lg col-start-1 col-end-5 text-center leading-none font-normal text-white md:col-end-9 lg:col-start-3 lg:col-end-11"
+          class="text-section font-display md:text-section-lg col-start-1 col-end-5 text-center leading-none font-normal text-white md:col-end-9 lg:col-start-3 lg:col-end-11"
         >
           Somos La Quinta Pata, un archivo digital dedicado a la silla Rimax en
           Colombia.
@@ -44,7 +42,7 @@ const bios = {
       </div>
 
       <div
-        class="col-start-1 col-end-5 flex flex-col items-center justify-center gap-32 md:col-end-9 md:flex-row md:gap-8 lg:col-start-4 lg:col-end-10"
+        class="col-start-1 col-end-5 flex flex-col items-center justify-center gap-32 pt-12 md:col-end-9 md:flex-row md:gap-8 lg:col-start-4 lg:col-end-10"
       >
         <div class="flex flex-col items-start gap-2">
           <div class="relative">

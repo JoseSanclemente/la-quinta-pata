@@ -16,6 +16,7 @@ const isQuienesSomos = path === "/quienes-somos";
 
 <header
   id="site-header"
+  data-keep-nav={isQuienesSomos ? "" : undefined}
   class="page-grid fixed inset-x-0 top-0 z-20 items-center gap-y-3 py-5"
 >
   <a
@@ -28,10 +29,7 @@ const isQuienesSomos = path === "/quienes-somos";
       alt="La Quinta Pata — Archivo digital"
       widths={[256, 512]}
       sizes="(min-width: 768px) 228px, 80px"
-      class:list={[
-        "mx-auto h-24 w-auto md:mx-0 md:h-24",
-        onBlue && "brightness-0 invert",
-      ]}
+      class="logo-mark mx-auto h-24 w-auto scale-100 brightness-0 invert transition-transform duration-200 select-none hover:scale-105 md:mx-0 md:h-24"
     />
   </a>
 
@@ -62,7 +60,7 @@ const isQuienesSomos = path === "/quienes-somos";
       { threshold: 0.5 },
     ).observe(hero);
   }
-  if (footer && header) {
+  if (footer && header && !header.hasAttribute("data-keep-nav")) {
     new IntersectionObserver(
       ([entry]) => header.classList.toggle("at-bottom", entry.isIntersecting),
       { threshold: 0 },

@@ -327,7 +327,7 @@ export default function AddMemoryForm({
             />
           </div>
 
-          <fieldset className="m-0 grid grid-cols-6 gap-2 border-none p-0">
+          <fieldset className="m-0 grid grid-cols-6 gap-2 rounded-xl border-none bg-[#E6EFFE] p-4">
             <legend className="sr-only">Color del círculo</legend>
             {CHAIR_COLORS.map((c) => (
               <label

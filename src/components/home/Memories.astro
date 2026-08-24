@@ -54,16 +54,14 @@ const bottomRow = photos.slice(half).map((image, i) => ({
   <div class="relative z-10 flex flex-col gap-12 md:gap-16 lg:gap-28">
     <div class="page-grid">
       <h2
-        class="text-section md:text-section-lg col-start-1 col-end-5 text-center leading-tight font-extrabold text-white md:col-end-9 lg:col-start-2 lg:col-end-12"
+        class="text-section font-display md:text-section-lg col-start-1 col-end-5 text-center leading-tight font-extrabold text-white md:col-end-9 lg:col-start-2 lg:col-end-12"
       >
         Recuerdos y anécdotas
       </h2>
     </div>
 
     <div class="group relative overflow-hidden">
-      <div
-        class="marquee-track animate-marquee flex w-max pt-8 group-hover:[animation-play-state:paused]"
-      >
+      <div class="marquee-track animate-marquee flex w-max pt-8">
         {
           [false, true].map((clone) => (
             <div class="contents" aria-hidden={clone ? "true" : undefined}>
@@ -103,9 +101,7 @@ const bottomRow = photos.slice(half).map((image, i) => ({
     </div>
 
     <div class="group relative overflow-hidden">
-      <div
-        class="marquee-track animate-marquee-reverse flex w-max pt-8 group-hover:[animation-play-state:paused]"
-      >
+      <div class="marquee-track animate-marquee-reverse flex w-max pt-8">
         {
           [false, true].map((clone) => (
             <div class="contents" aria-hidden={clone ? "true" : undefined}>

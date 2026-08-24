@@ -3,9 +3,18 @@
 @import "./map-detail.css";
 @import "./map-tooltip.css";
 
+@font-face {
+  font-family: "Intro Rust";
+  src: url("@/assets/fonts/IntroRust.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --font-sans:
     "Nunito Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Intro Rust", var(--font-sans);
 
   --text-xs: 0.726rem;
   --text-sm: 0.852rem;
@@ -77,6 +86,16 @@
 #site-header.at-bottom nav {
   opacity: 0;
   pointer-events: none;
+}
+
+.logo-mark {
+  transition:
+    filter 300ms ease,
+    transform 200ms;
+}
+
+#site-header.at-bottom .logo-mark {
+  filter: none;
 }
 
 :root {

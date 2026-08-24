@@ -1,6 +1,5 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import SiteHeader from "@/components/SiteHeader.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
 
 interface Props {
@@ -13,7 +12,6 @@ const { title, heading, updated } = Astro.props;
 ---
 
 <Layout title={title}>
-  <SiteHeader />
   <main id="contenido" class="bg-blue min-h-dvh pt-40 pb-24 md:pt-48">
     <div class="page-grid gap-y-8">
       <header

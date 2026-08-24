@@ -8,7 +8,25 @@ import PaperEdge from "@/components/PaperEdge.astro";
 
 <section
   aria-labelledby="hallazgo-title"
-  class="bg-blue relative overflow-hidden pt-32 pb-24 md:pt-40 md:pb-32 lg:pt-52 lg:pb-40"
+  class="bg-blue lg: relative overflow-hidden py-32"
 >
   <PaperEdge class="bg-magenta top-0 z-10" />
+
+  <div class="page-grid relative z-10 lg:pt-32">
+    <div
+      class="col-start-1 col-end-5 flex flex-col items-center space-y-4 text-center md:col-start-2 md:col-end-8 lg:col-start-3 lg:col-end-11"
+    >
+      <h2
+        id="hallazgo-title"
+        class="text-section md:text-section-lg font-display max-w-sm leading-tight font-normal text-white md:max-w-2xl"
+      >
+        Pero un día, decidimos ir más lento y prestarle algo de atención
+      </h2>
+      <p
+        class="max-w-sm text-base leading-relaxed text-white md:max-w-xl lg:text-lg"
+      >
+        Y nunca nos imaginamos lo que encontraríamos
+      </p>
+    </div>
+  </div>
 </section>
