@@ -2,7 +2,6 @@
 import { Image } from "astro:assets";
 import Layout from "@/layouts/Layout.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
-import wordmark from "@/assets/laquintapata.webp";
 import fotoNati from "@/assets/about_us/foto_nati.webp";
 import fotoLina from "@/assets/about_us/foto_lina.webp";
 import burbujaNati from "@/assets/about_us/burbuja_nati.webp";
@@ -23,22 +22,61 @@ const bios = {
   >
     <div class="page-grid gap-y-32 md:gap-y-14">
       <div
-        class="col-start-1 col-end-5 flex flex-col items-center gap-8 md:col-end-9 lg:col-start-3 lg:col-end-11"
+        class="bg-paper text-blue col-start-1 col-end-5 flex flex-col gap-6 rounded-xl p-6 md:col-end-9 md:p-10 lg:col-start-2 lg:col-end-12"
       >
-        <Image
-          src={wordmark}
-          alt="La Quinta Pata — Archivo digital"
-          widths={[320, 640]}
-          sizes="(min-width: 768px) 480px, 320px"
-          class="col-start-1 col-end-5 mx-auto w-72 md:col-start-3 md:col-end-7 md:w-96 lg:col-start-4 lg:col-end-10"
-        />
-
-        <h1
-          class="text-section font-display md:text-section-lg col-start-1 col-end-5 text-center leading-none font-normal text-white md:col-end-9 lg:col-start-3 lg:col-end-11"
-        >
-          Somos La Quinta Pata, un archivo digital dedicado a la silla Rimax en
-          Colombia.
+        <h1 class="text-section font-display md:text-section-lg leading-none font-normal">
+          ¡Quiubo, Hola, Hello!
         </h1>
+        <p class="font-bold">
+          Bienvenidx a La Quinta Pata. Pasá, sentate te cuento algo
+        </p>
+        <p>
+          La Rimax es de esas cosas que uno ve todos los días y ni les para
+          bolas. Está en la terraza, en la tienda, en el cumpleaños, en el patio
+          y hasta en la velorio cogiendo airecito.
+        </p>
+        <p>
+          Somos La Quinta Pata, un archivo digital dedicado a la silla Rimax en
+          Colombia. Nos dio por ponerle cuidado a esa silla que ha estado ahí
+          toda la vida, acompañando conversaciones, celebraciones, trabajos y uno
+          que otro chismecito.
+        </p>
+        <p>
+          Nos interesan esos cuentos que casi nunca llegan a los archivos ni a
+          los museos. Porque detrás de una Rimax hay fotos, recuerdos,
+          anécdotas que cuentan algo sobre quién sos y la forma en que habitas
+          el mundo.
+        </p>
+        <h2 class="font-display mt-6 text-2xl leading-none font-normal md:text-3xl">
+          ¿Qué es La Quinta Pata?
+        </h2>
+        <p>
+          La Quinta Pata es un archivo digital que recoge, conserva y comparte
+          las historias que se han tejido alrededor de la silla Rimax en
+          Colombia.
+        </p>
+        <p class="font-bold">Pero, ¿por qué La Quinta Pata?</p>
+        <p>
+          Porque buscamos encontrar eso que no siempre se ve a primera vista. La
+          silla tiene cuatro patas, pero detrás de ella hay muchas más:
+          historias, personas, lugares, encuentros, recuerdos y experiencias que
+          también hacen parte de lo que somos; la pata perdida.
+        </p>
+        <p>
+          La “quinta pata” es entonces esa otra mirada que proponemos: detenernos
+          en un objeto cotidiano para descubrir todo lo que puede contar.
+        </p>
+        <p>
+          Este archivo reúne fotografías, relatos, recuerdos, anécdotas y voces
+          que normalmente no llegan a los archivos ni a los museos. Historias que
+          viven en las casas, los barrios, las reuniones y en la memoria de
+          quienes las han vivido.
+        </p>
+        <p>
+          Somos un espacio para mirar lo cotidiano con otros ojos y construir,
+          entre todos, un archivo de recuerdos alrededor de una silla que nos
+          resulta familiar.
+        </p>
       </div>
 
       <div

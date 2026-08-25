@@ -13,17 +13,17 @@ import treeUrl from "@/assets/map_assets/10_arbol.webp";
 import tree2Url from "@/assets/map_assets/11_arbol_2.webp";
 
 const DECORATIONS = [
-  { src: palmTreeUrl.src, x: 22, y: 64, w: "clamp(13rem, 6vw, 18rem)" },
-  { src: treeUrl.src, x: 71, y: 38, w: "clamp(13rem, 6vw, 18rem)" },
-  { src: palmTreeUrl.src, x: 8, y: 20, w: "clamp(10rem, 5vw, 14rem)" },
-  { src: treeUrl.src, x: 90, y: 12, w: "clamp(10rem, 5vw, 14rem)" },
-  { src: palmTreeUrl.src, x: 40, y: 85, w: "clamp(11rem, 5.5vw, 16rem)" },
-  { src: treeUrl.src, x: 15, y: 90, w: "clamp(10rem, 5vw, 14rem)" },
-  { src: palmTreeUrl.src, x: 82, y: 70, w: "clamp(11rem, 5.5vw, 16rem)" },
-  { src: treeUrl.src, x: 55, y: 8, w: "clamp(10rem, 5vw, 14rem)" },
-  { src: tree2Url.src, x: 65, y: 60, w: "clamp(11rem, 5.5vw, 16rem)" },
-  { src: tree2Url.src, x: 22, y: 45, w: "clamp(10rem, 5vw, 14rem)" },
-  { src: tree2Url.src, x: 95, y: 90, w: "clamp(10rem, 5vw, 14rem)" },
+  { src: palmTreeUrl.src, x: 22, y: 64, w: "clamp(7rem, 6vw, 18rem)" },
+  { src: treeUrl.src, x: 71, y: 38, w: "clamp(7rem, 6vw, 18rem)" },
+  { src: palmTreeUrl.src, x: 8, y: 20, w: "clamp(5.5rem, 5vw, 14rem)" },
+  { src: treeUrl.src, x: 90, y: 12, w: "clamp(5.5rem, 5vw, 14rem)" },
+  { src: palmTreeUrl.src, x: 40, y: 85, w: "clamp(6rem, 5.5vw, 16rem)" },
+  { src: treeUrl.src, x: 15, y: 90, w: "clamp(5.5rem, 5vw, 14rem)" },
+  { src: palmTreeUrl.src, x: 82, y: 70, w: "clamp(6rem, 5.5vw, 16rem)" },
+  { src: treeUrl.src, x: 55, y: 8, w: "clamp(5.5rem, 5vw, 14rem)" },
+  { src: tree2Url.src, x: 65, y: 60, w: "clamp(6rem, 5.5vw, 16rem)" },
+  { src: tree2Url.src, x: 22, y: 45, w: "clamp(5.5rem, 5vw, 14rem)" },
+  { src: tree2Url.src, x: 95, y: 90, w: "clamp(5.5rem, 5vw, 14rem)" },
 ] as const;
 import type { Chair } from "@/lib/types";
 
@@ -412,7 +412,7 @@ export default function MapCanvas() {
           type="button"
           onClick={() => setSidebarOpen(true)}
           aria-label="Crear memoria"
-          className="group relative flex h-40 w-40 scale-100 cursor-pointer items-center justify-center transition-transform duration-200 hover:scale-105 md:h-48 md:w-48"
+          className="group relative flex h-34 w-34 scale-100 cursor-pointer items-center justify-center transition-transform duration-200 hover:scale-105 md:h-40 md:w-40"
         >
           <svg
             viewBox="0 0 100 100"
@@ -423,7 +423,7 @@ export default function MapCanvas() {
           </svg>
           <div
             aria-hidden="true"
-            className="relative h-18 w-18 bg-white md:h-22 md:w-22"
+            className="relative h-15 w-15 bg-white md:h-18 md:w-18"
             style={{
               WebkitMask: `url(${chairUrl.src}) center / contain no-repeat`,
               mask: `url(${chairUrl.src}) center / contain no-repeat`,
