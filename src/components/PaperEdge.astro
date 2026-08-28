@@ -19,7 +19,7 @@ const layer = `url(${mask.src}) center / 100% 100% no-repeat`;
 
 <div
   aria-hidden="true"
-  class:list={["pointer-events-none absolute inset-x-0 -scale-y-100", className]}
+  class:list={["pointer-events-none absolute inset-x-0", className]}
   style={`aspect-ratio: ${paperEdge.width} / ${paperEdge.height};
           -webkit-mask: ${layer};
           mask: ${layer}, ${layer}, ${layer};

@@ -38,23 +38,21 @@ const bottomRow = photos.slice(half).map((image, i) => ({
 <section
   class="bg-magenta relative overflow-hidden pt-28 pb-32 md:pt-32 md:pb-40 lg:pt-72"
 >
-  <PaperEdge class="bg-blue top-0 z-10" />
-
   <MaskedShape
     image={star}
     width={1400}
-    class="star-spin bg-orange/60 absolute top-10 left-1/2 w-[170%] -translate-x-1/2 md:w-[125%] lg:top-40 lg:w-2/3"
+    class="star-spin bg-orange/60 absolute top-15 w-2/3"
   />
   <MaskedShape
     image={star}
     width={1400}
-    class="star-spin bg-orange/60 absolute bottom-0 left-1/2 w-[170%] -translate-x-1/4 md:w-[125%] lg:bottom-30 lg:w-2/3"
+    class="star-spin bg-orange/60 absolute bottom-50 left-1/3 w-2/3"
   />
 
-  <div class="relative z-10 flex flex-col gap-12 md:gap-16 lg:gap-28">
+  <div class="relative space-y-30 pt-10">
     <div class="page-grid">
       <h2
-        class="text-section font-display md:text-section-lg col-start-1 col-end-5 text-center leading-tight font-extrabold text-white md:col-end-9 lg:col-start-2 lg:col-end-12"
+        class="text-section font-display md:text-section-lg col-start-1 col-end-5 text-center leading-tight font-extrabold text-white md:col-end-9 lg:col-span-12"
       >
         Recuerdos y anécdotas
       </h2>
@@ -90,9 +88,9 @@ const bottomRow = photos.slice(half).map((image, i) => ({
 
     <div class="page-grid">
       <p
-        class="col-start-1 col-end-5 text-center text-base leading-snug text-white md:col-start-2 md:col-end-8 md:text-base lg:col-start-4 lg:col-end-10 lg:text-xl"
+        class="col-start-1 col-end-5 text-center text-base leading-snug text-white md:col-start-2 md:col-end-8 md:text-base lg:col-start-4 lg:col-end-10 lg:text-2xl"
       >
-        Memorias que dicen algo sobre <strong class="font-extrabold italic"
+        Memorias que cuentan algo sobre <strong class="font-extrabold italic"
           >quiénes somos</strong
         > y la forma en que <strong class="font-extrabold italic"
           >vivimos el mundo.</strong

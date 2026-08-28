@@ -107,7 +107,7 @@
 :root {
   --gutter: 1.5rem;
   --grid-gap: 1rem;
-  --content-max: 90rem;
+  --content-max: 100rem;
 }
 
 @media (width >= 48rem) {
@@ -120,7 +120,7 @@
 @media (width >= 64rem) {
   :root {
     --gutter: 4rem;
-    --grid-gap: 1.5rem;
+    --grid-gap: 2rem;
   }
 }
 
@@ -131,7 +131,7 @@
   width: 100%;
   max-width: var(--content-max);
   margin-inline: auto;
-  padding-inline: var(--gutter);
+  padding-inline: 160px;
 
   @media (width >= 48rem) {
     grid-template-columns: repeat(8, minmax(0, 1fr));
@@ -140,6 +140,21 @@
   @media (width >= 64rem) {
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
+}
+
+@utility hatch-grid {
+  background-image:
+    repeating-linear-gradient(
+      var(--hatch-angle-a, 45deg),
+      var(--hatch-color, #fc85034d) 0 2px,
+      transparent 2px var(--hatch-size, 40px)
+    ),
+    repeating-linear-gradient(
+      var(--hatch-angle-b, 135deg),
+      var(--hatch-color, #fc85034d) 0 2px,
+      transparent 2px var(--hatch-size, 40px)
+    ),
+    var(--hatch-under, none);
 }
 
 @utility page-gutter {

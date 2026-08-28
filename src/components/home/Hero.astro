@@ -4,10 +4,11 @@ import PaperEdge from "@/components/PaperEdge.astro";
 import Button from "@/components/Button";
 import heroLogo from "@/assets/Hero_logo.webp";
 import heroBg from "@/assets/fondo_hero.webp";
+import Banner from "@/components/Banner.astro";
 ---
 
 <section id="hero" class="bg-neutral relative min-h-dvh">
-  <div class="absolute inset-0 overflow-hidden">
+  <div class="absolute inset-0">
     <Image
       src={heroBg}
       alt=""
@@ -18,14 +19,10 @@ import heroBg from "@/assets/fondo_hero.webp";
       fetchpriority="high"
       class="absolute inset-0 h-full w-full object-cover"
     />
-
-    <PaperEdge
-      class="bg-magenta bottom-0 z-10 scale-y-100! lg:translate-y-12"
-    />
   </div>
 
   <div class="relative z-10 flex min-h-dvh flex-col">
-    <div class="page-grid relative flex-1 content-center gap-y-6 pb-5 md:pb-32">
+    <div class="page-grid">
       <Image
         src={heroLogo}
         alt="La Quinta Pata, archivo digital"
@@ -34,7 +31,7 @@ import heroBg from "@/assets/fondo_hero.webp";
         loading="eager"
         fetchpriority="high"
         decoding="sync"
-        class="hero-logo col-start-1 col-end-5 h-[36vh] w-auto max-w-full justify-self-center object-contain md:col-end-9 md:h-[48vh] lg:col-end-13 lg:row-start-1 lg:h-auto lg:max-h-[45vh] lg:max-w-full lg:self-center"
+        class="hero-logo col-span-full max-h-1/2 self-center object-contain"
       />
 
       <nav

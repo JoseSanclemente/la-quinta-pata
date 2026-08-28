@@ -44,7 +44,7 @@
 
 @keyframes chair-slide {
   0% {
-    transform: translateX(-120vw) rotate(0deg);
+    transform: translateX(120vw) rotate(0deg);
     animation-timing-function: cubic-bezier(0.2, 0.55, 0.45, 0.9);
   }
   45% {
@@ -110,7 +110,6 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-logo,
   .chair-slide,
-  [data-reveal] .text-pop,
   .star-spin,
   .header-drop > * {
     animation: none;

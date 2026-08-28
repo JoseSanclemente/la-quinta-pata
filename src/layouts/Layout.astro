@@ -39,13 +39,6 @@ const ogImage = new URL(image, Astro.url).href;
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body class:list={["relative m-0", lockScroll && "lock-scroll"]}>
-    {
-      !lockScroll && (
-        <a href="#contenido" class="skip-link">
-          Saltar al contenido
-        </a>
-      )
-    }
     {!lockScroll && <SiteHeader />}
     <div id="smooth-wrapper">
       <div id="smooth-content">

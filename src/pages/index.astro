@@ -5,6 +5,11 @@ import RimaxIntro from "@/components/home/RimaxIntro.astro";
 import Discovery from "@/components/home/Discovery.astro";
 import Memories from "@/components/home/Memories.astro";
 import Closing from "@/components/home/Closing.astro";
+import Banner from "@/components/Banner.astro";
+import { Image } from "astro:assets";
+import leftAssets from "@/assets/Assets_Left.png";
+import rightAssets from "@/assets/Assets_Right.png";
+import SiteFooter from "@/components/SiteFooter.astro";
 
 export const prerender = true;
 ---
@@ -12,9 +17,27 @@ export const prerender = true;
 <Layout title="La Quinta Pata — Archivo digital de la silla Rimax">
   <main id="contenido">
     <Hero />
+
+    <Banner class="text-blue top-200 text-center">
+      <Image src={leftAssets} alt="" class="col-span-4" />
+      <div class="col-span-4">
+        <h1 class="mb-4 text-5xl font-extrabold">¡Quiubo, Hola, Hello!</h1>
+        <p class="text-lg">
+          Bienvenidx a La Quinta Pata. Pasá y conocé el primer archivo digital
+          de la <b>silla Rimax.</b>
+        </p>
+      </div>
+      <Image class="col-span-4" src={rightAssets} alt="" />
+    </Banner>
+
     <RimaxIntro />
+
     <Discovery />
+
     <Memories />
+
     <Closing />
+
+    <SiteFooter />
   </main>
 </Layout>

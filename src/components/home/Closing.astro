@@ -1,44 +1,30 @@
 ---
 import { Image } from "astro:assets";
-import PaperEdge from "@/components/PaperEdge.astro";
-import SiteFooter from "@/components/SiteFooter.astro";
-import wordmark from "@/assets/laquintapata.webp";
-import pinkChair from "@/assets/chair/pink_chair.webp";
+import wordmark from "@/assets/white_closing_logo.png";
+import pinkChair from "@/assets/silla_rota.png";
 import Button from "@/components/Button.tsx";
+import Banner from "@/components/Banner.astro";
+import closingBg from "@/assets/Closing_Section.png";
 ---
 
-<section aria-label="La Quinta Pata" class="bg-blue relative overflow-hidden">
-  <div class="absolute inset-x-0 top-0" aria-hidden="true">
-    <div class="bg-neutral relative h-[20vh] w-full md:h-[40vh]">
-      <PaperEdge class="bg-magenta top-0" />
-      <PaperEdge class="bg-neutral top-full -translate-y-px" />
-    </div>
-  </div>
+<section
+  aria-label="La Quinta Pata"
+  class="bg-blue hatch-grid relative"
+  style={`--hatch-angle-a: 0deg; --hatch-angle-b: 90deg; --hatch-color: #ffffff26; --hatch-under: url(${closingBg.src}); background-size: auto, auto, cover; background-position: 0 0, 0 0, top; background-repeat: repeat, repeat, no-repeat;`}
+>
+  <div class="relative">
+    <Banner class="text-blue -top-26 z-50 text-center">
+      <div class="col-start-4 col-end-10">
+        <p class="text-2xl">
+          Porque aunque el tiempo nos deje tirados, <b
+            >esos momentos siempre estarán con nosotros.
+          </b>
+        </p>
+      </div>
+    </Banner>
 
-  <div class="relative z-10">
-    <div class="page-grid pt-10 md:pt-60">
-      <p
-        class="text-blue md:text-lead col-start-1 col-end-5 text-center text-sm leading-snug md:col-start-2 md:col-end-8 lg:col-start-3 lg:col-end-11"
-      >
-        Porque aunque el tiempo nos deje tirados, <strong
-          class="font-extrabold italic"
-          >esos momentos siempre estarán con nosotros.</strong
-        >
-      </p>
-    </div>
-
-    <div class="page-grid items-center gap-y-12 pt-[18vh] pb-20 md:pt-[25vh]">
-      <Image
-        src={pinkChair}
-        alt="Silla Rimax fucsia"
-        widths={[320, 640, pinkChair.width]}
-        sizes="(min-width: 1024px) 32vw, (min-width: 768px) 34vw, 44vw"
-        class="col-start-1 col-end-5 w-full object-contain md:col-end-4 lg:col-end-6"
-      />
-
-      <div
-        class="col-start-1 col-end-5 text-center md:col-start-4 md:col-end-9 lg:col-start-6 lg:col-end-12"
-      >
+    <div class="page-grid items-center gap-y-12 pt-110 pb-20">
+      <div class="col-start-5 col-end-9 space-y-12 text-center">
         <h2>
           <Image
             src={wordmark}
@@ -48,11 +34,16 @@ import Button from "@/components/Button.tsx";
             class="mx-auto mb-8 w-full"
           />
         </h2>
+        <Image
+          src={pinkChair}
+          alt="Silla Rimax blanca rota"
+          widths={[320, 640, pinkChair.width]}
+          sizes="(min-width: 1024px) 32vw, (min-width: 768px) 34vw, 44vw"
+          class="w-full object-contain"
+        />
 
-        <Button href="/memorias" variant="secondary"> Dejá tu recuerdo </Button>
+        <Button href="/memorias" variant="secondary">Deja tu recuerdo</Button>
       </div>
     </div>
   </div>
-
-  <SiteFooter />
 </section>

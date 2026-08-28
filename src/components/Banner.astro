@@ -1,0 +1,24 @@
+---
+import { Image } from "astro:assets";
+import banner from "@/assets/White_Banner.png";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={["absolute z-10 flex h-full max-h-137.5 w-full", className]}>
+  <Image
+    src={banner}
+    alt=""
+    aria-hidden="true"
+    widths={[768, 1440, banner.width]}
+    sizes="100vw"
+    class="absolute inset-0 h-full w-full object-fill"
+  />
+  <div class="page-grid z-11 items-center">
+    <slot />
+  </div>
+</div>

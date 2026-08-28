@@ -2,31 +2,27 @@
 import { Image } from "astro:assets";
 import purpleChair from "@/assets/purple_chair.webp";
 import boxes from "@/assets/boxes.webp";
-import palmTree from "@/assets/palm_tree.webp";
+import palmTree from "@/assets/Palma_Silla.png";
 import PaperEdge from "@/components/PaperEdge.astro";
 ---
 
-<section
-  aria-labelledby="hallazgo-title"
-  class="bg-blue lg: relative overflow-hidden py-32"
->
-  <PaperEdge class="bg-magenta top-0 z-10" />
-
-  <div class="page-grid relative z-10 lg:pt-32">
-    <div
-      class="col-start-1 col-end-5 flex flex-col items-center space-y-4 text-center md:col-start-2 md:col-end-8 lg:col-start-3 lg:col-end-11"
-    >
-      <h2
-        id="hallazgo-title"
-        class="text-section md:text-section-lg font-display max-w-sm leading-tight font-normal text-white md:max-w-2xl"
-      >
-        Pero un día, decidimos ir más lento y prestarle algo de atención
-      </h2>
-      <p
-        class="max-w-sm text-base leading-relaxed text-white md:max-w-xl lg:text-lg"
-      >
-        Y nunca nos imaginamos lo que encontraríamos
+<section class="bg-blue relative flex min-h-[70vh]">
+  <PaperEdge class="bg-blue -top-44 z-10" />
+  <div class="page-grid items-center">
+    <div class="relative col-span-5 space-y-8 text-center text-white">
+      <p class="text-3xl">
+        Pero un día, decidimos ir más lento y prestarle algo de atención.
+      </p>
+      <p class="font-display text-3xl">
+        Y encontramos algo que no pensábamos que hubiera...
       </p>
     </div>
+
+    <Image
+      src={palmTree}
+      alt=""
+      class="absolute inset-x-1/2 -bottom-45 z-15 max-w-2/4"
+    />
   </div>
+  <PaperEdge class="bg-blue -bottom-32 z-10 scale-y-[-1]" />
 </section>

@@ -19,12 +19,12 @@ const hasHero = path === "/";
   id="site-header"
   data-keep-nav={isQuienesSomos ? "" : undefined}
   data-hero={hasHero ? "" : undefined}
-  class="page-grid fixed inset-x-0 top-0 z-20 items-center gap-y-3 py-5"
+  class="page-grid fixed inset-x-0 z-20"
 >
   <a
     href="/"
     aria-label="La Quinta Pata, inicio"
-    class="logo-link col-start-1 col-end-5 rounded-md transition-opacity hover:opacity-80 md:col-start-1 lg:col-end-5"
+    class="logo-link col-span-6 rounded-md transition-opacity"
   >
     <Image
       src={logo}
@@ -37,7 +37,7 @@ const hasHero = path === "/";
 
   <nav
     aria-label="Principal"
-    class="col-start-1 col-end-5 [display:none] items-center justify-between gap-x-4 gap-y-2 header-drop transition-opacity duration-300 md:col-start-6 md:col-end-9 md:[display:flex] md:justify-end md:gap-x-8 lg:col-start-9 lg:col-end-13"
+    class="header-drop col-span-6 [display:none] items-center justify-end gap-x-6 transition-opacity duration-300 md:[display:flex]"
   >
     {
       !isQuienesSomos && (
@@ -47,7 +47,7 @@ const hasHero = path === "/";
       )
     }
     <Button href="/memorias" variant={onBlue ? "secondary" : "primary"}>
-      Dejá tu recuerdo
+      Deja tu recuerdo
     </Button>
   </nav>
 </header>

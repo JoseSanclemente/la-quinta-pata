@@ -5,23 +5,20 @@ import TapedPhoto from "@/components/TapedPhoto.astro";
 import star from "@/assets/blue_star.webp";
 import chair from "@/assets/chair/yellow_chair.webp";
 import chairPhoto from "@/assets/yellow_chair_photo.webp";
+import boxes from "@/assets/boxes.webp";
 ---
 
-<section
-  class="bg-magenta relative overflow-hidden py-25 md:pt-[10vw] md:pb-24 lg:pb-30"
->
-  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-    <MaskedShape
-      image={star}
-      width={1000}
-      class="star-spin bg-orange/60 absolute top-65 -left-7.5 w-[112%] md:top-[25%] md:left-[15%] md:w-[70%] lg:top-[25%] lg:left-[-10%]"
-    />
-  </div>
+<section class="bg-magenta hatch-grid relative overflow-hidden pt-120 pb-60">
+  <MaskedShape
+    image={star}
+    width={1000}
+    class="star-spin bg-blue absolute bottom-50 left-50 w-1/2"
+  />
 
-  <div class="page-grid relative z-10 gap-y-12 md:items-center">
+  <div class="page-grid items-center">
     <div
       data-reveal
-      class="col-start-1 col-end-5 flex flex-col items-center space-y-4 md:col-end-9 lg:col-end-6"
+      class="z-10 col-start-1 col-end-6 row-start-1 flex flex-col items-center space-y-4"
     >
       <h2
         class="text-section md:text-section-lg max-w-sm leading-tight font-normal text-white md:max-w-xl"
@@ -31,10 +28,10 @@ import chairPhoto from "@/assets/yellow_chair_photo.webp";
         >
       </h2>
       <p
-        class="max-w-sm text-base leading-relaxed text-white md:max-w-xl md:text-base lg:text-lg"
+        class="max-w-sm text-base leading-relaxed text-white md:max-w-xl md:text-base lg:text-lg lg:leading-tight"
       >
-        Está en la terraza, en la tienda, en el cumpleaños, en el patio y hasta
-        en el velorio cogiendo airecito.
+        Está en la terraza, en la tienda, en el cumpleaños, en el patio y
+        acompaña incluso los momentos de despedida.
       </p>
 
       <Image
@@ -42,9 +39,15 @@ import chairPhoto from "@/assets/yellow_chair_photo.webp";
         alt="Silla Rimax amarilla"
         widths={[320, 640]}
         sizes="(min-width: 1024px) 320px, (min-width: 768px) 288px, 224px"
-        class="chair-slide w-56 md:w-72 lg:w-90"
+        class="chair-slide max-w-4/5 scale-x-[-1]"
       />
     </div>
+
+    <Image
+      src={boxes}
+      alt=""
+      class="z-20 col-start-3 col-end-7 row-start-1 translate-x-30 self-end"
+    />
 
     <TapedPhoto
       image={chairPhoto}
