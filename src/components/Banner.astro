@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import banner from "@/assets/White_Banner.png";
+import bannerMobile from "@/assets/White_Banner_Mobile.png";
 
 interface Props {
   class?: string;
@@ -9,15 +10,23 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<div class:list={["absolute z-10 flex h-full max-h-137.5 w-full", className]}>
-  <Image
-    src={banner}
-    alt=""
-    aria-hidden="true"
-    widths={[768, 1440, banner.width]}
-    sizes="100vw"
-    class="absolute inset-0 h-full w-full object-fill"
-  />
+<div
+  class:list={[
+    "absolute z-10 flex h-full max-h-43 w-full md:max-h-80 lg:max-h-137.5",
+    className,
+  ]}
+>
+  <picture class="absolute inset-0 h-full w-full">
+    <source media="(width < 40rem)" srcset={bannerMobile.src} />
+    <Image
+      src={banner}
+      alt=""
+      aria-hidden="true"
+      widths={[768, 1440, banner.width]}
+      sizes="100vw"
+      class="h-full w-full object-cover md:object-fill"
+    />
+  </picture>
   <div class="page-grid z-11 items-center">
     <slot />
   </div>

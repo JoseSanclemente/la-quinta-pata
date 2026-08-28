@@ -18,16 +18,28 @@ export const prerender = true;
   <main id="contenido">
     <Hero />
 
-    <Banner class="text-blue top-200 text-center">
-      <Image src={leftAssets} alt="" class="col-span-4" />
-      <div class="col-span-4">
-        <h1 class="mb-4 text-5xl font-extrabold">¡Quiubo, Hola, Hello!</h1>
-        <p class="text-lg">
+    <Banner
+      class="text-blue top-[16%] text-center sm:top-[13.8%] md:top-[13.5%] lg:top-[12%] xl:top-[11.3%]"
+    >
+      <Image
+        src={leftAssets}
+        alt=""
+        class="col-span-4 [display:none] lg:[display:block]"
+      />
+      <div class="col-span-4 md:col-start-3 md:col-end-7 lg:col-span-4">
+        <h1 class="mb-1 text-2xl font-extrabold lg:mb-4 lg:text-5xl">
+          ¡Quiubo, Hola, Hello!
+        </h1>
+        <p class="text-base lg:text-lg">
           Bienvenidx a La Quinta Pata. Pasá y conocé el primer archivo digital
           de la <b>silla Rimax.</b>
         </p>
       </div>
-      <Image class="col-span-4" src={rightAssets} alt="" />
+      <Image
+        class="col-span-4 [display:none] lg:[display:block]"
+        src={rightAssets}
+        alt=""
+      />
     </Banner>
 
     <RimaxIntro />

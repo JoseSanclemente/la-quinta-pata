@@ -8,17 +8,19 @@ import chairPhoto from "@/assets/yellow_chair_photo.webp";
 import boxes from "@/assets/boxes.webp";
 ---
 
-<section class="bg-magenta hatch-grid relative overflow-hidden pt-120 pb-60">
+<section
+  class="bg-magenta hatch-grid relative overflow-hidden pt-50 pb-25 md:pt-70 lg:pt-120 lg:pb-60"
+>
   <MaskedShape
     image={star}
     width={1000}
-    class="star-spin bg-blue absolute bottom-50 left-50 w-1/2"
+    class="star-spin bg-blue absolute top-110 w-full lg:top-200 lg:left-50 lg:w-1/2"
   />
 
   <div class="page-grid items-center">
     <div
       data-reveal
-      class="z-10 col-start-1 col-end-6 row-start-1 flex flex-col items-center space-y-4"
+      class="z-10 col-start-1 col-end-5 row-start-1 flex flex-col items-center space-y-4 md:col-end-7 lg:col-end-6"
     >
       <h2
         class="text-section md:text-section-lg max-w-sm leading-tight font-normal text-white md:max-w-xl"
@@ -46,7 +48,7 @@ import boxes from "@/assets/boxes.webp";
     <Image
       src={boxes}
       alt=""
-      class="z-20 col-start-3 col-end-7 row-start-1 translate-x-30 self-end"
+      class="z-20 col-start-3 col-end-7 row-start-1 [display:none] translate-x-30 self-end lg:[display:block]"
     />
 
     <TapedPhoto
