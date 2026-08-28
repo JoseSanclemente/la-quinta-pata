@@ -1,15 +1,19 @@
 ---
 import { Image } from "astro:assets";
-import purpleChair from "@/assets/purple_chair.webp";
-import boxes from "@/assets/boxes.webp";
 import palmTree from "@/assets/Palma_Silla.png";
 import PaperEdge from "@/components/PaperEdge.astro";
 ---
 
-<section class="bg-blue relative flex min-h-[70vh]">
-  <PaperEdge class="bg-blue top-0 z-10 border-5 lg:-top-44" />
+<section
+  class="bg-blue relative flex overflow-x-clip pt-10 lg:min-h-[70vh] lg:pt-0"
+>
+  <PaperEdge
+    class="bg-blue top-[-5%] z-10 md:top-[-10%] lg:top-[-15%] xl:top-[-20%]"
+  />
   <div class="page-grid items-center">
-    <div class="relative col-span-5 space-y-8 text-center text-white">
+    <div
+      class="relative col-span-4 space-y-8 text-center text-white lg:col-span-7"
+    >
       <p class="text-3xl">
         Pero un día, decidimos ir más lento y prestarle algo de atención.
       </p>
@@ -21,8 +25,10 @@ import PaperEdge from "@/components/PaperEdge.astro";
     <Image
       src={palmTree}
       alt=""
-      class="absolute inset-x-1/2 -bottom-45 z-15 max-w-2/4"
+      class="relative inset-x-1/5 bottom-[-6%] z-15 col-span-4 scale-125 lg:inset-x-0 lg:bottom-[-20%] lg:col-end-13 lg:scale-250 xl:bottom-0 2xl:scale-200"
     />
   </div>
-  <PaperEdge class="bg-blue -bottom-32 z-10 scale-y-[-1]" />
+  <PaperEdge
+    class="bg-blue bottom-[-5%] z-10 scale-y-[-1] md:bottom-[-12.5%] lg:bottom-[-15%]"
+  />
 </section>
