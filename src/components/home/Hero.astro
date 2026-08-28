@@ -7,21 +7,12 @@ import heroBg from "@/assets/fondo_hero.webp";
 import Banner from "@/components/Banner.astro";
 ---
 
-<section id="hero" class="bg-neutral relative min-h-dvh">
-  <div class="absolute inset-0">
-    <Image
-      src={heroBg}
-      alt=""
-      aria-hidden="true"
-      widths={[768, 1440, 1920, heroBg.width]}
-      sizes="100vw"
-      loading="eager"
-      fetchpriority="high"
-      class="absolute inset-0 h-full w-full object-cover"
-    />
-  </div>
-
-  <div class="relative z-10 flex min-h-dvh flex-col">
+<section
+  id="hero"
+  class="bg-neutral relative min-h-dvh bg-cover bg-center bg-no-repeat"
+  style={`background-image: url(${heroBg.src})`}
+>
+  <div class="relative z-10 flex min-h-dvh">
     <div class="page-grid">
       <Image
         src={heroLogo}
@@ -31,12 +22,12 @@ import Banner from "@/components/Banner.astro";
         loading="eager"
         fetchpriority="high"
         decoding="sync"
-        class="hero-logo col-span-full max-h-1/2 self-center object-contain"
+        class="hero-logo col-span-full max-h-1/2 self-end object-contain md:self-center"
       />
 
       <nav
         aria-label="Principal"
-        class="col-start-1 col-end-5 flex flex-col items-center justify-between gap-x-4 gap-y-4 md:hidden"
+        class="col-start-1 col-end-5 flex flex-col items-center justify-center space-y-4 self-center md:hidden"
       >
         <Button href="/memorias" variant="primary" className="w-full">
           Dejá tu recuerdo

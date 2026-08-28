@@ -10,8 +10,8 @@ const disabledFill =
 
 const variantClasses: Record<Variant, string> = {
   primary: `inline-flex min-h-11 items-center justify-center rounded-xl bg-brand px-6 py-4 text-base font-bold whitespace-nowrap text-white hover:bg-brand-hover md:min-h-14 md:px-8 md:text-base ${disabledFill}`,
-  secondary: `inline-flex min-h-11 items-center justify-center rounded-xl bg-magenta px-6 text-base font-bold whitespace-nowrap text-white hover:opacity-90 md:min-h-14 md:px-8 md:text-lg ${disabledFill}`,
-  link: "inline-flex min-h-11 items-center justify-center rounded-xl bg-white/95 px-6 text-base font-bold whitespace-nowrap text-navy hover:bg-white md:min-h-14 md:px-8",
+  secondary: `inline-flex min-h-11 items-center justify-center rounded-xl bg-magenta px-6 py-4 text-base font-bold whitespace-nowrap text-white hover:opacity-90 md:min-h-14 md:px-8 md:text-lg ${disabledFill}`,
+  link: "inline-flex min-h-11 items-center justify-center rounded-xl bg-white/95 px-6 py-4 text-base font-bold whitespace-nowrap text-navy hover:bg-white md:min-h-14 md:px-8",
 };
 
 type BaseProps = {

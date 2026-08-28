@@ -24,7 +24,7 @@ const hasHero = path === "/";
   <a
     href="/"
     aria-label="La Quinta Pata, inicio"
-    class="logo-link col-span-6 rounded-md transition-opacity"
+    class="logo-link col-span-6 rounded-md transition-opacity md:col-span-4"
   >
     <Image
       src={logo}
@@ -37,7 +37,7 @@ const hasHero = path === "/";
 
   <nav
     aria-label="Principal"
-    class="header-drop col-span-6 [display:none] items-center justify-end gap-x-6 transition-opacity duration-300 md:[display:flex]"
+    class="header-drop col-span-4 [display:none] items-center justify-end gap-x-6 transition-opacity duration-300 md:[display:flex] lg:col-span-6"
   >
     {
       !isQuienesSomos && (
