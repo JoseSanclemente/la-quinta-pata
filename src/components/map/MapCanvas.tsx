@@ -54,7 +54,6 @@ const MAP_SRC = "/assets/map-3000.webp";
 const MAP_SRCSET = "/assets/map-1600.webp 1600w, /assets/map-3000.webp 3000w";
 const MAP_SIZES = "(width < 48rem) 400px, clamp(1100px, 260vw, 3000px)";
 const FALLBACK_SRC = "/assets/placeholder.svg";
-const INTRO_SEEN_KEY = "quinta-pata-intro-seen";
 const MARGIN = 200;
 const SMOOTH_MS = 500;
 const LOADER_MIN_MS = 900;
@@ -70,7 +69,7 @@ export default function MapCanvas() {
   const [detailCircle, setDetailCircle] = useState<Chair | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [introOpen, setIntroOpen] = useState(false);
+  const [introOpen, setIntroOpen] = useState(true);
   const [mapSrc, setMapSrc] = useState(MAP_SRC);
   const [ready, setReady] = useState(false);
   const [hasPanned, setHasPanned] = useState(false);
@@ -283,12 +282,7 @@ export default function MapCanvas() {
     updateVisible();
   }, [circles, updateVisible]);
 
-  useEffect(() => {
-    if (!localStorage.getItem(INTRO_SEEN_KEY)) setIntroOpen(true);
-  }, []);
-
   const closeIntro = useCallback(() => {
-    localStorage.setItem(INTRO_SEEN_KEY, "1");
     setIntroOpen(false);
   }, []);
 

@@ -44,7 +44,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     });
   }
 
-  await fetch("https://api.resend.com/emails", {
+  const mail = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${RESEND_API_KEY}`,
@@ -57,6 +57,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       text: `Se reportó una memoria y fue ocultada del mapa.\n\nID: ${data.id}\nTítulo: ${data.title ?? "Sin título"}\nAutor: ${data.author ?? "Anónimo"}`,
     }),
   }).catch(() => null);
+
+  if (!mail || !mail.ok) {
+    console.error("resend", mail?.status, await mail?.text());
+  }
 
   return new Response(JSON.stringify({ ok: true }), { status: 200 });
 };
