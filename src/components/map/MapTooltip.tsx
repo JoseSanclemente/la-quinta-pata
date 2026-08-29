@@ -80,7 +80,7 @@ export default function MapTooltip({ circle, onShowMore, onReported }: Props) {
       >
         <div
           id="tooltip-content"
-          className="relative max-h-[70vh] space-y-5 overflow-auto p-11"
+          className="relative max-h-[70vh] space-y-5 overflow-auto overscroll-contain p-11 touch-pan-y touch-pinch-zoom"
         >
           <p className="text-navy/85 text-sm">
             Memoria de {shown.author || "anónimo"}:

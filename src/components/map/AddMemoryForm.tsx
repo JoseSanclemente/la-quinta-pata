@@ -10,7 +10,7 @@ import VoicePlayer from "@/components/map/VoicePlayer";
 import type { Chair, MediaType } from "@/lib/types";
 
 const AVATAR_BG_ALPHA = "4d";
-const RECORDING_LIMIT_MS = 60_000;
+const RECORDING_LIMIT_MS = 120_000;
 
 function errorMessage(err: unknown): string {
   if (err instanceof Error) return err.message;
@@ -455,7 +455,7 @@ export default function AddMemoryForm({
               {MEDIA_OPTIONS.find((opt) => opt.type === "audio")?.icon}
             </span>
             <span className="font-semibold">
-              Detener ({recordedSeconds}s / 60s)
+              Detener ({recordedSeconds}s / 120s)
             </span>
           </button>
         )}

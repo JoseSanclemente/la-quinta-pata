@@ -168,6 +168,7 @@ export default function MapCanvas() {
       "touches" in e ? e.touches[0]! : e;
 
     const down = (e: MouseEvent | TouchEvent) => {
+      if ((e.target as Element | null)?.closest("#tooltip")) return;
       if (e.type === "mousedown") e.preventDefault();
       pan.current.panning = true;
       pan.current.moved = false;
