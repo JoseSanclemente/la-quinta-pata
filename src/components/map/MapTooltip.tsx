@@ -66,7 +66,7 @@ export default function MapTooltip({ circle, onShowMore, onReported }: Props) {
     <div
       id="tooltip"
       ref={tooltipRef}
-      className="z-40 max-w-[min(520px,calc(100vw-32px))]"
+      className="z-40 w-[min(520px,calc(100vw-32px))]"
       style={{
         left: `${shown.x}%`,
         top: `${shown.y}%`,
