@@ -29,6 +29,10 @@ const page = await browser.newPage({
   reducedMotion: "reduce",
 });
 
+await page.addInitScript(() =>
+  localStorage.setItem("quinta-pata-intro-seen", "1"),
+);
+
 try {
   const res = await page.goto(BASE + route, {
     waitUntil: "networkidle",

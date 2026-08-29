@@ -5,37 +5,12 @@ import chairUrl from "@/assets/chair/pink_chair.webp";
 import { CHAIR_COLORS } from "@/lib/chairColors";
 import { downscaleImage } from "@/lib/downscaleImage";
 import { insertChair, uploadMedia } from "@/lib/supabase.client";
+import { pickPosition } from "@/lib/pickPosition";
 import VoicePlayer from "@/components/map/VoicePlayer";
 import type { Chair, MediaType } from "@/lib/types";
 
 const AVATAR_BG_ALPHA = "4d";
 const RECORDING_LIMIT_MS = 60_000;
-const BORDER_MARGIN = 9;
-const MIN_GAP = 10;
-const PLACEMENT_ATTEMPTS = 40;
-
-function pickPosition(existing: Chair[]) {
-  let best = { x: 50, y: 50 };
-  let bestMinDist = -1;
-  for (let i = 0; i < PLACEMENT_ATTEMPTS; i++) {
-    const x = Math.round(
-      Math.random() * (100 - 2 * BORDER_MARGIN) + BORDER_MARGIN,
-    );
-    const y = Math.round(
-      Math.random() * (100 - 2 * BORDER_MARGIN) + BORDER_MARGIN,
-    );
-    const minDist = existing.reduce((min, c) => {
-      const d = Math.hypot(c.x - x, c.y - y);
-      return Math.min(min, d);
-    }, Infinity);
-    if (minDist >= MIN_GAP) return { x, y };
-    if (minDist > bestMinDist) {
-      bestMinDist = minDist;
-      best = { x, y };
-    }
-  }
-  return best;
-}
 
 function errorMessage(err: unknown): string {
   if (err instanceof Error) return err.message;

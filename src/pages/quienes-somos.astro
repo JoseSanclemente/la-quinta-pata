@@ -18,38 +18,18 @@ const bios = {
 <Layout title="¿Quiénes Somos? | La Quinta Pata">
   <main
     id="contenido"
-    class="bg-blue min-h-dvh bg-[repeating-linear-gradient(0deg,rgba(255,255,255,0.08)_0_1px,transparent_1px_40px),repeating-linear-gradient(90deg,rgba(255,255,255,0.08)_0_1px,transparent_1px_40px)] pt-50 pb-20 md:pt-48"
+    class="bg-blue hatch-grid min-h-dvh pt-40 pb-20"
+    style="--hatch-angle-a: 0deg; --hatch-angle-b: 90deg; --hatch-color: #ffffff26;"
   >
-    <div class="page-grid gap-y-32 md:gap-y-14">
+    <div class="page-grid space-y-12">
       <div
-        class="bg-paper text-blue col-start-1 col-end-5 flex flex-col gap-6 rounded-xl p-6 md:col-end-9 md:p-10 lg:col-start-2 lg:col-end-12"
+        class="bg-paper text-blue col-span-full flex flex-col gap-6 rounded-xl p-6"
       >
-        <h1 class="text-section font-display md:text-section-lg leading-none font-normal">
-          ¡Quiubo, Hola, Hello!
-        </h1>
-        <p class="font-bold">
-          Bienvenidx a La Quinta Pata. Pasá, sentate te cuento algo
-        </p>
-        <p>
-          La Rimax es de esas cosas que uno ve todos los días y ni les para
-          bolas. Está en la terraza, en la tienda, en el cumpleaños, en el patio
-          y hasta en la velorio cogiendo airecito.
-        </p>
-        <p>
-          Somos La Quinta Pata, un archivo digital dedicado a la silla Rimax en
-          Colombia. Nos dio por ponerle cuidado a esa silla que ha estado ahí
-          toda la vida, acompañando conversaciones, celebraciones, trabajos y uno
-          que otro chismecito.
-        </p>
-        <p>
-          Nos interesan esos cuentos que casi nunca llegan a los archivos ni a
-          los museos. Porque detrás de una Rimax hay fotos, recuerdos,
-          anécdotas que cuentan algo sobre quién sos y la forma en que habitas
-          el mundo.
-        </p>
-        <h2 class="font-display mt-6 text-2xl leading-none font-normal md:text-3xl">
+        <h1
+          class="font-display mt-6 text-2xl leading-none font-normal md:text-3xl"
+        >
           ¿Qué es La Quinta Pata?
-        </h2>
+        </h1>
         <p>
           La Quinta Pata es un archivo digital que recoge, conserva y comparte
           las historias que se han tejido alrededor de la silla Rimax en
@@ -63,13 +43,14 @@ const bios = {
           también hacen parte de lo que somos; la pata perdida.
         </p>
         <p>
-          La “quinta pata” es entonces esa otra mirada que proponemos: detenernos
-          en un objeto cotidiano para descubrir todo lo que puede contar.
+          La “quinta pata” es entonces esa otra mirada que proponemos:
+          detenernos en un objeto cotidiano para descubrir todo lo que puede
+          contar.
         </p>
         <p>
           Este archivo reúne fotografías, relatos, recuerdos, anécdotas y voces
-          que normalmente no llegan a los archivos ni a los museos. Historias que
-          viven en las casas, los barrios, las reuniones y en la memoria de
+          que normalmente no llegan a los archivos ni a los museos. Historias
+          que viven en las casas, los barrios, las reuniones y en la memoria de
           quienes las han vivido.
         </p>
         <p>
@@ -80,23 +61,25 @@ const bios = {
       </div>
 
       <div
-        class="col-start-1 col-end-5 flex flex-col items-center justify-center gap-32 pt-12 md:col-end-9 md:flex-row md:gap-8 lg:col-start-4 lg:col-end-10"
+        class="col-span-full flex flex-col gap-20 md:gap-12 lg:flex-row lg:items-center lg:justify-center"
       >
-        <div class="flex flex-col items-start gap-2">
-          <div class="relative">
+        <div class="flex flex-col gap-2">
+          <div
+            class="relative col-span-full flex flex-col items-center md:col-start-1 md:col-end-6"
+          >
             <Image
               src={burbujaNati}
               alt={bios.nati}
               widths={[320, 640]}
               sizes="260px"
-              class="absolute -top-24 left-0 z-10 w-48 md:-top-16 md:-left-40 md:w-64"
+              class="absolute -top-24 left-0 z-10 [display:none] w-48 md:-top-16 md:-left-40 md:w-64 lg:[display:block]"
             />
             <Image
               src={fotoNati}
               alt="Nati"
               widths={[320, 640]}
               sizes="(min-width: 768px) 280px, 240px"
-              class="relative w-60 md:w-70"
+              class="xl:w-full"
             />
           </div>
           <div>
@@ -104,29 +87,38 @@ const bios = {
             <p class="text-yellow">
               <span class="font-bold">Fundadora</span> - Diseñadora Gráfica
             </p>
+            <p class="text-base text-white lg:[display:none]">
+              {bios.nati}
+            </p>
           </div>
         </div>
-        <div class="flex flex-col items-start gap-2">
-          <div class="relative">
+
+        <div class="flex flex-col gap-2">
+          <div
+            class="relative col-span-full flex flex-col items-center md:col-start-7 md:col-end-13"
+          >
             <Image
               src={burbujaLina}
               alt={bios.lina}
               widths={[320, 640]}
               sizes="260px"
-              class="absolute -top-24 right-0 z-10 w-48 md:-top-16 md:-right-40 md:w-64"
+              class="absolute -top-24 right-0 z-10 [display:none] w-48 md:-top-16 md:-right-40 md:w-64 lg:[display:block]"
             />
             <Image
               src={fotoLina}
               alt="Lina"
               widths={[320, 640]}
               sizes="(min-width: 768px) 280px, 240px"
-              class="relative w-60 md:w-70"
+              class="xl:w-full"
             />
           </div>
           <div>
             <p class="font-bold text-white">LINA</p>
             <p class="text-yellow">
               <span class="font-bold">Fundadora</span> - Diseñadora Gráfica
+            </p>
+            <p class="text-base text-white lg:[display:none]">
+              {bios.lina}
             </p>
           </div>
         </div>

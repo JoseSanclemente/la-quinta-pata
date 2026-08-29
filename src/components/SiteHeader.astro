@@ -62,10 +62,4 @@ const hasHero = path === "/";
       { threshold: 0.5 },
     ).observe(hero);
   }
-  if (footer && header && !header.hasAttribute("data-keep-nav")) {
-    new IntersectionObserver(
-      ([entry]) => header.classList.toggle("at-bottom", entry.isIntersecting),
-      { threshold: 0 },
-    ).observe(footer);
-  }
 </script>

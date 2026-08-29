@@ -11,12 +11,19 @@ import logoUrl from "@/assets/logo.webp";
 import palmTreeUrl from "@/assets/palm_tree.webp";
 import treeUrl from "@/assets/map_assets/10_arbol.webp";
 import tree2Url from "@/assets/map_assets/11_arbol_2.webp";
+import busUrl from "@/assets/map_assets/bus.webp";
+import busRightUrl from "@/assets/map_assets/bus_right.webp";
+import boxesUrl from "@/assets/boxes.webp";
+import chiguiroUrl from "@/assets/map_assets/chiguiro.webp";
+import cartUrl from "@/assets/map_assets/11_carrito.webp";
+import iceCartUrl from "@/assets/map_assets/17_carritohelados.webp";
+import frailejonUrl from "@/assets/map_assets/frailejones.webp";
 
 const DECORATIONS = [
   { src: palmTreeUrl.src, x: 22, y: 64, w: "clamp(7rem, 6vw, 18rem)" },
   { src: treeUrl.src, x: 71, y: 38, w: "clamp(7rem, 6vw, 18rem)" },
-  { src: palmTreeUrl.src, x: 8, y: 20, w: "clamp(5.5rem, 5vw, 14rem)" },
-  { src: treeUrl.src, x: 90, y: 12, w: "clamp(5.5rem, 5vw, 14rem)" },
+  { src: palmTreeUrl.src, x: 20, y: 20, w: "clamp(5.5rem, 5vw, 14rem)" },
+  { src: treeUrl.src, x: 70, y: 12, w: "clamp(5.5rem, 5vw, 14rem)" },
   { src: palmTreeUrl.src, x: 40, y: 85, w: "clamp(6rem, 5.5vw, 16rem)" },
   { src: treeUrl.src, x: 15, y: 90, w: "clamp(5.5rem, 5vw, 14rem)" },
   { src: palmTreeUrl.src, x: 82, y: 70, w: "clamp(6rem, 5.5vw, 16rem)" },
@@ -24,6 +31,22 @@ const DECORATIONS = [
   { src: tree2Url.src, x: 65, y: 60, w: "clamp(6rem, 5.5vw, 16rem)" },
   { src: tree2Url.src, x: 22, y: 45, w: "clamp(5.5rem, 5vw, 14rem)" },
   { src: tree2Url.src, x: 95, y: 90, w: "clamp(5.5rem, 5vw, 14rem)" },
+  { src: frailejonUrl.src, x: 1, y: 7.5, w: "clamp(5rem, 5vw, 15rem)" },
+  { src: frailejonUrl.src, x: 31.5, y: 2.8, w: "clamp(5rem, 5vw, 15rem)" },
+  { src: frailejonUrl.src, x: 72, y: 0.5, w: "clamp(5rem, 5vw, 15rem)" },
+  { src: frailejonUrl.src, x: 94, y: 11, w: "clamp(5rem, 5vw, 15rem)" },
+  { src: busRightUrl.src, x: 0, y: 20.5, w: "clamp(7rem, 12.5vw, 22rem)" },
+  { src: busUrl.src, x: 90, y: 76, w: "clamp(7rem, 12.5vw, 22rem)" },
+  { src: cartUrl.src, x: 84.5, y: 33.5, w: "clamp(3.75rem, 5vw, 13rem)" },
+  { src: cartUrl.src, x: 21, y: 26, w: "clamp(3.75rem, 5vw, 13rem)" },
+  { src: cartUrl.src, x: 1, y: 61.5, w: "clamp(3.75rem, 5vw, 13rem)" },
+  { src: iceCartUrl.src, x: 68.5, y: 19.5, w: "clamp(3.75rem, 5vw, 13rem)" },
+  { src: iceCartUrl.src, x: 84.5, y: 55.5, w: "clamp(3.75rem, 5vw, 13rem)" },
+  { src: iceCartUrl.src, x: 12.5, y: 77.5, w: "clamp(3.75rem, 5vw, 13rem)" },
+  { src: boxesUrl.src, x: 36, y: 59, w: "clamp(2.75rem, 3.75vw, 10rem)" },
+  { src: boxesUrl.src, x: 90, y: 91.5, w: "clamp(2.75rem, 3.75vw, 10rem)" },
+  { src: chiguiroUrl.src, x: 87.5, y: 23, w: "clamp(1.75rem, 2.25vw, 6rem)" },
+  { src: chiguiroUrl.src, x: 8, y: 57, w: "clamp(1.75rem, 2.25vw, 6rem)" },
 ] as const;
 import type { Chair } from "@/lib/types";
 
@@ -341,6 +364,7 @@ export default function MapCanvas() {
               key={i}
               src={d.src}
               alt=""
+              data-decoration
               draggable={false}
               className="pointer-events-none absolute h-auto origin-top-left select-none xl:scale-180"
               style={{ left: `${d.x}%`, top: `${d.y}%`, width: d.w }}
