@@ -342,7 +342,7 @@ export default function MapCanvas() {
               src={d.src}
               alt=""
               draggable={false}
-              className="pointer-events-none absolute h-auto select-none"
+              className="pointer-events-none absolute h-auto origin-top-left select-none xl:scale-180"
               style={{ left: `${d.x}%`, top: `${d.y}%`, width: d.w }}
             />
           ))}
